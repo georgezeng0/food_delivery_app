@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import './App.css'
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {Landing, Login, Restaurants, SingleRestaurant, Checkout, Basket, Error} from './routes'
 
 function App() {
 
-  const [data, setData] = useState("Loading")
-
-  const testAPI = async () => {
-    try {
-      const res = await fetch("/api")
-      const data = await res.json()
-      setData(data.message)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    testAPI()
-  },[])
-
   return (
-    <div>
-      <h2>{data}</h2>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing/>}/>
+        <Route path="/restaurants" element={<Restaurants/>}/>
+        <Route path="/restaurants/:id" element={<SingleRestaurant/>}/>
+        <Route path="/order" element={<Basket/>}/>
+        <Route path="/checkout" element={<Checkout/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="*" element={<Error/>}/>
+    </Routes>
+    </BrowserRouter>
   )
 }
 
