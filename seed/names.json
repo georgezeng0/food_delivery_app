@@ -1,0 +1,35 @@
+{
+    "adjectives":[
+        "Evergeen", "Real","Bounding", "Olde", "Giddy","Godly",
+        "Billowy", "Red","Purple","Orange","Gray","Blue","Happy",
+        "Lucky","Loco", "Eastern","Northern","Southern","Western",
+        "Dusty","Mad","Tame","Super","Delightful","Delicious",
+        "Dashing","One","Parched","Hot","Tasty","Sweet","Savory",
+        "Succulent","Plump", "Light", "Gusty", "Roasty", "Black", 
+        "Bite-sized","Ancient","Loud", "Rowdy","Icy", "High","Fine",
+        "Casual", "Grand","Petite","Oval","Charming","Great","Mighty",
+        "Top","Amazing","Flawless","Acidic","Zingy","Nimble","Loving",
+        "Nifty","Second","First","Old","Third","Terrific", "Chilly",
+        "Transquil", "Popular", "Zany","Daily","Fair","Spotted","Furry",
+        "Rustic","Dashing","Nice","Hearty","Awesome","Small","Tasteful",
+        "Tidy","Hushed","Alurring","Incredible","Leafy","Sea-side","Windy",
+        "Meaty","Yellow","Special","Unique","Addictive","Famous","Infamous",
+        "Cute","Wooden","Central","Uptown","Downtown","East-side","West-side",
+        "Riverside","Park","Park-side","Streetside","Main","Midtown","Best"
+        ],
+    "nouns":[
+        "Grove","Lamb","Pork","Chicken","Cow","Pig","Road","Jewel","Exchange",
+        "Dream","Hound","Tavern","Pub","House","Palace","Garden","Street",
+        "Kitchen","Hotel","Pizzeria","Fridge","Canteen","Goat","Panda","Express",
+        "China","Cloud","Moment","Lagoon","Windmill","Night","Hive","Maple","Lane",
+        "Lighthouse","Bay","Hog","Place","Avenue","Path","Nomad","Guy","Lady",
+        "Clove","Drive","Room","Lemon","Bread","Roastery","Hut","Shack","Stop",
+        "Halt","Works","Plant","Row","Grubbery","Eatery","Rooftop","Basement",
+        "Beach","Mountain","Hill","Conservatory","Orangerie","Brasserie","Wall",
+        "Castle","Paraside","Table","Picnic","Blossom","Tree","Flower","Emperor",
+        "Diner","Restaurant","Pass","Keep","Bar","Public House","Takeaway","Lounge",
+        "Port","Glen","Sands","Waters","Seas","Hillside","Archway","Light",
+        "Stage","Chef","Lobster","Leg","Mutton","Leaf","Flower","Maple","Oak","Beech",
+        "Sun","Wharf","Junction","Tap","Glass","Foodie"
+    ]
+}   

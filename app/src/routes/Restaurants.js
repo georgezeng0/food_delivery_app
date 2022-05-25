@@ -41,8 +41,7 @@ const Restaurants = () => {
         {restaurants.map(r => {
           const { r_id, r_name, location } = r
           return <article key={r_id}>
-            <h3>{r_name}-{location}</h3>
-            <Link to='/restaurants/:id/edit'>Edit</Link>
+            <h3>{r_name} - {location}</h3>
             <button onClick={()=>deleteRestaurant(r_id)}>Delete</button>
           </article>
         })}
