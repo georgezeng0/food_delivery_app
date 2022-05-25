@@ -5,5 +5,9 @@ import Login from "./Login"
 import Basket from "./Basket"
 import Checkout from "./Checkout"
 import Error from "./Error"
+import NewRestaurant from "./NewRestaurant"
 
-export {Landing,Restaurants,SingleRestaurant,Login,Basket,Checkout,Error}
+export {
+    Landing, Restaurants, SingleRestaurant,
+    Login, Basket, Checkout, Error, NewRestaurant
+}

@@ -12,7 +12,7 @@ const getRestaurants = async () => {
 }
 
 const createRestaurant = async (body) => {
-    const {r_id,r_name,location} = body
+    const { r_id, r_name, location } = body
     try {
         const res = await pool.query(
             `INSERT INTO restaurants (r_id,r_name,location) VALUES ($1,$2,$3) RETURNING *;`,
