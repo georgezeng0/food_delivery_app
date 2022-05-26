@@ -1,33 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { v4 as uuid } from 'uuid'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { createRestaurant } from '../features/restaurantSlice'
 
 const NewRestaurant = () => {
-    const [isEdit,setIsEdit] = useState(false)
+    let { isEdit, error: { isError } } = useSelector(state => state.restaurant)
+    // TBD - dynamically change page to new/edit
+
     const [name, setName] = useState('')
     const [location, setLocation] = useState('')
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-
-    const { id } = useParams()   
-    // Need redux here and API to fetch one restaurant details
-    
-    const createRestaurant = async () => {
-        try {
-            const res = await axios.post(
-                '/api/restaurants/new',
-                {r_id:uuid(),r_name:name,location}
-            )
-            // TBD - success flash and redirect  
-            console.log(res)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // const { id } = useParams()   
+    // EDIT page - Need redux here and API to fetch one restaurant details 
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        createRestaurant()
+        e.preventDefault();
+        dispatch(createRestaurant({ r_id: uuid(), r_name: name, location }));
     }
 
   return (

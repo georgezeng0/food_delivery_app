@@ -24,10 +24,25 @@ export const deleteRestaurant = createAsyncThunk(
             return thunkAPI.rejectWIthValue(error.response.data.error)
         }
     }
-)
+);
+
+export const createRestaurant = createAsyncThunk(
+    'restaurant/createRestaurant',
+    async ({ r_id, r_name, location } , thunkAPI) => {
+        try {
+            const res = await axios.post(`../api/restaurants/new`,
+            { r_id, r_name, location }
+            );
+            return res.data
+        } catch (error) {
+            return thunkAPI.rejectWIthValue(error.response.data.error)
+        }
+    }
+);
 
 const initialState = {
     isLoading: false,
+    isEdit: false,
     error: {
         isError: false,
         message: ''
@@ -67,6 +82,19 @@ const restaurantSlice = createSlice({
             // TBD - success deletion action / message
         },
         [deleteRestaurant.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error.isError = true;
+            state.error.message = action.payload
+        },
+        [createRestaurant.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [createRestaurant.fulfilled]: (state,action) => {
+            state.isLoading = false;
+            state.error.isError = false;
+            // TBD - success deletion action / message
+        },
+        [createRestaurant.rejected]: (state, action) => {
             state.isLoading = false;
             state.error.isError = true;
             state.error.message = action.payload
