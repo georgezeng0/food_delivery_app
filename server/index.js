@@ -13,7 +13,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 // API routes
 app.get("/api", (req, res) => {
     res.json({ message: "Server responding" });
@@ -32,7 +31,6 @@ app.post("/api/restaurants/new", async (req, res, next) => {
     try {
         const data = await createRestaurant(req.body);
         res.send(data)
-
     } catch (error) {
         next(error)
     }
@@ -54,6 +52,16 @@ app.patch("/api/restaurants/:id", async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+})
+
+// 404 handler
+app.all('*', (req, res, next) => {
+    res.status(404).send({error: 'API route not found'})
+})
+
+// Error handler - sends json 
+app.use((err, req, res, next) => {
+    res.status(500).send({message: err.message})
 })
 
 app.listen(PORT, () => {
