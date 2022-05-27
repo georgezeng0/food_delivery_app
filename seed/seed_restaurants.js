@@ -40,7 +40,7 @@ const randomCuisines = () => {
     }
     let string = '{'
     res.forEach(item => {
-        string=`${string}'${item}',`
+        string=`${string}${item},`
     })
     return `${string.slice(0,string.length-1)}}`
 }
@@ -69,7 +69,7 @@ const buildList = () => {
 const deleteRestaurants = async () => {
     try {
         const res = await pool.query(
-            `TRUNCATE TABLE restaurants`
+            `TRUNCATE TABLE restaurants CASCADE`
         );
     } catch (error) {
         console.log(error);

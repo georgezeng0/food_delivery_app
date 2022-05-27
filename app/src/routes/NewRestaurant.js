@@ -1,44 +1,108 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { v4 as uuid } from 'uuid'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { createRestaurant } from '../features/restaurantSlice'
+import { createRestaurant, editRestaurant, getRestaurants, emptyForm,
+    updateForm, getCuisines, populateForm } from '../features/restaurantSlice'
 
 const NewRestaurant = () => {
-    let { isEdit, error: { isError } } = useSelector(state => state.restaurant)
-    // TBD - dynamically change page to new/edit
+    let {
+        restaurants,
+        form: { r_name, cuisine, pricepoint, location, open, close, cuisineList }
+        } = useSelector(state => state.restaurant)
 
-    const [name, setName] = useState('')
-    const [location, setLocation] = useState('')
+    const [isEdit, setIsEdit] = useState(false);
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // const { id } = useParams()   
+    const { id } = useParams();   
+
+    useEffect(() => {
+        if (restaurants.length === 0) {
+            dispatch(getRestaurants())
+        } 
+        if (id) {
+            setIsEdit(true);
+            dispatch(populateForm(id))
+        } else {
+            dispatch(emptyForm())
+        }
+        dispatch(getCuisines()) // Gets the list of cuisines for the form dynamically
+    }, [restaurants]);
+
     // EDIT page - Need redux here and API to fetch one restaurant details 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(createRestaurant({ r_id: uuid(), r_name: name, location }));
+        if (!isEdit) {
+            dispatch(createRestaurant());
+            dispatch(emptyForm())
+        } else {
+            dispatch(editRestaurant(id));
+            dispatch(emptyForm())
+        }
+    }
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        const checked = e.target.checked;
+        dispatch(updateForm({name,value,checked}))
     }
 
   return (
       <main>
-          <h1>New Restaurant</h1>
+          <h1>{`${isEdit? "Edit":"New"} Restaurant`}</h1>
           <div>
               <form onSubmit={handleSubmit}>
+                  {/* Name text form */}
                   <div>
                       <label htmlFor="name">Name</label>
-                      <input type="text" id="name"
-                          value={name}
-                          onChange={(e)=>setName(e.target.value)} />
-                    </div>
+                      <input type="text" id="name" name="r_name"
+                          value={r_name}
+                          onChange={handleChange} />
+                  </div>
+                  {/* Cuisines checkbox */}
                   <div>
-                      <label htmlFor="location">Location</label>
-                      <input type="text" id="location"
+                      <legend>Cuisine</legend>
+                      <fieldset>
+                  {cuisineList.map((item,i)=> {
+                      return <div key={i}>
+                          <label htmlFor={item}>{item}</label>
+                          <input type="checkbox" name="cuisine"
+                              value={item} id={item}
+                              onChange={handleChange}
+                              checked={cuisine.includes(item)? true:false}
+                          />
+                          </div>
+                    })}
+                          </fieldset>
+                  </div>
+                  {/* Pricepoint range */}
+                  <div>
+                      <label htmlFor="pricepoint">Pricepoint</label>
+                      <input type="range" id="pricepoint" name="pricepoint"
+                          value={pricepoint} min="1" max="3"
+                          onChange={handleChange} />
+                  </div>
+                  {/* Location textform */}
+                  <div>
+                      <label htmlFor="location">Postcode</label>
+                      <input type="text" id="location" name="location"
                             value={location}
-                            onChange={(e)=>setLocation(e.target.value)}/>
-                    </div>
+                            onChange={handleChange}/>
+                  </div>
+                  {/* Open and close times */}
+                  <div>
+                      <label htmlFor="open">Open</label>
+                      <input type="time" id="open" name="open"
+                            value={open}
+                            onChange={handleChange}/>
+                      <label htmlFor="close">Close</label>
+                      <input type="time" id="close" name="close"
+                            value={close}
+                            onChange={handleChange}/>
+                  </div>
                   <button>Submit</button>
               </form>
           </div>

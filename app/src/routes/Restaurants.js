@@ -9,7 +9,7 @@ const Restaurants = () => {
 
   useEffect(() => {
     dispatch(getRestaurants());
-  },[])
+  },[dispatch])
 
   return (
     <main>
@@ -22,6 +22,7 @@ const Restaurants = () => {
           const { r_id, r_name, location } = r
           return <article key={r_id}>
             <h3>{r_name} - {location}</h3>
+            <Link to={`/restaurants/${r_id}`}><button>View</button></Link>
             <button onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete</button>
           </article>
         })}
