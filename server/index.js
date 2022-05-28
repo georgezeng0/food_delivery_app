@@ -3,6 +3,7 @@ if(process.env.NODE_ENV !== "production"){
 }
 
 const express = require('express');
+const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
 const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant } = require('../models/restaurant_model');
 
 const PORT = process.env.PORT || 5000;
@@ -53,6 +54,58 @@ app.patch("/api/restaurants/:id", async (req, res, next) => {
         next(error)
     }
 })
+
+// GET all dishes
+app.get("/api/dishes/", async (req, res, next) => {
+    try {
+        const data = await getDishes();
+        res.send(data);
+    } catch (error) {
+        next(error);
+    }
+})
+
+// Create dish
+app.post("/api/dishes/new", async (req, res, next) => {
+    try {
+        const data = await newDish(req.body)
+        res.send(data)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Get dishes for one restaurant
+app.get("/api/:restaurant_id/dishes", async (req, res, next) => {
+
+    try {
+        const data = await getDishes(req.params.restaurant_id);
+        res.send(data);
+    } catch (error) {
+        next(error);
+    }
+})
+
+// Delete dish
+app.delete("/api/dishes/:dish_id", async (req, res, next) => {
+    try {
+        const data = await deleteDish(req.params.dish_id);
+        res.send(data);
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Edit dish
+app.patch("/api/dishes/:dish_id", async (req, res, next) => {
+    try {
+        const data = await updateDish(req.params.dish_id,req.body);
+        res.send(data)
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 // 404 handler
 app.all('*', (req, res, next) => {

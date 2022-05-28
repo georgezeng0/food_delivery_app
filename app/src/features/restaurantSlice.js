@@ -39,7 +39,6 @@ export const editRestaurant = createAsyncThunk(
             );
             return res.data;
         } catch (error) {
-            console.log(error.response.data)
             return thunkAPI.rejectWIthValue(error.response.data.message)
         }
     }
@@ -55,7 +54,6 @@ export const createRestaurant = createAsyncThunk(
             );
             return res.data
         } catch (error) {
-            console.log(error.response.data.message)
             return thunkAPI.rejectWIthValue(error.response.data.message)
         }
     }
@@ -68,7 +66,6 @@ const initialState = {
         message: ''
     },
     restaurants: [],
-    dishes: [],
     filter: {
         search: ""
     },
