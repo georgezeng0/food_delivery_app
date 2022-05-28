@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import {
   Landing, Login, Restaurants, SingleRestaurant,
-  Checkout, Basket, Error, NewRestaurant
+  Checkout, Basket, Error, NewRestaurant, NewDish
 } from './routes'
 
 function App() {
@@ -16,6 +16,8 @@ function App() {
         <Route path="/restaurants/create" element={<NewRestaurant/>}/>
         <Route path="/restaurants/:id" element={<SingleRestaurant/>}/>
         <Route path="/restaurants/:id/edit" element={<NewRestaurant/>}/>
+        <Route path="/restaurants/:r_id/new_dish" element={<NewDish/>}/>
+        <Route path="/dishes/:d_id/edit" element={<NewDish/>}/>
         <Route path="/order" element={<Basket/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>

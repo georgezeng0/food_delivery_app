@@ -16,9 +16,9 @@ const getDishes = async (restaurant_id='%') => {
 
 // Add dish
 const newDish = async (body) => {
-    const { d_id, restaurant, name, price, image, available, starred } = body
+    const { d_id, restaurant, name, price, image, available, starred, category } = body
     const query = format('INSERT INTO dishes VALUES (%L) RETURNING *',
-        [d_id, name, price, image, available, starred, restaurant])
+        [d_id, name, price, image, available, starred, restaurant, category])
     
     try {
         const res = await pool.query(query)

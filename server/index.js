@@ -76,7 +76,7 @@ app.post("/api/dishes/new", async (req, res, next) => {
 })
 
 // Get dishes for one restaurant
-app.get("/api/:restaurant_id/dishes", async (req, res, next) => {
+app.get("/api/restaurants/:restaurant_id/dishes", async (req, res, next) => {
 
     try {
         const data = await getDishes(req.params.restaurant_id);

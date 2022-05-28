@@ -36,10 +36,8 @@ const NewRestaurant = () => {
         e.preventDefault();
         if (!isEdit) {
             dispatch(createRestaurant());
-            dispatch(emptyForm())
         } else {
             dispatch(editRestaurant(id));
-            dispatch(emptyForm())
         }
     }
 

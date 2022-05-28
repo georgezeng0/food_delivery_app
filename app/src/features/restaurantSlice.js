@@ -18,7 +18,7 @@ export const deleteRestaurant = createAsyncThunk(
     'restaurant/deleteRestaurant',
     async (id, thunkAPI) => {
         try {
-            const res = await axios.delete(`../api/restaurants/${id}`);
+            const res = await axios.delete(`/api/restaurants/${id}`);
             thunkAPI.dispatch(getRestaurants())
             return res.data
         } catch (error) {
@@ -37,6 +37,7 @@ export const editRestaurant = createAsyncThunk(
             {r_id:id,r_name, cuisine, pricepoint,
                 location, open, close, rating}
             );
+            thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
             return thunkAPI.rejectWIthValue(error.response.data.message)
@@ -49,9 +50,10 @@ export const createRestaurant = createAsyncThunk(
     async (_, thunkAPI) => {
         const  input  = thunkAPI.getState().restaurant.form
         try {
-            const res = await axios.post(`../api/restaurants/new`,
+            const res = await axios.post(`/api/restaurants/new`,
             {r_id:uuid(),...input }
             );
+            thunkAPI.dispatch(emptyForm())
             return res.data
         } catch (error) {
             return thunkAPI.rejectWIthValue(error.response.data.message)
@@ -168,6 +170,19 @@ const restaurantSlice = createSlice({
             // TBD - success deletion action / message
         },
         [createRestaurant.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.error.isError = true;
+            state.error.message = action.payload
+        },
+        [editRestaurant.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [editRestaurant.fulfilled]: (state,action) => {
+            state.isLoading = false;
+            state.error.isError = false;
+            // TBD - success deletion action / message
+        },
+        [editRestaurant.rejected]: (state, action) => {
             state.isLoading = false;
             state.error.isError = true;
             state.error.message = action.payload
