@@ -1,0 +1,68 @@
+{
+    "starter":[
+        "Cheese tart", "Saganaki", "Bacon rings", "Chiken vol=au-vents",
+        "Tuna empanadilas", "Prawn and ginger dumplings", "Fried Onions",
+        "Beed empanadas", "Canape selection", "Bacon and cheese croquettes",
+        "Vegetarian tacos", "Fresh oysters", "Chorizo salad", "Spring rolls",
+        "Prawn toast", "Salmon salad", "Sashimi", "Curry puffs", "Lamb skewers",
+        "Chicken and pine nut meatballs", "Vietnamese rolls", "Grilled prawns",
+        "Buffalo wings", "Stuffed mushrooms", "Agrodolce olives", "Baked Brie",
+        "Bruschetta", "Caramelised pear tart", "Antipasto platter", "Smoked salmon",
+        "Haloumi grilled", "Garlic bread", "Pappadums", "Prawn cocktail", "Chicken caesar salad",
+        "Piri-piri prawns", "Haloumi fritters", "Courgette fritters", "Bacalao croquettes",
+        "Baked stuffed tomatoes", "Quiche lorraine", "Dim sum platter", "Chicken skewers", "Mixed salad",
+        "Tomato soup", "Wonton soup", "Onion soup", "Chicken and sweetcorn soup"
+    ],
+    "main":[
+        "Loaded nachos", "Chicken stir fry", "Chicken chow mein", "Cripsy beef", 
+        "Sweet and sour chicken", "Kung pao chicken", "Teriyaki chicken",
+        "Chipotle shrimp", "Rump steak", "Sirloin steak", "Zucchini pasta", "Coconut curry prawn",
+        "Mexican wrap", "Beef burrito", "Carnitas tacos", "Fish tacos", "T-bone steak",
+        "Barbeque chicken", "Chicken burger", "Cheeseburger", "Vegetarian burger",
+        "Chicken Kabobs", "Lamb kabobs", "Butterfly chicken", "Beef madras curry",
+        "Beef vindaloo curry", "Chicken tikka masala", "Lasagna", "Spaghetti bolognese",
+        "Sunday roast", "Fish and chips", "Roasted beef", "Sausage and mash", "Cottage pie",
+        "Shepherd's pie", "Vegetable stir fry", "Mushroom rissotto", "Chilli con carne", 
+        "All day breakfast", "Maple pancakes", "Bacon sandwish", "Full english breakfast",
+        "Steak and chips","Spaghetti Carbonara","Gnocchi Sorrento","Pork Braciola",
+        "Pizza Margherita", "Prawn Ravioli", "Meat Pizza", "Vegetable Pizza", "Hawaiian pizza",
+        "Three-Cheese Lasagna", "Grilled Fish with Artichoke", "Beef Brasato with Pappardelle",
+        "Spinach and Ricotta Gnudi", "Braised Chicken all'Arrabbiata","Pea-and-Bacon Risotto",
+        "Sardinian Stuffed Eggplant", "Tuscan-Style Spareribs", "Roman-Style Braised Chicken",
+        "Seafood Stew", "Paella", "Chicken Parmesan", "Vegtable paella", "Spaghetti Cacio e Pepe",
+        "Grilled salmon", "Roasted duck", "Mapo tofu", "Char siu", "Special fried rice",
+        "Vegetable fried rice", "Twice cooked pork stir fry", "Coq au vin",
+        "Beef bourguignon", "Confit de canard", "Ratatouille", "Potatoes dauphinoise",
+        "Cassoulet", "Grilled lamp chops", "Chicken cordon bleu", "Beef and mushroom pie",
+        "Sushi selection", "Nigiri selection", "Sashimi selection", "Tonkotsu ramen",
+        "Chicken ramen", "Beef noodle soup", "Dumpling noodle soup", "Grill selection",
+        "Beef stew", "Tomato and ham omelette", "Vegetarian breakfast"
+
+    ],
+    "side":[
+        "Boiled potatos", "Roast potatoes", "Roast vegetables", "Steamed vegetabels",
+        "Sauteed spinach", "French fries", "Baked fries", "Bombay potatoes", "Mashed potatoes",
+        "Mint peas", "Gravy", "Peppercorn sauce", "Sauteed vegetables",
+        "Grilled vegetables", "Cos salad", "Leafy salad", "Sweet potato fries",
+        "Sweet potato salad", "Bean and feta salad", "Grilled eggplant", 
+        "Corn chips", "Roasted kale", "Avocado salad", "Baby carrots",
+        "Crunch coleslaw", "Boiled rice", "Jasmine rice", "Japanese rice", "Hummus",
+        "Plain Naan", "Garlic Naan", "Peshwari Naan", "Flatbread", "Sourbread",
+        "Couscous salad", "Quinoa salad", "Spiced cauliflower"
+
+    ],
+    "drink":[
+        "Cola", "Sprite", "7-up", "Fanta", "Diet Cola", "Pepsi", "Dr pepper", 
+        "Lemonade", "Orange juice", "Apple juice", "House red", "House white", 
+        "Spirit shot", "Beer", "Milkshake", "Bubble tea", "Coffee", "Tea"
+    ],
+    "dessert":[
+        "Ice cream", "Mochi", "Custard tart", "Tiramisu","Gulab Jamun",
+        "Churros", "Chocolate brownie", "Red velvet cake", "Apple pie", "Cookies",
+        "Cheesecake", "Creme brulee", "Apple strudel", "Cannoli", 
+        "Fruit sundae", "Pavlova", "Eton mess", "Custard bun", "Red bean bun",
+        "Mango pudding", "Sticky toffee pudding", "Tres Leches cake", 
+        "Black forest cake", "Irish spice cake", "Fresh fruit selection"
+    ]
+
+}   

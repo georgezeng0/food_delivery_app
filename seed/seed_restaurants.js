@@ -1,6 +1,7 @@
 const { pool } = require("../models/pool");
 const format = require('pg-format');
 const { v4: uuid } = require('uuid')
+const seedDishes = require("./seed_dishes");
 
 // Variables
 const NUM = 50 // Number to seed
@@ -10,7 +11,6 @@ const THE_RATE = 0.35 // Rate of names with "The" at start
 // Import helper files
 const { postcodes } = require('./postcodes')
 const { adjectives, nouns } = require('./names.json');
-const res = require("express/lib/response");
 
 const cuisines = [
     "African", "American", "Asian", "British", "Brunch", "Caribbean", "Chinese", "Fast-food", "French",
@@ -83,7 +83,7 @@ const seedRestaurants = async () => {
         const query = format(`INSERT INTO restaurants VALUES %L returning r_id`, restaurants);
         await deleteRestaurants();
         const res = await pool.query(query);
-        console.log(res.rows)
+        await seedDishes(res.rows)
         
     } catch (error) {
         console.log(error)

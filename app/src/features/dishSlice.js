@@ -11,7 +11,7 @@ const initialState = {
     dishes: [],
     form: {
         name: '',
-        price: '',
+        price: 0,
         image: '',
         available: true,
         starred: false,
@@ -85,7 +85,7 @@ const dishSlice = createSlice({
     reducers: {
         updateForm: (state, { payload: { name, value,checked } }) => {
             if (name === 'price') {
-                value=parseFloat(value)
+                value=parseInt(parseFloat(value)*100)
             }
             if (name === 'available' || name === 'starred') {
                 value=checked
@@ -95,7 +95,7 @@ const dishSlice = createSlice({
         emptyForm: (state) => {
             state.form={
                 name: '',
-                price: 0.01,
+                price: 0,
                 image: '',
                 available: true,
                 starred: false,
@@ -121,7 +121,8 @@ const dishSlice = createSlice({
     },
     extraReducers: {
         [getDishes.pending]: (state) => {
-            state.isLoading=true
+            state.isLoading = true
+            state.dishes=[]
         },
         [getDishes.fulfilled]: (state,action) => {
             state.isLoading = false;

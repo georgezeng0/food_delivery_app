@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { getDishes, deleteDish } from '../features/dishSlice';
-import { getRestaurants } from '../features/restaurantSlice';
+import { getRestaurants,deleteRestaurant } from '../features/restaurantSlice';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -39,6 +39,7 @@ const SingleRestaurant = () => {
       <div>
         <Link to={`./edit`}><button>Edit</button></Link>
         <Link to={`./new_dish`}><button>New Dish</button></Link>
+        <button onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete</button>
       </div>
       <h2>Dishes</h2>
       {dishes.map(dish => {

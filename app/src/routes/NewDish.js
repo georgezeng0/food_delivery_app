@@ -28,6 +28,9 @@ const NewDish = () => {
         if (dishes.length === 0) {
             dispatch(getDishes('ALL'))
         }
+    },[])
+
+    useEffect(() => {
         if (d_id) {
             setIsEdit(true)
             dispatch(populateForm(d_id))
@@ -61,7 +64,7 @@ const NewDish = () => {
                   <div>
                       <label htmlFor="price">Price</label>
                       <input type="number" id="price" name="price"
-                          value={price} min="0.01" max="99.99" step="0.01"
+                          value={price/100} min="0.01" max="99.99" step="0.01"
                           onChange={handleChange} />
                   </div>
                   {/* Image form - consider changing to image upload w/ cloudinary*/}

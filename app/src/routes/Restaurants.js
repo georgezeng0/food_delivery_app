@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRestaurants,deleteRestaurant } from '../features/restaurantSlice'
+import { getRestaurants } from '../features/restaurantSlice'
 
 const Restaurants = () => {
   const { restaurants } = useSelector(state => state.restaurant);
@@ -23,7 +23,6 @@ const Restaurants = () => {
           return <article key={r_id}>
             <h3>{r_name} - {location}</h3>
             <Link to={`/restaurants/${r_id}`}><button>View</button></Link>
-            <button onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete</button>
           </article>
         })}
       </section>
