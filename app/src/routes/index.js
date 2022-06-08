@@ -7,9 +7,10 @@ import Checkout from "./Checkout"
 import Error from "./Error"
 import NewRestaurant from "./NewRestaurant"
 import NewDish from "./NewDish"
+import Register from "./Register"
 
 export {
     Landing, Restaurants, SingleRestaurant,
     Login, Basket, Checkout, Error, NewRestaurant,
-    NewDish
+    NewDish, Register
 }

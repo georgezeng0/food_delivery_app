@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from './components'
 import {
   Landing, Login, Restaurants, SingleRestaurant,
-  Checkout, Basket, Error, NewRestaurant, NewDish
+  Checkout, Basket, Error, NewRestaurant, NewDish,
+  Register
 } from './routes'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/basket" element={<Basket/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<Error/>}/>
     </Routes>
     </BrowserRouter>
