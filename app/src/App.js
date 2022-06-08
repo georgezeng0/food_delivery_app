@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
+import { Navbar } from './components'
 import {
   Landing, Login, Restaurants, SingleRestaurant,
   Checkout, Basket, Error, NewRestaurant, NewDish
@@ -10,6 +10,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Landing/>}/>
         <Route path="/restaurants" element={<Restaurants/>}/>
@@ -18,7 +19,7 @@ function App() {
         <Route path="/restaurants/:id/edit" element={<NewRestaurant/>}/>
         <Route path="/restaurants/:r_id/new_dish" element={<NewDish/>}/>
         <Route path="/dishes/:d_id/edit" element={<NewDish/>}/>
-        <Route path="/order" element={<Basket/>}/>
+        <Route path="/basket" element={<Basket/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="*" element={<Error/>}/>
