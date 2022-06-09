@@ -6,15 +6,19 @@ const express = require('express');
 const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
 const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant } = require('../models/restaurant_model');
 const { registerUser, getPassword,getUser } = require('../models/user_model');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+// env variables
 const PORT = process.env.PORT || 5000;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 // API routes
 app.get("/api", (req, res) => {
@@ -108,13 +112,24 @@ app.patch("/api/dishes/:dish_id", async (req, res, next) => {
     }
 })
 
-// Add User
+// Add User/ Register
 app.post("/api/users/new", async (req, res, next) => {
     try {
         const { name, email, location, password } = req.body;
         const hash = await bcrypt.hash(password, 12)
-        const data = await registerUser({name, email, location, password:hash});
-        res.send(data)
+        const newUser = await registerUser({name, email, location, password:hash});
+        delete newUser.password
+        const token = jwt.sign(
+            {
+                id: newUser.email,
+                group: "user"
+            },
+            TOKEN_SECRET,
+            {
+                expiresIn: 86400 // 24h 
+            } 
+        )
+        res.send({ ...newUser, token })
     } catch (error) {
         next(error)
     }
@@ -128,7 +143,18 @@ app.post("/api/users/login", async (req, res, next) => {
         const result = await bcrypt.compare(password, stored_pw)
         if (result) {
             const user = await getUser(email);
-            res.send({...user, password: undefined})
+            delete user.password
+            const token = jwt.sign(
+                {
+                    id: user.email,
+                    group: user.group
+                },
+                TOKEN_SECRET,
+                {
+                    expiresIn: 86400 // 24h 
+                } 
+            )
+            res.send({ ...user, token })
         } else {
             throw new Error("Incorrect Details")
         }
@@ -138,6 +164,8 @@ app.post("/api/users/login", async (req, res, next) => {
 })
 
 // Edit User
+
+
 
 
 // 404 handler

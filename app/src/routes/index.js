@@ -8,9 +8,11 @@ import Error from "./Error"
 import NewRestaurant from "./NewRestaurant"
 import NewDish from "./NewDish"
 import Register from "./Register"
+import UserProfile from "./UserProfile"
+import ProtectedRoute from "./ProtectedRoute"
 
 export {
     Landing, Restaurants, SingleRestaurant,
     Login, Basket, Checkout, Error, NewRestaurant,
-    NewDish, Register
+    NewDish, Register,UserProfile,ProtectedRoute
 }

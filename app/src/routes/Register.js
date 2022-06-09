@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateForm, registerUser,emptyForm } from '../features/userSlice'
+import { updateForm, registerUser,emptyForm, setLocalUser } from '../features/userSlice'
 
 const Register = () => {
     const {user,form: {email, name, password, location}} = useSelector(state=>state.user)
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -25,7 +26,10 @@ const Register = () => {
 
     // Navigate if user successful via useEffect
     useEffect(() => {
-        
+        if (user.token) {
+            dispatch(setLocalUser())
+            navigate('/restaurants')
+        }
     }, [user])
 
     useEffect(() => {

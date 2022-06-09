@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { updateForm, loginUser, emptyForm } from '../features/userSlice'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { updateForm, loginUser, emptyForm, setLocalUser } from '../features/userSlice'
 
 const Login = () => {
   const {user,form: {email, password}} = useSelector(state=>state.user)
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation(); // to get the location state from a redirect
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -21,7 +23,18 @@ const Login = () => {
   
   useEffect(() => {
     dispatch(emptyForm())
-  },[])
+  }, [])
+  
+  useEffect(() => {
+    if (user.token) {
+      dispatch(setLocalUser())
+      if (location.state?.from) {
+        navigate(location.state.from) // If location.state.from exists (from protected route) > go back on login
+      } else {
+        navigate('/restaurants')
+      }
+    }
+}, [user])
 
 return (
   <main>

@@ -1,15 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const getLocalUser = () => {
+  const localUser = localStorage.getItem('user');
+  if (localUser) {
+    return JSON.parse(localUser)
+  } else {
+    return {
+      email: '',
+      name: '',
+      location: '',
+      group: '',
+      token: ''
+    }
+  }
+}
+
 const initialState = {
   isLoading: false,
-  user: {
-    email: '',
-    name: '',
-    location: '',
-    group: 'user',
-    token: ''
-  },
+  user: getLocalUser(),
   form: {
     email: '',
     name: '',
@@ -44,7 +53,6 @@ export const loginUser = createAsyncThunk(
       const res = await axios.post(`api/users/login`, { email,password});
       return res.data
     } catch (error) {
-      console.log(error)
       return thunkAPI.rejectWIthValue(error.response.data.message)
     }
   }
@@ -64,6 +72,19 @@ const userSlice = createSlice({
         password: '',
         location: ''
       }
+    },
+    setLocalUser: (state) => {
+      localStorage.setItem('user',JSON.stringify(state.user))
+    },
+    logout: (state) => {
+      state.user = {
+        email: '',
+        name: '',
+        location: '',
+        group: '',
+        token: ''
+      };
+      localStorage.removeItem('user')
     }
   },
   extraReducers: {
@@ -73,7 +94,7 @@ const userSlice = createSlice({
   [registerUser.fulfilled]: (state,action) => {
       state.isLoading = false;
       state.error.isError = false;
-      state.user = action.payload;
+    state.user = action.payload;
   },
   [registerUser.rejected]: (state, action) => {
       state.isLoading = false;
@@ -86,7 +107,7 @@ const userSlice = createSlice({
   [loginUser.fulfilled]: (state,action) => {
       state.isLoading = false;
       state.error.isError = false;
-      state.user = action.payload;
+    state.user = action.payload;
   },
   [loginUser.rejected]: (state, action) => {
       state.isLoading = false;
@@ -96,5 +117,8 @@ const userSlice = createSlice({
   }
 });
 
-export const { updateForm, emptyForm } = userSlice.actions;
+export const {
+  updateForm, emptyForm,
+  setLocalUser, logout
+  } = userSlice.actions;
 export default userSlice.reducer;
