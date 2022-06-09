@@ -28,6 +28,7 @@ const Register = () => {
     useEffect(() => {
         if (user.token) {
             dispatch(setLocalUser())
+            dispatch(emptyForm())
             navigate('/restaurants')
         }
     }, [user])

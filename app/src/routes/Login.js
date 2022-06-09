@@ -28,6 +28,7 @@ const Login = () => {
   useEffect(() => {
     if (user.token) {
       dispatch(setLocalUser())
+      dispatch(emptyForm())
       if (location.state?.from) {
         navigate(location.state.from) // If location.state.from exists (from protected route) > go back on login
       } else {

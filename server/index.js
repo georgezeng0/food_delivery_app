@@ -5,7 +5,7 @@ if(process.env.NODE_ENV !== "production"){
 const express = require('express');
 const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
 const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant } = require('../models/restaurant_model');
-const { registerUser, getPassword,getUser } = require('../models/user_model');
+const { registerUser, getPassword,getUser,editUser } = require('../models/user_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -164,7 +164,22 @@ app.post("/api/users/login", async (req, res, next) => {
 })
 
 // Edit User
-
+app.patch("/api/users/edit", async (req, res, next) => {
+    try {
+        let { name, email, location, password } = req.body;
+        let user
+        if (password) {
+            password = await bcrypt.hash(password, 12)
+            user = await editUser({name, email, location, password});
+        } else {
+            user = await editUser({name, email, location});
+        }
+        delete user.password
+        res.send({ ...user})
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 

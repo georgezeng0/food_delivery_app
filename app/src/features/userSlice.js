@@ -45,6 +45,21 @@ export const registerUser = createAsyncThunk(
   }
 )
 
+export const editUser = createAsyncThunk(
+  'user/edit',
+  async (_, thunkAPI) => {
+    const input = thunkAPI.getState().user.form;
+    
+    try {
+      const res = await axios.patch(`api/users/edit`,input);
+      return res.data
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWIthValue(error.response.data.message)
+    }
+  }
+)
+
 export const loginUser = createAsyncThunk(
   'user/login',
   async (_, thunkAPI) => {
@@ -71,6 +86,12 @@ const userSlice = createSlice({
         name: '',
         password: '',
         location: ''
+      }
+    },
+    populateForm: (state) => {
+      const { email, name, location } = state.user
+      state.form = {
+        ...state.form, email, name, location 
       }
     },
     setLocalUser: (state) => {
@@ -100,8 +121,8 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error.isError = true;
       state.error.message = action.payload
-    },
-    [loginUser.pending]: (state) => {
+  },
+  [loginUser.pending]: (state) => {
       state.isLoading = true;
   },
   [loginUser.fulfilled]: (state,action) => {
@@ -113,12 +134,27 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error.isError = true;
       state.error.message = action.payload
+  },
+  [editUser.pending]: (state) => {
+      state.isLoading = true;
+  },
+  [editUser.fulfilled]: (state,action) => {
+      state.isLoading = false;
+      state.error.isError = false;
+      state.user = { ...state.user, ...action.payload };
+      state.form.password=""
+    
+  },
+  [editUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error.isError = true;
+      state.error.message = action.payload
   }
   }
 });
 
 export const {
   updateForm, emptyForm,
-  setLocalUser, logout
+  setLocalUser, logout, populateForm
   } = userSlice.actions;
 export default userSlice.reducer;

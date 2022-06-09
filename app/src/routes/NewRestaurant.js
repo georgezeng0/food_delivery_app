@@ -30,7 +30,6 @@ const NewRestaurant = () => {
         dispatch(getCuisines()) // Gets the list of cuisines for the form dynamically
     }, [restaurants]);
 
-    // EDIT page - Need redux here and API to fetch one restaurant details 
 
     const handleSubmit = (e) => {
         e.preventDefault();

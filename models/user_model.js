@@ -36,10 +36,30 @@ const getUser = async (email) => {
     }
 }
 
-// edit User
+const editUser = async (body) => {
+    let query = `UPDATE users SET `;
+    const values = [body.email];
+    delete body.email;
+    const columns = Object.keys(body);
+    columns.map((col, i) => {
+        values.push(body[col]);
+        query=`${query}${col}=$${i + 2},`
+    });
+    query=`${query.substring(0,query.length-1)} WHERE email=$1 RETURNING *;`
+    try {
+        const res = await pool.query(
+            query,
+            values
+        );
+        return res.rows[0];
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
 module.exports = {
     registerUser,
     getPassword,
-    getUser
+    getUser,
+    editUser
 }
