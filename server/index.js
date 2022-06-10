@@ -9,6 +9,9 @@ const { registerUser, getPassword,getUser,editUser } = require('../models/user_m
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Utils
+const { authenticateJWT } = require('./utils/auth_middleware.js')
+
 // env variables
 const PORT = process.env.PORT || 5000;
 const TOKEN_SECRET = process.env.TOKEN_SECRET;
@@ -34,7 +37,7 @@ app.get("/api/restaurants", async (req, res, next) => {
     }
 })
 
-app.post("/api/restaurants/new", async (req, res, next) => {
+app.post("/api/restaurants/new",authenticateJWT, async (req, res, next) => {
     try {
         const data = await createRestaurant(req.body);
         res.send(data)
@@ -43,7 +46,7 @@ app.post("/api/restaurants/new", async (req, res, next) => {
     }
 })
 
-app.delete("/api/restaurants/:id", async (req, res, next) => {
+app.delete("/api/restaurants/:id",authenticateJWT, async (req, res, next) => {
     try {
         const data = await deleteRestaurant(req.params.id);
         res.send(data)
@@ -52,7 +55,7 @@ app.delete("/api/restaurants/:id", async (req, res, next) => {
     }
 })
 
-app.patch("/api/restaurants/:id", async (req, res, next) => {
+app.patch("/api/restaurants/:id",authenticateJWT, async (req, res, next) => {
     try {
         const data = await updateRestaurant(req.params.id,req.body);
         res.send(data)
@@ -72,7 +75,7 @@ app.get("/api/dishes/", async (req, res, next) => {
 })
 
 // Create dish
-app.post("/api/dishes/new", async (req, res, next) => {
+app.post("/api/dishes/new",authenticateJWT, async (req, res, next) => {
     try {
         const data = await newDish(req.body)
         res.send(data)
@@ -93,7 +96,7 @@ app.get("/api/restaurants/:restaurant_id/dishes", async (req, res, next) => {
 })
 
 // Delete dish
-app.delete("/api/dishes/:dish_id", async (req, res, next) => {
+app.delete("/api/dishes/:dish_id",authenticateJWT, async (req, res, next) => {
     try {
         const data = await deleteDish(req.params.dish_id);
         res.send(data);
@@ -103,7 +106,7 @@ app.delete("/api/dishes/:dish_id", async (req, res, next) => {
 })
 
 // Edit dish
-app.patch("/api/dishes/:dish_id", async (req, res, next) => {
+app.patch("/api/dishes/:dish_id",authenticateJWT, async (req, res, next) => {
     try {
         const data = await updateDish(req.params.dish_id,req.body);
         res.send(data)
@@ -164,7 +167,7 @@ app.post("/api/users/login", async (req, res, next) => {
 })
 
 // Edit User
-app.patch("/api/users/edit", async (req, res, next) => {
+app.patch("/api/users/edit",authenticateJWT, async (req, res, next) => {
     try {
         let { name, email, location, password } = req.body;
         let user

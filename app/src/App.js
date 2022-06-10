@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from './components'
 import { getLocalUser } from './features/userSlice'
+import axios from 'axios'
 import {
   Landing, Login, Restaurants, SingleRestaurant,
   Checkout, Basket, Error, NewRestaurant, NewDish,
@@ -12,7 +13,20 @@ import {
 function App() {
   
   // Check for user
-  const { user } = useSelector(state=>state.user)
+  const { user } = useSelector(state => state.user)
+  
+  // Axios authorisation config
+  axios.interceptors.request.use(
+    request => {
+      if (user.token) {
+        request.headers['Authorization']=`Bearer ${user.token}`
+      }
+    return request
+  },
+    error => {
+    
+    return Promise.reject(error)
+  })
   
   return (
     <BrowserRouter>
