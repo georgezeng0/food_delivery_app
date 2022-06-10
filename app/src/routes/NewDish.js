@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { updateForm,createDish,populateForm,editDish,getDishes, emptyForm } from '../features/dishSlice'
+import { updateForm,createDish,populateForm,editDish,getDishes, emptyForm, resetSuccess } from '../features/dishSlice'
 
 
 const NewDish = () => {
     const {
         dishes,
-        form: { name, price, image, available, starred,category }
+        success: {APIsuccess,successType},
+        form: { name, price, image, available, starred,category, restaurant }
         } = useSelector(state => state.dish)
     const { r_id, d_id } = useParams();
 
     const [isEdit, setIsEdit] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,6 +38,22 @@ const NewDish = () => {
             dispatch(populateForm(d_id))
         }
     }, [dishes])
+
+    // Success actions
+    useEffect(() => {
+        if (APIsuccess) {
+            if (successType === 'CREATE_DISH') {
+                dispatch(resetSuccess())
+                navigate(`/restaurants/${r_id}`)
+            }
+            if (successType === 'EDIT_DISH') {
+                dispatch(resetSuccess())
+                navigate(`/restaurants/${restaurant}`)
+            }
+        }
+    },[APIsuccess])
+
+    // Error actions
 
     const handleChange = (e) => {
         const name = e.target.name;

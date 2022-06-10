@@ -2,6 +2,35 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid'
 
+const initialState = {
+    isLoading: false,
+    success: {
+        APIsuccess: false,
+        successType: '',
+        newRestaurantId: ''
+    },
+    error: {
+        isError: false,
+        message: ''
+    },
+    restaurants: [],
+    filter: {
+        search: ""
+    },
+    form: {
+        r_name:'',
+        cuisine: [],
+        cuisineList: [],
+        pricepoint: 1,
+        location: '',
+        open: '00:00',
+        close: '23:00',
+        rating: 0,
+        owner: ''
+    },
+    sort: {}    
+};
+
 export const getRestaurants = createAsyncThunk(
     'restaurant/getRestaurants',
     async (_, thunkAPI) => {
@@ -37,6 +66,7 @@ export const editRestaurant = createAsyncThunk(
             {r_id:id,r_name, cuisine, pricepoint,
                 location, open, close, rating}
             );
+            await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before edited restaurant loaded
             thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
@@ -48,11 +78,13 @@ export const editRestaurant = createAsyncThunk(
 export const createRestaurant = createAsyncThunk(
     'restaurant/createRestaurant',
     async (_, thunkAPI) => {
-        const  input  = thunkAPI.getState().restaurant.form
+        const input = thunkAPI.getState().restaurant.form
+        const user = thunkAPI.getState().user.user
         try {
             const res = await axios.post(`/api/restaurants/new`,
-            {r_id:uuid(),...input }
-            );
+            {r_id:uuid(),...input,owner:user.email }
+            ); 
+            await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before new restaurant loaded
             thunkAPI.dispatch(emptyForm())
             return res.data
         } catch (error) {
@@ -60,30 +92,6 @@ export const createRestaurant = createAsyncThunk(
         }
     }
 );
-
-const initialState = {
-    isLoading: false,
-    error: {
-        isError: false,
-        message: ''
-    },
-    restaurants: [],
-    filter: {
-        search: ""
-    },
-    form: {
-        r_name:'',
-        cuisine: [],
-        cuisineList: [],
-        pricepoint: 1,
-        location: '',
-        open: '00:00',
-        close: '23:00',
-        rating: 0,
-        owner: ''
-    },
-    sort: {}    
-};
 
 const restaurantSlice = createSlice({
     name: 'restaurant',
@@ -132,6 +140,13 @@ const restaurantSlice = createSlice({
                 rating: 0,
                 owner: ''
             }
+        },
+        resetSuccess: state => {
+            state.success = {
+                APIsuccess: false,
+                successType:'',
+                newRestaurantId:''
+            }
         }
     },
     extraReducers: {
@@ -154,7 +169,8 @@ const restaurantSlice = createSlice({
         [deleteRestaurant.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
-            // TBD - success deletion action / message
+            state.success.APIsuccess = true;
+            state.success.successType = 'DELETE_RESTAURANT'
         },
         [deleteRestaurant.rejected]: (state, action) => {
             state.isLoading = false;
@@ -167,7 +183,8 @@ const restaurantSlice = createSlice({
         [createRestaurant.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
-            // TBD - success deletion action / message
+            state.success.APIsuccess = true;
+            state.success.newRestaurantId = action.payload.r_id
         },
         [createRestaurant.rejected]: (state, action) => {
             state.isLoading = false;
@@ -180,7 +197,8 @@ const restaurantSlice = createSlice({
         [editRestaurant.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
-            // TBD - success deletion action / message
+            state.success.APIsuccess = true;
+            state.success.successType = 'EDIT_RESTAURANT'
         },
         [editRestaurant.rejected]: (state, action) => {
             state.isLoading = false;
@@ -190,5 +208,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {updateForm,getCuisines,populateForm,emptyForm} = restaurantSlice.actions;
+export const {updateForm,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;

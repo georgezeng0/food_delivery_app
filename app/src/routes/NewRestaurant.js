@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRestaurant, editRestaurant, getRestaurants, emptyForm,
-    updateForm, getCuisines, populateForm } from '../features/restaurantSlice'
+    updateForm, getCuisines, populateForm, resetSuccess } from '../features/restaurantSlice'
 
 const NewRestaurant = () => {
     let {
         restaurants,
+        success: { APIsuccess, newRestaurantId, successType },
         form: { r_name, cuisine, pricepoint, location, open, close, cuisineList }
         } = useSelector(state => state.restaurant)
 
@@ -18,6 +19,7 @@ const NewRestaurant = () => {
     const { id } = useParams();   
 
     useEffect(() => {
+        dispatch(resetSuccess())
         if (restaurants.length === 0) {
             dispatch(getRestaurants())
         } 
@@ -33,10 +35,14 @@ const NewRestaurant = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!isEdit) {
-            dispatch(createRestaurant());
-        } else {
-            dispatch(editRestaurant(id));
+        if (!r_name, cuisine.length == 0, !location) {
+            alert("Please fill in all fields!")
+        } else { 
+            if (!isEdit) {
+                dispatch(createRestaurant());
+            } else {
+                dispatch(editRestaurant(id));
+            }
         }
     }
 
@@ -47,6 +53,20 @@ const NewRestaurant = () => {
         dispatch(updateForm({name,value,checked}))
     }
 
+    // Successful creation
+    useEffect(() => {
+        if (newRestaurantId) {
+            dispatch(resetSuccess())
+            navigate(`/restaurants/${newRestaurantId}`)
+        }
+        if (successType === 'EDIT_RESTAURANT') {
+            dispatch(resetSuccess()) 
+            navigate(`/restaurants/${id}`)
+        }
+    },[APIsuccess])
+
+    // Error creation
+
   return (
       <main>
           <h1>{`${isEdit? "Edit":"New"} Restaurant`}</h1>
@@ -54,7 +74,7 @@ const NewRestaurant = () => {
               <form onSubmit={handleSubmit}>
                   {/* Name text form */}
                   <div>
-                      <label htmlFor="name">Name</label>
+                      <label htmlFor="name">Restaurant Name</label>
                       <input type="text" id="name" name="r_name"
                           value={r_name}
                           onChange={handleChange} />

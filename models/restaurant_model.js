@@ -21,7 +21,7 @@ const createRestaurant = async (body) => {
     cuisine_string=`${cuisine_string.slice(0,cuisine_string.length-1)}}`
     const query = format(
         'INSERT INTO restaurants VALUES (%L) RETURNING *;',
-        [r_id, r_name, cuisine_string, pricepoint,location,open,close,rating]
+        [r_id, r_name, cuisine_string, pricepoint,location,open,close,rating,owner]
     )
     try {
         const res = await pool.query(query);
@@ -63,9 +63,22 @@ const updateRestaurant = async (id, body) => {
     }
 }
 
+const getRestaurantOwner = async (id) => {
+    try {
+        const res = await pool.query(
+            `SELECT owner FROM restaurants WHERE r_id=$1`,
+            [id]
+        );
+        return res.rows[0]
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 module.exports = {
     getRestaurants,
     createRestaurant,
     deleteRestaurant,
-    updateRestaurant
+    updateRestaurant,
+    getRestaurantOwner
 }

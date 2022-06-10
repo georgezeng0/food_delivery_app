@@ -4,7 +4,7 @@ if(process.env.NODE_ENV !== "production"){
 
 const express = require('express');
 const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
-const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant } = require('../models/restaurant_model');
+const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRestaurantOwner } = require('../models/restaurant_model');
 const { registerUser, getPassword,getUser,editUser } = require('../models/user_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -16,10 +16,11 @@ const { authenticateJWT } = require('./utils/auth_middleware.js')
 const PORT = process.env.PORT || 5000;
 const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
+// App
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: false }));
 
 
@@ -39,26 +40,45 @@ app.get("/api/restaurants", async (req, res, next) => {
 
 app.post("/api/restaurants/new",authenticateJWT, async (req, res, next) => {
     try {
-        const data = await createRestaurant(req.body);
-        res.send(data)
+        const token_email = req.user ? req.user.id : undefined;
+        if (token_email == req.body.owner) {
+            const data = await createRestaurant(req.body);
+            res.send(data)
+        } else {
+            throw new Error("Auth token and request user mismatch.")
+        }        
     } catch (error) {
         next(error)
     }
 })
 
 app.delete("/api/restaurants/:id",authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
     try {
-        const data = await deleteRestaurant(req.params.id);
-        res.send(data)
+        const { owner } = await getRestaurantOwner(req.params.id)
+        // Only owner may delete
+        if (token_email == owner) {
+            const data = await deleteRestaurant(req.params.id);
+            res.send(data)
+        } else {
+            res.status(403).send("Unauthorized")
+        }  
     } catch (error) {
         next(error)
     }
 })
 
 app.patch("/api/restaurants/:id",authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
     try {
-        const data = await updateRestaurant(req.params.id,req.body);
-        res.send(data)
+        const { owner } = await getRestaurantOwner(req.params.id)
+        // Ownly owner may edit
+        if (token_email == owner) {
+            const data = await updateRestaurant(req.params.id, req.body);
+            res.send(data)
+        } else {
+            res.status(403).send("Unauthorized")
+        }
     } catch (error) {
         next(error)
     }
@@ -76,9 +96,16 @@ app.get("/api/dishes/", async (req, res, next) => {
 
 // Create dish
 app.post("/api/dishes/new",authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
     try {
-        const data = await newDish(req.body)
-        res.send(data)
+        const { owner } = await getRestaurantOwner(req.body.restaurant)
+        if (token_email === owner) {
+            const data = await newDish(req.body)
+            res.send(data)
+        } else {
+            res.status(403).send("Unauthorized")
+        }
+        
     } catch (error) {
         next(error)
     }
@@ -96,10 +123,17 @@ app.get("/api/restaurants/:restaurant_id/dishes", async (req, res, next) => {
 })
 
 // Delete dish
-app.delete("/api/dishes/:dish_id",authenticateJWT, async (req, res, next) => {
+app.delete("/api/dishes/:dish_id/:r_id",authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
     try {
-        const data = await deleteDish(req.params.dish_id);
-        res.send(data);
+        const { owner } = await getRestaurantOwner(req.params.r_id)
+        if (token_email === owner) {
+            const data = await deleteDish(req.params.dish_id);
+            res.send(data);
+        }
+        else {
+            res.status(403).send("Unauthorized")
+        }
     } catch (error) {
         next(error)
     }
@@ -107,9 +141,17 @@ app.delete("/api/dishes/:dish_id",authenticateJWT, async (req, res, next) => {
 
 // Edit dish
 app.patch("/api/dishes/:dish_id",authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
     try {
-        const data = await updateDish(req.params.dish_id,req.body);
+        const { owner } = await getRestaurantOwner(req.body.restaurant)
+        delete req.body.restaurant
+        if (token_email === owner) {
+            const data = await updateDish(req.params.dish_id,req.body);
         res.send(data)
+        } else {
+            res.status(403).send("Unauthorized")
+        }
+        
     } catch (error) {
         next(error)
     }

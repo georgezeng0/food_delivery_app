@@ -8,6 +8,10 @@ const initialState = {
         isError: false,
         message: ''
     },
+    success: {
+        APIsuccess: false,
+        successType: ''
+    },
     dishes: [],
     form: {
         name: '',
@@ -15,7 +19,8 @@ const initialState = {
         image: '',
         available: true,
         starred: false,
-        category: ''
+        category: '',
+        restaurant: ''
     }
 };
 
@@ -38,9 +43,10 @@ export const getDishes = createAsyncThunk(
 
 export const deleteDish = createAsyncThunk(
     'dish/deleteDish',
-    async (d_id, thunkAPI) => {
+    async ({ d_id, r_id }, thunkAPI) => {
         try {
-            const res = await axios.delete(`/api/dishes/${d_id}`);
+            // Pass restaurant Id into API so that server can check for owner with it
+            const res = await axios.delete(`/api/dishes/${d_id}/${r_id}`);
             thunkAPI.dispatch(getDishes(res.data.restaurant))
             return res.data;
         } catch (error) {
@@ -56,6 +62,7 @@ export const createDish = createAsyncThunk(
             const res = await axios.post(`/api/dishes/new`,
                 {restaurant: r_id, d_id: uuid(),...thunkAPI.getState().dish.form }
             );
+            await thunkAPI.dispatch(getDishes(r_id)) // Await before navigate
             thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
@@ -67,11 +74,12 @@ export const createDish = createAsyncThunk(
 export const editDish = createAsyncThunk(
     'dish/editDish',
     async (d_id, thunkAPI) => {
-        const {name,price,image,available,starred,category} = thunkAPI.getState().dish.form
+        const {name,price,image,available,starred,category,restaurant} = thunkAPI.getState().dish.form
         try {
             const res = await axios.patch(`/api/dishes/${d_id}`, {
-                name,price,image,available,starred,category
+                name,price,image,available,starred,category,restaurant
             })
+            await thunkAPI.dispatch(getDishes(restaurant))
             return res.data;
         } catch (error) {
             return thunkAPI.rejectWIthValue(error.response.data.message)
@@ -113,9 +121,16 @@ const dishSlice = createSlice({
                         image: dish.image,
                         available: dish.available,
                         starred: dish.starred,
-                        category: dish.category || ""
+                        category: dish.category || "",
+                        restaurant: dish.restaurant
                     }
                 }
+            }
+        },
+        resetSuccess: state => {
+            state.success = {
+                APIsuccess: false,
+                successType:''
             }
         }
     },
@@ -140,6 +155,8 @@ const dishSlice = createSlice({
         [deleteDish.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
+            state.success.APIsuccess = true;
+            state.success.successType = 'DELETE_DISH';
         },
         [deleteDish.rejected]: (state, action) => {
             state.isLoading = false;
@@ -152,6 +169,8 @@ const dishSlice = createSlice({
         [createDish.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
+            state.success.APIsuccess = true;
+            state.success.successType = 'CREATE_DISH';
         },
         [createDish.rejected]: (state, action) => {
             state.isLoading = false;
@@ -164,7 +183,9 @@ const dishSlice = createSlice({
         [editDish.fulfilled]: (state,action) => {
             state.isLoading = false;
             state.error.isError = false;
-            state.dishes=[]
+            state.dishes = [];
+            state.success.APIsuccess = true;
+            state.success.successType = 'EDIT_DISH';
         },
         [editDish.rejected]: (state, action) => {
             state.isLoading = false;
@@ -174,5 +195,5 @@ const dishSlice = createSlice({
   }
 });
 
-export const { updateForm, emptyForm,populateForm } = dishSlice.actions;
+export const { updateForm, emptyForm,populateForm,resetSuccess } = dishSlice.actions;
 export default dishSlice.reducer;
