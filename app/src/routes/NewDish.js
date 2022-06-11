@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { updateForm,createDish,populateForm,editDish,getDishes, emptyForm, resetSuccess } from '../features/dishSlice'
+import { Loading } from '../components';
+import { toast } from 'react-toastify';
 
 
 const NewDish = () => {
     const {
         dishes,
+        isLoading,
+        error: { isError, message },
         success: {APIsuccess,successType},
         form: { name, price, image, available, starred,category, restaurant }
         } = useSelector(state => state.dish)
@@ -18,10 +22,14 @@ const NewDish = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!isEdit) {
-            dispatch(createDish(r_id));
+        if (!name || !price || !category) {
+            toast.error('Please fill out required fields.')
         } else {
-            dispatch(editDish(d_id));
+            if (!isEdit) {
+                dispatch(createDish(r_id));
+            } else {
+                dispatch(editDish(d_id));
+            }
         }
     }
 
@@ -44,16 +52,23 @@ const NewDish = () => {
         if (APIsuccess) {
             if (successType === 'CREATE_DISH') {
                 dispatch(resetSuccess())
+                toast.success('Dish created.')
                 navigate(`/restaurants/${r_id}`)
             }
             if (successType === 'EDIT_DISH') {
                 dispatch(resetSuccess())
+                toast.success('Dish updated.')
                 navigate(`/restaurants/${restaurant}`)
             }
         }
     },[APIsuccess])
 
     // Error actions
+    useEffect(() => {
+        if (isError) {
+            toast.error(`ERROR - ${message}`)
+        }
+    },[isError])
 
     const handleChange = (e) => {
         const name = e.target.name;
@@ -118,7 +133,11 @@ const NewDish = () => {
                           <option value="drink" >Drink</option>
                           </select>
                   </div>
-                  <button>Submit</button>
+
+                  {isLoading ? <Loading /> :
+                      <button>Submit</button>
+                  }
+
               </form>
           </div>
     </main>

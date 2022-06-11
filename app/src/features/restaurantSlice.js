@@ -38,7 +38,7 @@ export const getRestaurants = createAsyncThunk(
             const res = await axios('/api/restaurants');
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }
 );
@@ -51,7 +51,7 @@ export const deleteRestaurant = createAsyncThunk(
             thunkAPI.dispatch(getRestaurants())
             return res.data
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }
 );
@@ -70,7 +70,7 @@ export const editRestaurant = createAsyncThunk(
             thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }
 )
@@ -88,7 +88,7 @@ export const createRestaurant = createAsyncThunk(
             thunkAPI.dispatch(emptyForm())
             return res.data
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }
 );
@@ -151,6 +151,7 @@ const restaurantSlice = createSlice({
     },
     extraReducers: {
         [getRestaurants.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading = true;
         },
         [getRestaurants.fulfilled]: (state,action) => {
@@ -164,6 +165,7 @@ const restaurantSlice = createSlice({
             state.error.message = action.payload
         },
         [deleteRestaurant.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading = true;
         },
         [deleteRestaurant.fulfilled]: (state,action) => {
@@ -178,6 +180,7 @@ const restaurantSlice = createSlice({
             state.error.message = action.payload
         },
         [createRestaurant.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading = true;
         },
         [createRestaurant.fulfilled]: (state,action) => {
@@ -192,6 +195,7 @@ const restaurantSlice = createSlice({
             state.error.message = action.payload
         },
         [editRestaurant.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading = true;
         },
         [editRestaurant.fulfilled]: (state,action) => {

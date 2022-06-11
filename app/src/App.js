@@ -49,7 +49,7 @@ function App() {
           <ProtectedRoute user={user} redirectPath='/login' authOwner>
             <NewDish />
             </ProtectedRoute>} />
-        <Route path="/dishes/:d_id/edit" element={
+        <Route path="/dishes/:d_id/:r_id/edit" element={
           <ProtectedRoute user={user} redirectPath='/login' authOwner>
             <NewDish />
             </ProtectedRoute>} />

@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { Loading } from '../components'
 import { updateForm, editUser,populateForm, setLocalUser, emptyForm } from '../features/userSlice'
 
 const UserProfile = () => {
-    const {user,form: {email, name, password, location}} = useSelector(state=>state.user)
+    const { user,isLoading, error:{isError, message}, success,
+        form: { email, name, password, location } } = useSelector(state => state.user)
 
     const dispatch = useDispatch();
 
@@ -12,7 +15,7 @@ const UserProfile = () => {
         if (email && name && location) {
             dispatch(editUser())
         } else {
-            alert("Need to fill out required fields!")
+            toast.error('Please fill out required fields.')
         }
     }
 
@@ -25,7 +28,19 @@ const UserProfile = () => {
     useEffect(() => {
         dispatch(populateForm())
         dispatch(setLocalUser())
-    },[user])
+    }, [user])
+    
+    useEffect(() => {
+        if (success) {
+            toast.success('Profile updated.')
+        }
+    }, [success])
+    
+    useEffect(() => {
+        if (isError) {
+            toast.error(`ERROR - ${message}`)
+        }
+    },[isError])
 
     return (
       <main>
@@ -64,7 +79,8 @@ const UserProfile = () => {
                       />
                   </div>
 
-                  <button>Edit Details</button>
+                  {isLoading ? <Loading /> :
+                      <button>Edit Profile</button>}
               </form>
           </div>
 

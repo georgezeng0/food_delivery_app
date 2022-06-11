@@ -25,6 +25,7 @@ const initialState = {
     password: '',
     location: ''
   },
+  success: false,
   error: {
     isError: false,
     message: ''
@@ -40,7 +41,7 @@ export const registerUser = createAsyncThunk(
       thunkAPI.dispatch(emptyForm());
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWIthValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message)
     }
   }
 )
@@ -55,7 +56,7 @@ export const editUser = createAsyncThunk(
       return res.data
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWIthValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message)
     }
   }
 )
@@ -68,7 +69,7 @@ export const loginUser = createAsyncThunk(
       const res = await axios.post(`api/users/login`, { email,password});
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWIthValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message)
     }
   }
 )
@@ -110,6 +111,7 @@ const userSlice = createSlice({
   },
   extraReducers: {
     [registerUser.pending]: (state) => {
+      state.error.isError = false;
       state.isLoading = true;
   },
   [registerUser.fulfilled]: (state,action) => {
@@ -123,7 +125,8 @@ const userSlice = createSlice({
       state.error.message = action.payload
   },
   [loginUser.pending]: (state) => {
-      state.isLoading = true;
+    state.isLoading = true;
+    state.error.isError = false;
   },
   [loginUser.fulfilled]: (state,action) => {
       state.isLoading = false;
@@ -135,15 +138,17 @@ const userSlice = createSlice({
       state.error.isError = true;
       state.error.message = action.payload
   },
-  [editUser.pending]: (state) => {
+    [editUser.pending]: (state) => {
+      state.error.isError = false;
       state.isLoading = true;
+      state.success = false;
   },
   [editUser.fulfilled]: (state,action) => {
       state.isLoading = false;
       state.error.isError = false;
       state.user = { ...state.user, ...action.payload };
       state.form.password=""
-    
+      state.success = true;
   },
   [editUser.rejected]: (state, action) => {
       state.isLoading = false;

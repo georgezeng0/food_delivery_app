@@ -2,16 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDishes, deleteDish,resetSuccess as dishResetSuccess } from '../features/dishSlice';
-import { getRestaurants,deleteRestaurant, resetSuccess } from '../features/restaurantSlice';
+import { getRestaurants, deleteRestaurant, resetSuccess } from '../features/restaurantSlice';
+import {Loading} from '../components'
+import { toast } from 'react-toastify';
+import Error from './Error';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const {
+    isLoading,
+    error: {isError, message},
     success: { APIsuccess, successType },
     restaurants } = useSelector(state => state.restaurant);
   const { dishes,
+    isLoading: dishLoading,
+    error: {isError:dishError, message:dishErrorMessage},
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
   const { r_id:id } = useParams();
@@ -45,19 +52,41 @@ const SingleRestaurant = () => {
     if (APIsuccess) {
       if (successType === 'DELETE_RESTAURANT') {
         dispatch(resetSuccess())
+        toast.success('Restaurant Deleted')
         navigate('/restaurants')
       }
     } if (DishSuccess) {
-      if (successType === 'DELETE_DISH') {
+      if (DishSuccessType === 'DELETE_DISH') {
         dispatch(dishResetSuccess())
+        toast.success('Dish Deleted')
       }
     }
-  }, [APIsuccess,DishSuccess])
+  }, [APIsuccess, DishSuccess])
+
+  // API error
+  useEffect(() => {
+    if (isError) {
+      toast.error(`ERROR - ${message}`)
+    }
+    if (dishError) {
+      toast.error(`ERROR - ${dishErrorMessage}`)
+    }
+}, [isError,dishError])
+  
+  if (isLoading) {
+    return <Loading/>
+  }
+
+  if (isError || dishError) {
+    return <Error code='500'/>
+  }
   
   return (
     <main>
       <h1>{r_name} </h1>
-      {isOwner&&<span>You own this restaurant</span>}
+
+      {isOwner && <span>You own this restaurant</span>}
+      
       <h3>{location}</h3>
       <div>
         <p>Cuisines: {cuisine}</p>
@@ -73,21 +102,26 @@ const SingleRestaurant = () => {
         </div>}
       
       <h2>Dishes</h2>
-      {dishes.map(dish => {
-        const { d_id, name, price, image, available, starred, category } = dish;
-        return <article key={d_id}>
-          <h4>{name}</h4>
-          <p>{price} - {available ? 'Available' : 'Not available'}</p>
-          <div>
-            <button>Add to basket (NOT FUNCTIONAL)</button>
-            {/* Show edit/delete buttons only if owner */}
-            {isOwner &&<>
-            <Link to={`../../dishes/${d_id}/edit`}><button>Edit</button></Link>
-              <button onClick={() => { dispatch(deleteDish({ d_id, r_id })) }}>Delete</button>
-            </>}
-            </div>
-        </article>
-      })}
+
+      {dishLoading ? <Loading /> :
+  
+          dishes.map(dish => {
+            const { d_id, name, price, image, available, starred, category, restaurant } = dish;
+            return <article key={d_id}>
+              <h4>{name}</h4>
+              <p>{price} - {available ? 'Available' : 'Not available'}</p>
+              <div>
+                <button>Add to basket (NOT FUNCTIONAL)</button>
+                {/* Show edit/delete buttons only if owner */}
+                {isOwner && <>
+                  <Link to={`../../dishes/${d_id}/${restaurant}/edit`}><button>Edit</button></Link>
+                  <button onClick={() => { dispatch(deleteDish({ d_id, r_id })) }}>Delete</button>
+                </>}
+              </div>
+            </article>
+          })
+        }
+  
 
     </main>
   )

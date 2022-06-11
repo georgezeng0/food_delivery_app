@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { Loading } from '../components'
 import { updateForm, registerUser,emptyForm, setLocalUser } from '../features/userSlice'
 
 const Register = () => {
-    const {user,form: {email, name, password, location}} = useSelector(state=>state.user)
+    const { user, isLoading,
+        error: { isError, message },
+        form: { email, name, password, location } } = useSelector(state => state.user)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -14,7 +18,7 @@ const Register = () => {
         if (email && name && password && location) {
             dispatch(registerUser())
         } else {
-            alert("Need to fill out all fields!")
+            toast.error('Please fill out all fields.')
         }
     }
 
@@ -29,9 +33,16 @@ const Register = () => {
         if (user.token) {
             dispatch(setLocalUser())
             dispatch(emptyForm())
+            toast.success(`Hi ${user.name} - Thanks for signing up!`)
             navigate('/restaurants')
         }
     }, [user])
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(`ERROR - ${message}`)
+        }
+    },[isError])
 
     useEffect(() => {
         dispatch(emptyForm())
@@ -73,8 +84,8 @@ const Register = () => {
                           onChange={handleChange}
                       />
                   </div>
-
-                  <button>Submit</button>
+                  {isLoading ? <Loading /> :
+                      <button>Submit</button>}
               </form>
           </div>
     </main>

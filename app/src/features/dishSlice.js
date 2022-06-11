@@ -37,7 +37,7 @@ export const getDishes = createAsyncThunk(
             const res = await axios(url);
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message);
+            return thunkAPI.rejectWithValue(error.response.data.message);
         }
     });
 
@@ -50,7 +50,7 @@ export const deleteDish = createAsyncThunk(
             thunkAPI.dispatch(getDishes(res.data.restaurant))
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message);
+            return thunkAPI.rejectWithValue(error.response.data.message);
         }
     }
 )
@@ -66,7 +66,7 @@ export const createDish = createAsyncThunk(
             thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message);
+            return thunkAPI.rejectWithValue(error.response.data.message);
         }
     }
 )
@@ -82,7 +82,7 @@ export const editDish = createAsyncThunk(
             await thunkAPI.dispatch(getDishes(restaurant))
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWIthValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }
 )
@@ -136,6 +136,7 @@ const dishSlice = createSlice({
     },
     extraReducers: {
         [getDishes.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading = true
             state.dishes=[]
         },
@@ -150,6 +151,7 @@ const dishSlice = createSlice({
             state.error.message = action.payload
         },
         [deleteDish.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading=true
         },
         [deleteDish.fulfilled]: (state,action) => {
@@ -164,6 +166,7 @@ const dishSlice = createSlice({
             state.error.message = action.payload
         },
         [createDish.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading=true
         },
         [createDish.fulfilled]: (state,action) => {
@@ -178,6 +181,7 @@ const dishSlice = createSlice({
             state.error.message = action.payload
         },
         [editDish.pending]: (state) => {
+            state.error.isError = false;
             state.isLoading=true
         },
         [editDish.fulfilled]: (state,action) => {

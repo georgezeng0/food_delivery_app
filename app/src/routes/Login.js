@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { updateForm, loginUser, emptyForm, setLocalUser } from '../features/userSlice'
+import { Loading } from '../components'
 
 const Login = () => {
-  const {user,form: {email, password}} = useSelector(state=>state.user)
+  const { user, isLoading, error:{isError, message},
+    form: { email, password } } = useSelector(state => state.user)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -12,7 +15,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(loginUser())
+    if (email && password) {
+      dispatch(loginUser())
+    } else {
+      toast.error('Please fill out all fields.')
+    }
   }
   
   const handleChange = (e) => {
@@ -29,6 +36,7 @@ const Login = () => {
     if (user.token) {
       dispatch(setLocalUser())
       dispatch(emptyForm())
+      toast.success(`Welcome back ${user.name}`)
       if (location.state?.from) {
         navigate(location.state.from) // If location.state.from exists (from protected route) > go back on login
       } else {
@@ -37,6 +45,12 @@ const Login = () => {
     }
 }, [user])
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(`ERROR - ${message}`)
+    }
+  },[isError])
+  
 return (
   <main>
       <h1>Login</h1>
@@ -58,7 +72,8 @@ return (
                       />
               </div>
 
-              <button>Submit</button>
+              {isLoading ? <Loading /> :
+                      <button>Submit</button>}
           </form>
       </div>
 </main>

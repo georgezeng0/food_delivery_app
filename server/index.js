@@ -193,8 +193,12 @@ app.post("/api/users/new", async (req, res, next) => {
 app.post("/api/users/login", async (req, res, next) => {
     const { email, password } = req.body
     try {
-        const {password: stored_pw} = await getPassword(email)
-        const result = await bcrypt.compare(password, stored_pw)
+        let stored_pw = await getPassword(email)
+        if (!stored_pw) {
+            // If password not found - i.e. user email incorrect/ not in DB
+            throw new Error("Incorrect Details")
+        }
+        const result = await bcrypt.compare(password, stored_pw.password)
         if (result) {
             const user = await getUser(email);
             delete user.password
@@ -239,7 +243,7 @@ app.patch("/api/users/edit",authenticateJWT, async (req, res, next) => {
 
 // 404 handler
 app.all('*', (req, res, next) => {
-    res.status(404).send({error: 'API route not found'})
+    res.status(404).send({message: 'API route not found'})
 })
 
 // Error handler - sends json 

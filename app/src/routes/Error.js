@@ -9,6 +9,9 @@ const Error = ({ code = '404' }) => {
     if (code === '403') {
       setMessage('Unauthorised access to this page.')
     }
+    if (code === '500') {
+      setMessage('Internal Server Error')
+    }
   }, [])
 
   return (

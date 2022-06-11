@@ -3,10 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRestaurant, editRestaurant, getRestaurants, emptyForm,
     updateForm, getCuisines, populateForm, resetSuccess } from '../features/restaurantSlice'
+import { Loading } from '../components'
+import { toast } from 'react-toastify'
 
 const NewRestaurant = () => {
     let {
         restaurants,
+        isLoading,
+        error: { isError, message },
         success: { APIsuccess, newRestaurantId, successType },
         form: { r_name, cuisine, pricepoint, location, open, close, cuisineList }
         } = useSelector(state => state.restaurant)
@@ -35,8 +39,8 @@ const NewRestaurant = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!r_name, cuisine.length == 0, !location) {
-            alert("Please fill in all fields!")
+        if (!r_name || cuisine.length == 0 || !location) {
+            toast.error('Please fill out all fields.')
         } else { 
             if (!isEdit) {
                 dispatch(createRestaurant());
@@ -53,19 +57,26 @@ const NewRestaurant = () => {
         dispatch(updateForm({name,value,checked}))
     }
 
-    // Successful creation
+    // Successful restaurant creation
     useEffect(() => {
         if (newRestaurantId) {
             dispatch(resetSuccess())
+            toast.success('Here is your new restaurant!')
             navigate(`/restaurants/${newRestaurantId}`)
         }
         if (successType === 'EDIT_RESTAURANT') {
             dispatch(resetSuccess()) 
+            toast.success('Restaurant updated.')
             navigate(`/restaurants/${id}`)
         }
     },[APIsuccess])
 
-    // Error creation
+    // Error 
+    useEffect(() => {
+        if (isError) {
+            toast.error(`ERROR - ${message}`)
+        }
+    },[isError])
 
   return (
       <main>
@@ -120,7 +131,13 @@ const NewRestaurant = () => {
                             value={close}
                             onChange={handleChange}/>
                   </div>
-                  <button>Submit</button>
+
+                  {isLoading ?
+                    <Loading/>:
+                    <button>Submit</button>
+                    }
+                  
+
               </form>
           </div>
     </main>
