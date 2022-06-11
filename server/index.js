@@ -38,6 +38,15 @@ app.get("/api/restaurants", async (req, res, next) => {
     }
 })
 
+app.get("/api/restaurants/:r_id/owner", async (req, res, next) => {
+    try {
+        const data = await getRestaurantOwner(req.params.r_id);
+        res.send(data);
+    } catch (error) {
+        next(error);
+    }
+})
+
 app.post("/api/restaurants/new",authenticateJWT, async (req, res, next) => {
     try {
         const token_email = req.user ? req.user.id : undefined;

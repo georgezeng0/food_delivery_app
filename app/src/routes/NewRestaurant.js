@@ -16,7 +16,7 @@ const NewRestaurant = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { id } = useParams();   
+    const { r_id:id } = useParams();   
 
     useEffect(() => {
         dispatch(resetSuccess())

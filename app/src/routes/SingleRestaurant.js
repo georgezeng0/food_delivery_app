@@ -14,7 +14,7 @@ const SingleRestaurant = () => {
   const { dishes,
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
-  const { id } = useParams();
+  const { r_id:id } = useParams();
   const [restaurant, setRestaurant] = useState({});
   const [isOwner, setIsOwner] = useState(false);
   

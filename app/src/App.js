@@ -39,10 +39,20 @@ function App() {
             <NewRestaurant />
             </ProtectedRoute>
         } />
-        <Route path="/restaurants/:id" element={<SingleRestaurant/>}/>
-        <Route path="/restaurants/:id/edit" element={<NewRestaurant/>}/>
-        <Route path="/restaurants/:r_id/new_dish" element={<NewDish/>}/>
-        <Route path="/dishes/:d_id/edit" element={<NewDish/>}/>
+        <Route path="/restaurants/:r_id" element={<SingleRestaurant />} />
+        <Route path="/restaurants/:r_id/edit" element={
+          <ProtectedRoute user={user} redirectPath='/login' authOwner>
+            <NewRestaurant />
+            </ProtectedRoute>
+        } />
+        <Route path="/restaurants/:r_id/new_dish" element={
+          <ProtectedRoute user={user} redirectPath='/login' authOwner>
+            <NewDish />
+            </ProtectedRoute>} />
+        <Route path="/dishes/:d_id/edit" element={
+          <ProtectedRoute user={user} redirectPath='/login' authOwner>
+            <NewDish />
+            </ProtectedRoute>} />
         <Route path="/basket" element={<Basket/>}/>
         <Route path="/checkout" element={
           <ProtectedRoute user={user} redirectPath='/login'>

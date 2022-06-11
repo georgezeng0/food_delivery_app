@@ -1,8 +1,24 @@
 import React from 'react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-const Error = () => {
+const Error = ({ code = '404' }) => {
+  const [message, setMessage] = useState('Page not found.')
+
+  useEffect(() => {
+    if (code === '403') {
+      setMessage('Unauthorised access to this page.')
+    }
+  }, [])
+
   return (
-    <div>Error</div>
+    
+
+    <main>
+      <h1>{code}</h1>
+      <h4>Error - {message}</h4>
+      <Link to='/restaurants'>Back to Restaurants</Link>
+    </main>
   )
 }
 
