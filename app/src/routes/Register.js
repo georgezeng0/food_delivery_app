@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Loading } from '../components'
-import { updateForm, registerUser,emptyForm, setLocalUser } from '../features/userSlice'
+import { updateForm, registerUser,emptyForm, setLocalUser, resetSuccess } from '../features/userSlice'
 
 const Register = () => {
-    const { user, isLoading,
+    const { user, isLoading, success,
         error: { isError, message },
         form: { email, name, password, location } } = useSelector(state => state.user)
 
@@ -30,9 +30,10 @@ const Register = () => {
 
     // Navigate if user successful via useEffect
     useEffect(() => {
-        if (user.token) {
+        if (user.token && success) {
             dispatch(setLocalUser())
             dispatch(emptyForm())
+            dispatch(resetSuccess())
             toast.success(`Hi ${user.name} - Thanks for signing up!`)
             navigate('/restaurants')
         }
@@ -46,6 +47,10 @@ const Register = () => {
 
     useEffect(() => {
         dispatch(emptyForm())
+        if (user.token) {
+        toast.success(`You are already signed up.`)
+        navigate('/restaurants')
+        }
     },[])
 
   return (

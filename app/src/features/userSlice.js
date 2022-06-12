@@ -107,6 +107,9 @@ const userSlice = createSlice({
         token: ''
       };
       localStorage.removeItem('user')
+    },
+    resetSuccess: state => {
+      state.success = false;
     }
   },
   extraReducers: {
@@ -118,6 +121,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error.isError = false;
     state.user = action.payload;
+    state.success=true
   },
   [registerUser.rejected]: (state, action) => {
       state.isLoading = false;
@@ -159,7 +163,7 @@ const userSlice = createSlice({
 });
 
 export const {
-  updateForm, emptyForm,
+  updateForm, emptyForm, resetSuccess,
   setLocalUser, logout, populateForm
   } = userSlice.actions;
 export default userSlice.reducer;

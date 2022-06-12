@@ -56,7 +56,7 @@ const updateDish = async (id, body) => {
             query,
             values
         );
-        return res;
+        return res.rows;
     } catch (error) {
         throw new Error(error);
     }

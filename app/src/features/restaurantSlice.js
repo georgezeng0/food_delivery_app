@@ -25,7 +25,6 @@ const initialState = {
         location: '',
         open: '00:00',
         close: '23:00',
-        rating: 0,
         owner: ''
     },
     sort: {}    
@@ -60,11 +59,11 @@ export const editRestaurant = createAsyncThunk(
     'restaurant/editRestaurant',
     async (id, thunkAPI) => {
         const { r_name, cuisine, pricepoint,
-            location, open, close, rating } = thunkAPI.getState().restaurant.form
+            location, open, close } = thunkAPI.getState().restaurant.form
         try {
             const res = await axios.patch(`/api/restaurants/${id}`,
             {r_id:id,r_name, cuisine, pricepoint,
-                location, open, close, rating}
+                location, open, close}
             );
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before edited restaurant loaded
             thunkAPI.dispatch(emptyForm())
@@ -137,7 +136,6 @@ const restaurantSlice = createSlice({
                 location: '',
                 open: '00:00',
                 close: '23:00',
-                rating: 0,
                 owner: ''
             }
         },

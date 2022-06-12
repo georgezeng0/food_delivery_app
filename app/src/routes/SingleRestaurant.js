@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDishes, deleteDish,resetSuccess as dishResetSuccess } from '../features/dishSlice';
 import { getRestaurants, deleteRestaurant, resetSuccess } from '../features/restaurantSlice';
-import {Loading} from '../components'
+import {Loading, ReviewForm, Reviews} from '../components'
 import { toast } from 'react-toastify';
 import Error from './Error';
 
@@ -21,12 +21,14 @@ const SingleRestaurant = () => {
     error: {isError:dishError, message:dishErrorMessage},
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
+  const { avg_rating } = useSelector(state => state.review);
   const { r_id:id } = useParams();
   const [restaurant, setRestaurant] = useState({});
   const [isOwner, setIsOwner] = useState(false);
+  const [rating, setRating] = useState(0);
   
   const {
-    r_id, r_name, cuisine, pricepoint, location, open, close, rating, owner
+    r_id, r_name, cuisine, pricepoint, location, open, close, owner
   } = restaurant;
 
   useEffect(() => {
@@ -46,6 +48,8 @@ const SingleRestaurant = () => {
   useEffect(() => {
       dispatch(getDishes(id))
   }, [])
+
+ 
   
   // Success actions
   useEffect(() => {
@@ -89,6 +93,7 @@ const SingleRestaurant = () => {
       
       <h3>{location}</h3>
       <div>
+        <p>Rating: {avg_rating}</p>
         <p>Cuisines: {cuisine}</p>
         <p>Pricepoint: {pricepoint}</p>
         <p>Opening times: {open}-{close}</p>
@@ -121,7 +126,9 @@ const SingleRestaurant = () => {
             </article>
           })
         }
-  
+
+      <Reviews r_id={id} />
+      <ReviewForm r_id={id}/>
 
     </main>
   )

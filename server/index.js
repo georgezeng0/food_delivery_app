@@ -4,13 +4,15 @@ if(process.env.NODE_ENV !== "production"){
 
 const express = require('express');
 const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
-const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRestaurantOwner } = require('../models/restaurant_model');
+const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRestaurantOwner, getRating } = require('../models/restaurant_model');
 const { registerUser, getPassword,getUser,editUser } = require('../models/user_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { createReview, getReviews, deleteReview, getReviewOwner, editReview } = require('../models/review_model');
 
 // Utils
-const { authenticateJWT } = require('./utils/auth_middleware.js')
+const { authenticateJWT } = require('./utils/auth_middleware.js');
+
 
 // env variables
 const PORT = process.env.PORT || 5000;
@@ -239,7 +241,58 @@ app.patch("/api/users/edit",authenticateJWT, async (req, res, next) => {
     }
 })
 
+// Get reviews
+app.get('/api/reviews/:r_id', async (req, res, next) => {
+    try {
+        const data = await getReviews(req.params.r_id);
+        res.send(data);
+    } catch (error) {
+        next(error)
+    }
+})
 
+// Create review
+app.post('/api/reviews/new', authenticateJWT, async (req, res, next) => {
+    try {
+        const data = await createReview(req.body);
+        res.send(data)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Edit review
+app.patch('/api/reviews/:rev_id', authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
+    try {
+        const { author } = await getReviewOwner(req.params.rev_id)
+        if (token_email===author) {
+            const data = await editReview(req.params.rev_id,req.body);
+            res.send(data)
+        } else {
+            res.status(403).send('Unauthorised')
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+
+// Delete review
+app.delete('/api/reviews/:rev_id',authenticateJWT, async (req, res, next) => {
+    const token_email = req.user ? req.user.id : undefined;
+    try {
+        const { author } = await getReviewOwner(req.params.rev_id)
+        if (token_email===author) {
+            const data = await deleteReview(req.params.rev_id);
+            res.send(data)
+        } else {
+            res.status(403).send('Unauthorised')
+        }
+    } catch (error) {
+        next(error)
+    }
+})
 
 // 404 handler
 app.all('*', (req, res, next) => {
