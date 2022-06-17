@@ -6,6 +6,7 @@ import { getRestaurants, deleteRestaurant, resetSuccess } from '../features/rest
 import {Loading, ReviewForm, Reviews} from '../components'
 import { toast } from 'react-toastify';
 import Error from './Error';
+import { addItem, resetError } from '../features/basketSlice';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -22,10 +23,10 @@ const SingleRestaurant = () => {
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
   const { avg_rating } = useSelector(state => state.review);
+  const {error: {isError:basketError, type:basketErrorType}} = useSelector(state=>state.basket)
   const { r_id:id } = useParams();
   const [restaurant, setRestaurant] = useState({});
   const [isOwner, setIsOwner] = useState(false);
-  const [rating, setRating] = useState(0);
   
   const {
     r_id, r_name, cuisine, pricepoint, location, open, close, owner
@@ -49,7 +50,14 @@ const SingleRestaurant = () => {
       dispatch(getDishes(id))
   }, [])
 
- 
+ // If adding to basket with dishes from another restaurant
+  useEffect(() => {
+    if (basketError && basketErrorType === "DIFF_RESTAURANT") {
+      // Should upgrade this to a modal with option to empty basket or goto that restaurant.
+      toast.error('You already have a basket from another restaurant!')
+      dispatch(resetError())
+    }
+  }, [basketError])
   
   // Success actions
   useEffect(() => {
@@ -116,7 +124,12 @@ const SingleRestaurant = () => {
               <h4>{name}</h4>
               <p>{price} - {available ? 'Available' : 'Not available'}</p>
               <div>
-                <button>Add to basket (NOT FUNCTIONAL)</button>
+                <button disabled={!available}
+                  onClick={async () => {
+                    dispatch(addItem(dish))
+                  }}
+                >Add to basket</button>
+                
                 {/* Show edit/delete buttons only if owner */}
                 {isOwner && <>
                   <Link to={`../../dishes/${d_id}/${restaurant}/edit`}><button>Edit</button></Link>

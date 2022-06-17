@@ -9,8 +9,10 @@ import {
   Checkout, Basket, Error, NewRestaurant, NewDish,
   Register, UserProfile, ProtectedRoute
 } from './routes'
+import { updateTotals } from './features/basketSlice'
 
 function App() {
+  const dispatch = useDispatch()
   
   // Check for user
   const { user } = useSelector(state => state.user)
@@ -26,7 +28,20 @@ function App() {
     error => {
     
     return Promise.reject(error)
-  })
+    })
+  
+  // Basket saving to local storage
+  const { basket } = useSelector(state => state.basket)
+  
+  useEffect(() => {
+    if (basket.length > 0) {
+      localStorage.setItem('basket', JSON.stringify(basket))
+    } else {
+      localStorage.removeItem('basket')
+    }
+    dispatch(updateTotals())
+  },[basket])
+
   
   return (
     <BrowserRouter>
