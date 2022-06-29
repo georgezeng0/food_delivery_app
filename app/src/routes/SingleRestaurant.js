@@ -29,7 +29,7 @@ const SingleRestaurant = () => {
   const [isOwner, setIsOwner] = useState(false);
   
   const {
-    r_id, r_name, cuisine, pricepoint, location, open, close, owner
+    r_id, r_name, cuisine, pricepoint, location, open, close, owner, image
   } = restaurant;
 
   useEffect(() => {
@@ -95,6 +95,8 @@ const SingleRestaurant = () => {
   
   return (
     <main>
+      {/* Consider cloudinary transformation API */}
+      <img src={image} width="500px"></img>
       <h1>{r_name} </h1>
 
       {isOwner && <span>You own this restaurant</span>}

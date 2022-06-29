@@ -13,4 +13,8 @@ export const store = configureStore({
         review: reviewSlice,
         user: userSlice
   },
+  // Add this middleware so that file upload can be added to state
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+})
 });

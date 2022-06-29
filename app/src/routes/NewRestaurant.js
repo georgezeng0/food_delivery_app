@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { createRestaurant, editRestaurant, getRestaurants, emptyForm,
+import { createRestaurant, addImageUrl, editRestaurant, getRestaurants, emptyForm,
     updateForm, getCuisines, populateForm, resetSuccess } from '../features/restaurantSlice'
 import { Loading } from '../components'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const NewRestaurant = () => {
     let {
@@ -16,6 +17,8 @@ const NewRestaurant = () => {
         } = useSelector(state => state.restaurant)
 
     const [isEdit, setIsEdit] = useState(false);
+    const [image, setImage] = useState('');
+
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -36,23 +39,55 @@ const NewRestaurant = () => {
         dispatch(getCuisines()) // Gets the list of cuisines for the form dynamically
     }, [restaurants]);
 
+    // Uses cloudinary upload API
+    const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`
+    const imageUpload = async () => {
+        const formData = new FormData();
+        // Update formData object to send to cloudinary
+        formData.append("file", image)
+        formData.append("upload_preset",process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET)
+        formData.append("folder","food_delivery_app") // folder on cloudinary
+        try {
+            const res = await axios.post(url, formData,
+                {
+                    transformRequest: (data, headers) => {
+                        headers["X-Requested-With"]="XMLHttpRequest"
+                        delete headers['Authorization'];
+                        return data;
+                    }
+                })
+            return res.data.url
+        } catch (error) {
+            console.log(error);
+            toast.error("Error uploading image")
+        }
+    }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!r_name || cuisine.length == 0 || !location) {
             toast.error('Please fill out all fields.')
         } else { 
-            if (!isEdit) {
-                dispatch(createRestaurant());
-            } else {
-                dispatch(editRestaurant(id));
-            }
+                if (!isEdit) {
+                    if (image) {
+                        const res = await imageUpload()
+                        if (res) {
+                            dispatch(addImageUrl(res))
+                            dispatch(createRestaurant());
+                        }
+                    } else {
+                        dispatch(createRestaurant());
+                    }
+                } else {
+                    dispatch(editRestaurant(id));
+                }
+        
         }
     }
 
     const handleChange = (e) => {
         const name = e.target.name;
-        const value = e.target.value;
+        let value = e.target.value;
         const checked = e.target.checked;
         dispatch(updateForm({name,value,checked}))
     }
@@ -130,6 +165,14 @@ const NewRestaurant = () => {
                       <input type="time" id="close" name="close"
                             value={close}
                             onChange={handleChange}/>
+                  </div>
+
+                  {/* Image */}
+                  <div>
+                      <label htmlFor="image">Select Image</label>
+                      <input type="file" accept="image/*" name="image" id="image"
+                            onChange={e=>setImage(e.target.files[0])}
+                      />
                   </div>
 
                   {isLoading ?

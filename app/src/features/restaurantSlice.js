@@ -25,7 +25,8 @@ const initialState = {
         location: '',
         open: '00:00',
         close: '23:00',
-        owner: ''
+        owner: '',
+        image: ''
     },
     sort: {}    
 };
@@ -104,7 +105,8 @@ const restaurantSlice = createSlice({
                     const index = state.form.cuisine.indexOf(value)
                     state.form.cuisine.splice(index, 1)
                 }
-            } else {
+            }
+            else {
                 state.form[name] = value
             }
         },
@@ -136,7 +138,8 @@ const restaurantSlice = createSlice({
                 location: '',
                 open: '00:00',
                 close: '23:00',
-                owner: ''
+                owner: '',
+                image: null
             }
         },
         resetSuccess: state => {
@@ -145,6 +148,9 @@ const restaurantSlice = createSlice({
                 successType:'',
                 newRestaurantId:''
             }
+        },
+        addImageUrl: (state, action) => {
+            state.form.image=action.payload
         }
     },
     extraReducers: {
@@ -210,5 +216,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {updateForm,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
+export const {updateForm,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;
