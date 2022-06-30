@@ -13,7 +13,7 @@ const NewRestaurant = () => {
         isLoading,
         error: { isError, message },
         success: { APIsuccess, newRestaurantId, successType },
-        form: { r_name, cuisine, pricepoint, location, open, close, cuisineList }
+        form: { r_name, cuisine, pricepoint, location, open, close, old_image,cuisineList }
         } = useSelector(state => state.restaurant)
 
     const [isEdit, setIsEdit] = useState(false);
@@ -79,7 +79,16 @@ const NewRestaurant = () => {
                         dispatch(createRestaurant());
                     }
                 } else {
-                    dispatch(editRestaurant(id));
+                    if (image) {
+                        const res = await imageUpload()
+                        if (res) {
+                            dispatch(addImageUrl(res))
+                            dispatch(editRestaurant(id));
+                        }
+                    } else {
+                        dispatch(editRestaurant(id));
+                    }
+                    
                 }
         
         }
@@ -169,11 +178,18 @@ const NewRestaurant = () => {
 
                   {/* Image */}
                   <div>
-                      <label htmlFor="image">Select Image</label>
+                      <label htmlFor="image">{!isEdit?`Select`:`Edit`} Image</label>
                       <input type="file" accept="image/*" name="image" id="image"
                             onChange={e=>setImage(e.target.files[0])}
                       />
                   </div>
+
+                  {isEdit &&
+                      <div>
+                          Old Image: {!old_image && 'None'}
+                          <img src={old_image}/>
+                  </div>
+                  }
 
                   {isLoading ?
                     <Loading/>:

@@ -26,7 +26,8 @@ const initialState = {
         open: '00:00',
         close: '23:00',
         owner: '',
-        image: ''
+        image: '',
+        old_image: ''
     },
     sort: {}    
 };
@@ -60,11 +61,11 @@ export const editRestaurant = createAsyncThunk(
     'restaurant/editRestaurant',
     async (id, thunkAPI) => {
         const { r_name, cuisine, pricepoint,
-            location, open, close } = thunkAPI.getState().restaurant.form
+            location, open, close, image } = thunkAPI.getState().restaurant.form
         try {
             const res = await axios.patch(`/api/restaurants/${id}`,
             {r_id:id,r_name, cuisine, pricepoint,
-                location, open, close}
+                location, open, close, image}
             );
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before edited restaurant loaded
             thunkAPI.dispatch(emptyForm())
@@ -125,8 +126,8 @@ const restaurantSlice = createSlice({
         },
         populateForm: (state, { payload: id }) => {
             if (state.restaurants.length > 0) {
-                const {r_name,cuisine,location,open,close,pricepoint}=state.restaurants.find(r => r.r_id === id)
-                state.form={...state.form,r_name,cuisine,location,open,close,pricepoint}
+                const {r_name,cuisine,location,open,close,pricepoint,image}=state.restaurants.find(r => r.r_id === id)
+                state.form={...state.form,r_name,cuisine,location,open,close,pricepoint, old_image:image}
             }
         },
         emptyForm: state => {
@@ -151,7 +152,13 @@ const restaurantSlice = createSlice({
         },
         addImageUrl: (state, action) => {
             state.form.image=action.payload
-        }
+        }, 
+        resetError: state => {
+            state.error= {
+                isError: false,
+                message: ''
+            }
+        },
     },
     extraReducers: {
         [getRestaurants.pending]: (state) => {
@@ -216,5 +223,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {updateForm,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
+export const {updateForm,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;

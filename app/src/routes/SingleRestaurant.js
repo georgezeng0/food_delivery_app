@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDishes, deleteDish,resetSuccess as dishResetSuccess } from '../features/dishSlice';
-import { getRestaurants, deleteRestaurant, resetSuccess } from '../features/restaurantSlice';
+import { getRestaurants, deleteRestaurant, resetSuccess, resetError as resetRestaurantError } from '../features/restaurantSlice';
 import {Loading, ReviewForm, Reviews} from '../components'
 import { toast } from 'react-toastify';
 import Error from './Error';
@@ -36,7 +36,14 @@ const SingleRestaurant = () => {
     if (restaurants.length === 0) {
       dispatch(getRestaurants())
     } else {
-      setRestaurant(restaurants.find(r => r.r_id === id))
+      const foundRestaurant = restaurants.find(r => r.r_id === id)
+      if (!foundRestaurant) {
+        toast.error('Restaurant not found')
+        navigate('/restaurants')
+      } else {
+      
+        setRestaurant(foundRestaurant)
+      }
     }
   }, [restaurants])
 
@@ -89,7 +96,12 @@ const SingleRestaurant = () => {
     return <Loading/>
   }
 
-  if (isError || dishError) {
+  if (isError) {
+    if (message && message.match(/^403/gm)) {
+      dispatch(resetRestaurantError())
+      return <Error code='403'/>
+    }
+    dispatch(resetRestaurantError())
     return <Error code='500'/>
   }
   

@@ -4,18 +4,20 @@ const { v4: uuid } = require('uuid')
 const seedDishes = require("./seed_dishes");
 
 // Variables
-const NUM = 50 // Number to seed
+const NUM = 20 // Number to seed
 const ADJ_RATE = 0.8 // Rate of names with an adjective
 const THE_RATE = 0.35 // Rate of names with "The" at start
 
 // Import helper files
 const { postcodes } = require('./postcodes')
 const { adjectives, nouns } = require('./names.json');
+const { images } = require('./images.json');
 
 const cuisines = [
     "African", "American", "Asian", "British", "Brunch", "Caribbean", "Chinese", "Fast-food", "French",
     "German", "Greek", "Indian", "Italian", "Japanese", "Korean", "Pizza", "Mexican","Seafood","Spanish"
 ]
+
 
 // Helper functions //
 const randomName = () => {
@@ -45,6 +47,11 @@ const randomCuisines = () => {
     return `${string.slice(0,string.length-1)}}`
 }
 
+const randomImage = () => {
+    const rand=Math.floor(Math.random()*images.length)
+    return images[rand]
+}
+
 // BuildList - this is positional with regard to col names. Update this if
 // column names change.
 const buildList = () => {
@@ -58,8 +65,8 @@ const buildList = () => {
             postcodes[Math.floor(Math.random() * postcodes.length)], //location
             "00:00", // open
             "23:59", // close - Currently open 24h for seeded restaurants
-            0 // rating
-            // owner column - not yet implemented in seed
+            "georgexzeng@outlook.com", // owner column
+            randomImage(), // image_url
         ])
     }
     return res

@@ -7,7 +7,7 @@ const Error = ({ code = '404' }) => {
 
   useEffect(() => {
     if (code === '403') {
-      setMessage('Unauthorised access to this page.')
+      setMessage('Unauthorised access to this page. Your login may have expired.')
     }
     if (code === '500') {
       setMessage('Internal Server Error')

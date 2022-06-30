@@ -65,6 +65,7 @@ app.post("/api/restaurants/new",authenticateJWT, async (req, res, next) => {
 
 app.delete("/api/restaurants/:id",authenticateJWT, async (req, res, next) => {
     const token_email = req.user ? req.user.id : undefined;
+    
     try {
         const { owner } = await getRestaurantOwner(req.params.id)
         // Only owner may delete
