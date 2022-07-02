@@ -4,6 +4,7 @@ import ReviewForm from "./ReviewForm"
 import Reviews from "./Reviews"
 import BasketItems from "./BasketItems"
 import BasketTotals from "./BasketTotals"
+import FilterSearch from "./FilterSearch"
 
 export {
     Navbar,
@@ -11,5 +12,6 @@ export {
     Reviews,
     ReviewForm,
     BasketItems,
-    BasketTotals
+    BasketTotals,
+    FilterSearch
 }

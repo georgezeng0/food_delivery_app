@@ -14,9 +14,7 @@ const initialState = {
         message: ''
     },
     restaurants: [],
-    filter: {
-        search: ""
-    },
+    sorted_restaurants: [],
     form: {
         r_name:'',
         cuisine: [],
@@ -29,7 +27,12 @@ const initialState = {
         image: '',
         old_image: ''
     },
-    sort: {}    
+    sort: {
+        search: '',
+        cuisine: 'all',
+        sort: '',
+        sortList: ['A-Z','Z-A','Price Low-High','Price High-Low']
+    }    
 };
 
 export const getRestaurants = createAsyncThunk(
@@ -113,7 +116,7 @@ const restaurantSlice = createSlice({
         },
         getCuisines: (state) => {
             if (state.restaurants.length > 0) {
-                const list =state.restaurants.reduce((list, item) => {
+                const list = state.restaurants.reduce((list, item) => {
                     item.cuisine.map(cuisine => {
                         if (!list.includes(cuisine)) {
                             list.push(cuisine)
@@ -121,13 +124,13 @@ const restaurantSlice = createSlice({
                     })
                     return list
                 }, [])
-                state.form.cuisineList=list
+                state.form.cuisineList = list
             }
         },
         populateForm: (state, { payload: id }) => {
             if (state.restaurants.length > 0) {
-                const {r_name,cuisine,location,open,close,pricepoint,image}=state.restaurants.find(r => r.r_id === id)
-                state.form={...state.form,r_name,cuisine,location,open,close,pricepoint, old_image:image}
+                const { r_name, cuisine, location, open, close, pricepoint, image } = state.restaurants.find(r => r.r_id === id)
+                state.form = { ...state.form, r_name, cuisine, location, open, close, pricepoint, old_image: image }
             }
         },
         emptyForm: state => {
@@ -146,18 +149,47 @@ const restaurantSlice = createSlice({
         resetSuccess: state => {
             state.success = {
                 APIsuccess: false,
-                successType:'',
-                newRestaurantId:''
+                successType: '',
+                newRestaurantId: ''
             }
         },
         addImageUrl: (state, action) => {
-            state.form.image=action.payload
-        }, 
+            state.form.image = action.payload
+        },
         resetError: state => {
-            state.error= {
+            state.error = {
                 isError: false,
                 message: ''
             }
+        },
+        updateSort: (state, { payload: { name, value } }) => {
+            state.sort[name] = value;
+
+            state.sorted_restaurants = state.restaurants.filter(
+                r => {
+                    const r_name = r.r_name.toUpperCase()
+                    const search_name = (state.sort.search).toUpperCase()
+                    return (r_name.includes(search_name)) &&
+                        (state.sort.cuisine === 'all' || r.cuisine.includes(state.sort.cuisine))
+                })
+            const toSort = [...state.sorted_restaurants]
+            toSort.sort(
+                    (a, b) => {
+                    if (state.sort.sort === 'A-Z') {
+                        return a.r_name.localeCompare(b.r_name)
+                    }
+                    if (state.sort.sort === 'Z-A') {
+                        return b.r_name.localeCompare(a.r_name)
+                    }
+                    if (state.sort.sort === 'Price Low-High') {
+                        return a.pricepoint-b.pricepoint
+                    }
+                    if (state.sort.sort === 'Price High-Low') {
+                        return b.pricepoint-a.pricepoint
+                    }
+                }
+            )
+            state.sorted_restaurants=[...toSort]
         },
     },
     extraReducers: {
@@ -169,6 +201,7 @@ const restaurantSlice = createSlice({
             state.isLoading = false;
             state.error.isError = false;
             state.restaurants = action.payload;
+            state.sorted_restaurants = action.payload;
         },
         [getRestaurants.rejected]: (state, action) => {
             state.isLoading = false;
@@ -223,5 +256,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {updateForm,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
+export const {updateForm,updateSort,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;

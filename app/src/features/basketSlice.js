@@ -30,7 +30,7 @@ const basketSlice = createSlice({
     },
     addItem: (state, { payload: dish }) => {
       if (state.basket.length < 1) {
-        state.restaurant.id=dish.restaurant
+        state.restaurant=dish.restaurant
       }
       if (state.restaurant != dish.restaurant) {
         state.error = { isError: true, type: 'DIFF_RESTAURANT' }

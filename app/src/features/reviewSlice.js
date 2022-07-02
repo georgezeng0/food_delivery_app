@@ -116,6 +116,7 @@ const reviewSlice = createSlice({
   },
   extraReducers: {
     [getReviews.pending]: (state) => {
+      state.avg_rating = 0;
       state.error.isLoadError = false;
       state.isLoading = true;
    },
