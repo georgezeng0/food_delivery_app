@@ -4,14 +4,27 @@ import axios from 'axios';
 const getLocalUser = () => {
   const localUser = localStorage.getItem('user');
   if (localUser) {
-    return JSON.parse(localUser)
+    const user = JSON.parse(localUser)
+    if (user.expires <= Date.now()) {
+      return {
+        email: '',
+        name: '',
+        location: '',
+        group: '',
+        token: '',
+        expires: '',
+      }
+    } else {
+      return user
+    } 
   } else {
     return {
       email: '',
       name: '',
       location: '',
       group: '',
-      token: ''
+      token: '',
+      expires: '',
     }
   }
 }
@@ -41,7 +54,8 @@ export const registerUser = createAsyncThunk(
       thunkAPI.dispatch(emptyForm());
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message || error.response.data)
+      // Error.response.data to catch any messages not manually set
     }
   }
 )
@@ -52,11 +66,10 @@ export const editUser = createAsyncThunk(
     const input = thunkAPI.getState().user.form;
     
     try {
-      const res = await axios.patch(`api/users/edit`,input);
+      const res = await axios.patch(`api/users/edit`, input);
       return res.data
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
     }
   }
 )
@@ -69,7 +82,7 @@ export const loginUser = createAsyncThunk(
       const res = await axios.post(`api/users/login`, { email,password});
       return res.data
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
     }
   }
 )

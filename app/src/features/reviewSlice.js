@@ -34,7 +34,7 @@ export const getReviews = createAsyncThunk(
       const res = await axios(`/api/reviews/${r_id}`);
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
   }
   }
 )
@@ -51,7 +51,7 @@ export const createReview = createAsyncThunk(
       thunkAPI.dispatch(getReviews(r_id));
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
   }
   }
 )
@@ -66,7 +66,7 @@ export const editReview = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
   }
   }
 )
@@ -78,7 +78,7 @@ export const deleteReview = createAsyncThunk(
       const res = await axios.delete(`/api/reviews/${rev_id}`);
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message)
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
   }
   }
 )

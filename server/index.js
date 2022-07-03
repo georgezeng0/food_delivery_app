@@ -4,7 +4,7 @@ if(process.env.NODE_ENV !== "production"){
 
 const express = require('express');
 const { getDishes, newDish, deleteDish, updateDish } = require('../models/dish_model');
-const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRestaurantOwner, getRating } = require('../models/restaurant_model');
+const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRestaurantOwner, getRating, getRestaurantById } = require('../models/restaurant_model');
 const { registerUser, getPassword,getUser,editUser } = require('../models/user_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -34,6 +34,15 @@ app.get("/api", (req, res) => {
 app.get("/api/restaurants", async (req, res, next) => {
     try {
         const data = await getRestaurants();
+        res.send(data);
+    } catch (error) {
+        next(error);
+    }
+})
+
+app.get("/api/restaurants/:r_id", async (req, res, next) => {
+    try {
+        const data = await getRestaurantById(req.params.r_id);
         res.send(data);
     } catch (error) {
         next(error);
@@ -215,7 +224,7 @@ app.post("/api/users/login", async (req, res, next) => {
                     expiresIn: 86400 // 24h 
                 } 
             )
-            res.send({ ...user, token })
+            res.send({ ...user, token, expires: Date.now()+86400 })
         } else {
             throw new Error("Incorrect Details")
         }

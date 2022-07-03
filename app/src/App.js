@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Navbar } from './components'
-import { getLocalUser } from './features/userSlice'
 import axios from 'axios'
 import {
   Landing, Login, Restaurants, SingleRestaurant,
@@ -18,6 +17,7 @@ function App() {
   const { user } = useSelector(state => state.user)
   
   // Axios authorisation config
+  // Auth request interceptor
   axios.interceptors.request.use(
     request => {
       if (user.token) {
@@ -29,6 +29,8 @@ function App() {
     
     return Promise.reject(error)
     })
+  
+  
   
   // Basket saving to local storage
   const { basket } = useSelector(state => state.basket)

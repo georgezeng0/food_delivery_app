@@ -5,6 +5,8 @@ import Reviews from "./Reviews"
 import BasketItems from "./BasketItems"
 import BasketTotals from "./BasketTotals"
 import FilterSearch from "./FilterSearch"
+import DishFilter from "./DishFilter"
+import DishList from "./DishList"
 
 export {
     Navbar,
@@ -13,5 +15,7 @@ export {
     ReviewForm,
     BasketItems,
     BasketTotals,
-    FilterSearch
+    FilterSearch,
+    DishFilter,
+    DishList
 }

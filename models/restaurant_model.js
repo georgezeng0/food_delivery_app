@@ -12,6 +12,18 @@ const getRestaurants = async () => {
     }
 }
 
+const getRestaurantById = async (id) => {
+    try {
+        const res = await pool.query(
+            'SELECT * FROM restaurants WHERE r_id=$1',
+            [id]
+        )
+        return res.rows[0]
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 const createRestaurant = async (body) => {
     const { r_id, r_name, cuisine, pricepoint,location,open,close,image='NULL',owner='NULL' } = body
     let cuisine_string = '{'
@@ -82,4 +94,5 @@ module.exports = {
     deleteRestaurant,
     updateRestaurant,
     getRestaurantOwner,
+    getRestaurantById
 }

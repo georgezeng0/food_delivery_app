@@ -9,7 +9,12 @@ const authenticateJWT = (req, res, next) => {
         
         jwt.verify(token, TOKEN_SECRET, (err, user) => {
             if (err) {
-                next(new Error(`403 - ${err.message}`));
+                if (err.name === "TokenExpiredError") {
+                    // Send a 401 status so that axios interceptor logsout and redirects
+                    res.status(401).send({message: "JWT expired"})
+                } else {
+                    res.sendStatus(403);
+                }
             }
             req.user = user;
             next()

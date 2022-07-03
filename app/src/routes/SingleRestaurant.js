@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDishes, deleteDish,resetSuccess as dishResetSuccess } from '../features/dishSlice';
 import { getRestaurants, deleteRestaurant, resetSuccess, resetError as resetRestaurantError } from '../features/restaurantSlice';
-import {Loading, ReviewForm, Reviews} from '../components'
+import {DishFilter, DishList, Loading, ReviewForm, Reviews} from '../components'
 import { toast } from 'react-toastify';
 import Error from './Error';
-import { addItem, resetError } from '../features/basketSlice';
+import { resetError } from '../features/basketSlice';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -130,29 +130,11 @@ const SingleRestaurant = () => {
       
       <h2>Dishes</h2>
 
+      <DishFilter/>
+
       {dishLoading ? <Loading /> :
-  
-          dishes.map(dish => {
-            const { d_id, name, price, image, available, starred, category, restaurant } = dish;
-            return <article key={d_id}>
-              <h4>{name}</h4>
-              <p>{price} - {available ? 'Available' : 'Not available'}</p>
-              <div>
-                <button disabled={!available}
-                  onClick={async () => {
-                    dispatch(addItem(dish))
-                  }}
-                >Add to basket</button>
-                
-                {/* Show edit/delete buttons only if owner */}
-                {isOwner && <>
-                  <Link to={`../../dishes/${d_id}/${restaurant}/edit`}><button>Edit</button></Link>
-                  <button onClick={() => { dispatch(deleteDish({ d_id, r_id })) }}>Delete</button>
-                </>}
-              </div>
-            </article>
-          })
-        }
+        <DishList isOwner={isOwner} r_id={r_id}/>
+      }
 
       <Reviews r_id={id} />
       <ReviewForm r_id={id}/>

@@ -21,7 +21,8 @@ const initialState = {
         starred: false,
         category: '',
         restaurant: ''
-    }
+    },
+    filter: ''
 };
 
 // const ROOT = window.location.hostname
@@ -35,6 +36,7 @@ export const getDishes = createAsyncThunk(
         }
         try {
             const res = await axios(url);
+            thunkAPI.dispatch(resetFilter())
             return res.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data.message);
@@ -132,6 +134,12 @@ const dishSlice = createSlice({
                 APIsuccess: false,
                 successType:''
             }
+        },
+        updateFilter: (state, action) =>{
+            state.filter = action.payload
+        },
+        resetFilter: state => {
+            state.filter=''
         }
     },
     extraReducers: {
@@ -199,5 +207,5 @@ const dishSlice = createSlice({
   }
 });
 
-export const { updateForm, emptyForm,populateForm,resetSuccess } = dishSlice.actions;
+export const { updateForm, emptyForm,populateForm,resetSuccess,resetFilter, updateFilter } = dishSlice.actions;
 export default dishSlice.reducer;

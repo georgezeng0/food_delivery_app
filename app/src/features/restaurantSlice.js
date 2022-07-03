@@ -42,7 +42,7 @@ export const getRestaurants = createAsyncThunk(
             const res = await axios('/api/restaurants');
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
         }
     }
 );
@@ -55,7 +55,7 @@ export const deleteRestaurant = createAsyncThunk(
             thunkAPI.dispatch(getRestaurants())
             return res.data
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
         }
     }
 );
@@ -74,7 +74,7 @@ export const editRestaurant = createAsyncThunk(
             thunkAPI.dispatch(emptyForm())
             return res.data;
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
         }
     }
 )
@@ -92,7 +92,7 @@ export const createRestaurant = createAsyncThunk(
             thunkAPI.dispatch(emptyForm())
             return res.data
         } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
+            return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
         }
     }
 );
