@@ -24,6 +24,7 @@ const Navbar = () => {
 const Wrapper = styled.nav`
     display: flex;
     justify-content: space-evenly;
+    height: var(--nav-height)
 `;
 
 export default Navbar

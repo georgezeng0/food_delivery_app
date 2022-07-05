@@ -7,7 +7,51 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root {
+  /* colors */
+  --primary-1: #e0aaff;
+  --primary-2: #c77dff;
+  --primary-3: #9d4edd;
+  --primary-4: #7b2cbf;
+  --primary-5: #5a189a;
+  --primary-6: #3c096c;
+  --primary-7: #240046;
+  --primary-8: #10002b;
+
+  --secondary-1: #a5e6ba;
+  --secondary-2: #9ac6c5;
+  --secondary-3: #7785ac;
+  --secondary-4: #3a0ca3;
+
+  /* grey */
+  --grey-1: #e5e6eb;
+  --grey-2: #d2d4dc;
+  --grey-3: #c0c2ce;
+  --grey-4: #afafaf;
+  --grey-5: #767385;
+  --grey-6: #32303b;
+  --grey-7: #16151c;
+  --grey-8: #0b080b;
+
+  /* rest of the colors */
+  --black: #222;
+  --white: #fff;
+  --red-light: #f8d7da;
+  --red-dark: #842029;
+  --green-light: #d1e7dd;
+  --green-dark: #0f5132;
+
+  /* rest of the vars */
+  --textColor: var(--grey-900);
+  --borderRadius: 0.25rem;
+  --letterSpacing: 1px;
+  --transition: 0.3s ease-in-out all;
+  --max-width: 1400px;
+  --fixed-width: 500px;
+  --fluid-width: 90vw;
+  --breakpoint-sm: 425px;
+  --breakpoint-md: 768px; 
+  --breakpoint-lg: 992px;
+  --breakpoint-xl:1440px;
+  --nav-height: 3rem;
 }
