@@ -1,30 +1,17 @@
-import React,{ useEffect, useState } from 'react'
+import React from 'react'
+import styled from 'styled-components'
 
 const Landing = () => {
 
-  const [data, setData] = useState("Loading")
-
-  const testAPI = async () => {
-    try {
-      const res = await fetch("/api")
-      const data = await res.json()
-      setData(data.message)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    testAPI()
-  },[])
-
   return (
-    <div>
+    <Wrapper>
       <h1>Landing</h1>
-      <h2>{data}</h2>
-    </div>
+    </Wrapper>
   )
-  
 }
+
+const Wrapper = styled.main`
+
+`
 
 export default Landing
