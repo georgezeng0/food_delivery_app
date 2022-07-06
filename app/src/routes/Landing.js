@@ -14,8 +14,8 @@ const Landing = () => {
         <div className='content-container'>
           <div className='top-container'>
             <div className='title-container'>
-              <h1 className='title'>Food Delivery App</h1>
-              <h4 className='title'>Probably need a less generic name...</h4>
+              <h1 className='title'>Deliver<span>Eat</span></h1>
+              <h4 className='subtitle'>Fresh food from authentic restaurants delivered to you...</h4>
               <div className='btn-container'>
               <Link to='/restaurants' className='button-66'>I'm Hungry</Link>
               </div>
@@ -37,6 +37,7 @@ const Landing = () => {
 }
 
 const Wrapper = styled.main`
+  min-width: var(--min-width);
   height: calc(100vh - var(--nav-height));
   min-height: 800px;
   padding: 2% 2% 2%;
@@ -46,6 +47,9 @@ const Wrapper = styled.main`
   justify-content: center;
   h1 {
     margin: 0;
+    span{
+      color: var(--tertiary-1);
+    }
   }
   h3 {
     margin: 0;
@@ -66,7 +70,9 @@ const Wrapper = styled.main`
   }
   .top-container {
     display: flex;
-    height:60%;
+    height:53%;
+    flex-grow:1;
+    transition: all 1s;
   }
   .title-container {
     font-size: 2rem;
@@ -80,6 +86,7 @@ const Wrapper = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
   }
   .hero-container {
@@ -102,11 +109,15 @@ const Wrapper = styled.main`
     border-bottom-right-radius: 1rem;
     border-bottom-left-radius: 1rem;
     height: 100%;
-    background-color: var(--primary-5);
+    background-color: var(--tertiary-1);
   }
   .gradient{
-    height: 20px;
-    background-image: linear-gradient(var(--primary-3),var(--primary-5));
+    height: 60px;
+    background-image: linear-gradient(var(--primary-3),var(--tertiary-1));
+    transition: all 1s;
+  }
+  .subtitle{
+    width: 80%
   }
   @media (max-width: 1174px) {
     .hero-container {
@@ -161,6 +172,34 @@ const Wrapper = styled.main`
     .button-66 {
       padding: 16px 44px;
       min-width: 150px;
+    }
+  }
+  @media (max-width: ${ScreenSizes.breakpoint_sm}){
+    .content-container{
+      height: 100%;
+    }
+    .container{
+      height:90%;
+    }
+    .title-container{
+      font-size:1rem;
+    }
+    .top-container{
+      height: 60%;
+      flex-grow: 1;
+    }
+    .bottom-container{
+      height: 40%;
+      flex-grow: 0;
+      overflow: hidden;
+    }
+    .button-66{
+      font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    min-height: 40px;
+    min-width: 80px;
+    padding: 10px 20px;
     }
   }
 `;
