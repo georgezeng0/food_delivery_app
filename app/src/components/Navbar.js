@@ -69,6 +69,8 @@ const Navbar = () => {
 
           <TiUser className='user-icon' onClick={toggleUserDropdown} />
 
+          <UserDropdown showUser={showUser}  user={user} toggleUserDropdown={toggleUserDropdown} />
+
         </div>
         
         
@@ -222,6 +224,11 @@ const Wrapper = styled.nav`
       display: flex;
       font-size: 1.4rem;
       margin-left: 5px;
+      }
+      .nav-link:hover{
+        span{
+        transform: translateY(0%);
+        }
       }
     }
 `;

@@ -15,7 +15,7 @@ const Landing = () => {
           <div className='top-container'>
             <div className='title-container'>
               <h1 className='title'>Deliver<span>Eat</span></h1>
-              <h4 className='subtitle'>Fresh food from authentic restaurants delivered to you...</h4>
+              <h4 className='subtitle'>Freshly made food from authentic restaurants delivered to you...</h4>
               <div className='btn-container'>
               <Link to='/restaurants' className='button-66'>I'm Hungry</Link>
               </div>
