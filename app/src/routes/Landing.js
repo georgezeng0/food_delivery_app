@@ -24,6 +24,7 @@ const Landing = () => {
               <img src={foods} alt="" />
             </div>
           </div>
+          <div className='gradient'></div>
           <div className='bottom-container'>
             <div className='carousel'>
               <LandingCarousel/>
@@ -55,7 +56,8 @@ const Wrapper = styled.main`
     width: 100%;
     max-width: var(--max-width);
     background-color: var(--primary-3);
-    border-radius: 1rem
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px 5px var(--grey-5);
   }
   .content-container {
     height:100%;
@@ -102,7 +104,10 @@ const Wrapper = styled.main`
     height: 100%;
     background-color: var(--primary-5);
   }
-  
+  .gradient{
+    height: 20px;
+    background-image: linear-gradient(var(--primary-3),var(--primary-5));
+  }
   @media (max-width: 1174px) {
     .hero-container {
       overflow:hidden;
@@ -121,7 +126,7 @@ const Wrapper = styled.main`
   }
   /* Taken from https://getcssscan.com/css-buttons-examples */
   .button-66 {
-    background-color: #0a6bff;
+    background-color: var(--secondary-4);
     border-radius: 4px;
     border: 0;
     box-shadow: rgba(1,60,136,.5) 0 -1px 3px 0 inset,rgba(0,44,97,.1) 0 3px 6px 0;
