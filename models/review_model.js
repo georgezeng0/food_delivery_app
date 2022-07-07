@@ -91,10 +91,23 @@ const editReview = async (rev_id,input) => {
     }
 }
 
+const updateRating = async (id,newRating) => {
+    try {
+        const res = await pool.query(
+            `UPDATE restaurants SET rating=$2 WHERE r_id=$1 RETURNING *;`,
+            [id,newRating]
+        );
+        return res.rows[0]
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports = {
     createReview, 
     getReviews,
     deleteReview,
     getReviewOwner,
-    editReview
+    editReview,
+    updateRating
 }

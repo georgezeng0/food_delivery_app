@@ -81,6 +81,7 @@ const Navbar = () => {
 }
 
 const Wrapper = styled.nav`
+    z-index: 1;
     min-width: var(--min-width);
     box-sizing: border-box;
     width: 100%;

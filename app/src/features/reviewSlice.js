@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 
 const initialState = {
   reviews: [],
-  avg_rating:0.0,
   form: {
     title: '',
     body: '',
@@ -26,6 +25,28 @@ const initialState = {
     message: ''
   }
 };
+
+export const updateRating = createAsyncThunk(
+  'reviews/updatingRating',
+  async (r_id, thunkAPI) => {
+    try {
+      const reviews = thunkAPI.getState().review.reviews
+      if (reviews.length > 0) {
+        const ratings = reviews.reduce((total, item) => {
+          return total+item.rating
+        }, 0)
+        const newRating=ratings/reviews.length
+
+        const res = await axios.post(`/api/reviews/${r_id}/update_rating`,{newRating});
+        return res.data;
+        
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)
+    }
+  }
+
+)
 
 export const getReviews = createAsyncThunk(
   'reviews/getReviews',
@@ -123,14 +144,7 @@ const reviewSlice = createSlice({
     [getReviews.fulfilled]: (state,action) => {
       state.isLoading = false;
       state.error.isLoadError = false;
-      state.reviews = action.payload;
-      // Calculate average rating for restaurant
-      if (state.reviews.length>0) {
-        const ratings = state.reviews.reduce((total, item) => {
-          return total+item.rating
-        }, 0)
-        state.avg_rating=ratings/state.reviews.length
-      }
+      state.reviews = action.payload;  
     },
     [getReviews.rejected]: (state, action) => {
       state.isLoading = false;
@@ -182,6 +196,19 @@ const reviewSlice = createSlice({
       }
     },
     [editReview.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error.isError = true;
+      state.error.message = action.payload
+    },
+    [updateRating.pending]: (state) => {
+      state.error.isError = false;
+      state.isLoading = true;
+   },
+    [updateRating.fulfilled]: (state) => {
+      state.isLoading = false;
+      state.error.isError = false;
+    },
+    [updateRating.rejected]: (state, action) => {
       state.isLoading = false;
       state.error.isError = true;
       state.error.message = action.payload

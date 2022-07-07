@@ -163,7 +163,9 @@ const restaurantSlice = createSlice({
             }
         },
         updateSort: (state, { payload: { name, value } }) => {
-            state.sort[name] = value;
+            if (name) {
+                state.sort[name] = value;
+            }
 
             state.sorted_restaurants = state.restaurants.filter(
                 r => {
@@ -191,6 +193,33 @@ const restaurantSlice = createSlice({
             )
             state.sorted_restaurants=[...toSort]
         },
+        refreshSort: (state) => {
+            state.sorted_restaurants = state.restaurants.filter(
+                r => {
+                    const r_name = r.r_name.toUpperCase()
+                    const search_name = (state.sort.search).toUpperCase()
+                    return (r_name.includes(search_name)) &&
+                        (state.sort.cuisine === 'all' || r.cuisine.includes(state.sort.cuisine))
+                })
+            const toSort = [...state.sorted_restaurants]
+            toSort.sort(
+                    (a, b) => {
+                    if (state.sort.sort === 'A-Z') {
+                        return a.r_name.localeCompare(b.r_name)
+                    }
+                    if (state.sort.sort === 'Z-A') {
+                        return b.r_name.localeCompare(a.r_name)
+                    }
+                    if (state.sort.sort === 'Price Low-High') {
+                        return a.pricepoint-b.pricepoint
+                    }
+                    if (state.sort.sort === 'Price High-Low') {
+                        return b.pricepoint-a.pricepoint
+                    }
+                }
+            )
+            state.sorted_restaurants=[...toSort]
+        }
     },
     extraReducers: {
         [getRestaurants.pending]: (state) => {
@@ -256,5 +285,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {updateForm,updateSort,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
+export const {refreshSort,updateForm,updateSort,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;

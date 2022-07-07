@@ -7,6 +7,7 @@ import {DishFilter, DishList, Loading, ReviewForm, Reviews} from '../components'
 import { toast } from 'react-toastify';
 import Error from './Error';
 import { resetError } from '../features/basketSlice';
+import axios from 'axios';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -22,30 +23,32 @@ const SingleRestaurant = () => {
     error: {isError:dishError, message:dishErrorMessage},
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
-  const { avg_rating } = useSelector(state => state.review);
   const {error: {isError:basketError, type:basketErrorType}} = useSelector(state=>state.basket)
-  const { r_id:id } = useParams();
+  const {reviews} = useSelector(state=>state.review)
+  
+  const { r_id: id } = useParams();
   const [restaurant, setRestaurant] = useState({});
   const [isOwner, setIsOwner] = useState(false);
   
   const {
-    r_id, r_name, cuisine, pricepoint, location, open, close, owner, image
+    r_id, r_name, cuisine, pricepoint, location, open, close, owner, image,rating
   } = restaurant;
 
-  useEffect(() => {
-    if (restaurants.length === 0) {
-      dispatch(getRestaurants())
-    } else {
-      const foundRestaurant = restaurants.find(r => r.r_id === id)
-      if (!foundRestaurant) {
-        toast.error('Restaurant not found')
-        navigate('/restaurants')
-      } else {
-      
-        setRestaurant(foundRestaurant)
-      }
+  const getRestaurant = async (id) => {
+    try{
+      const res = await axios(`/api/restaurants/${id}`)
+      setRestaurant(res.data)
     }
-  }, [restaurants])
+    catch (error) {
+      console.log(error);
+      toast.error('Restaurant not found')
+      navigate('/restaurants')
+    }
+  }
+
+  useEffect(() => {
+    getRestaurant(id)
+  }, [reviews])
 
   useEffect(() => {
     if (restaurant) {
@@ -115,7 +118,7 @@ const SingleRestaurant = () => {
       
       <h3>{location}</h3>
       <div>
-        <p>Rating: {avg_rating}</p>
+        <p>Rating: {rating}</p>
         <p>Cuisines: {cuisine}</p>
         <p>Pricepoint: {pricepoint}</p>
         <p>Opening times: {open}-{close}</p>

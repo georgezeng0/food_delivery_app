@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
+import StarRatings from 'react-star-ratings';
 
-const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine } }) => {
+const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating } }) => {
     const navigate = useNavigate();
     const onClick = () => {
       navigate(`/restaurants/${r_id}`)
@@ -22,8 +23,15 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine } }) 
                 </div>
 
                 <div className="info">
-                <div>
-                    Ratings (X Reviews) 
+                <div className='rating-container'>
+                        <StarRatings
+                            className="rating"
+                            rating={rating}
+                            isAggregateRating
+                            starRatedColor="gold"
+                            numberOfStars={5}
+                            starDimension='15px'
+                        />
                 </div>
                 <p>
                     {location}
@@ -96,6 +104,12 @@ const Wrapper = styled.article`
         p {
             margin: 5px 0 0 0;
         }
+    }
+    .rating{
+
+    }
+    .rating-container{
+        height: auto;
     }
 `
 

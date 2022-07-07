@@ -86,7 +86,7 @@ const FilterSearch = () => {
 }
 
 const Wrapper = styled.section`
-    display: flex;
+    display: flex; 
     flex-direction: column;
     align-items: center;
     padding-top:10px;

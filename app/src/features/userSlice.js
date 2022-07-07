@@ -5,18 +5,19 @@ const getLocalUser = () => {
   const localUser = localStorage.getItem('user');
   if (localUser) {
     const user = JSON.parse(localUser)
-    if (user.expires <= Date.now()) {
-      return {
-        email: '',
-        name: '',
-        location: '',
-        group: '',
-        token: '',
-        expires: '',
-      }
-    } else {
-      return user
-    } 
+    return user;
+    // if (user.expires <= Date.now()) {
+    //   return {
+    //     email: '',
+    //     name: '',
+    //     location: '',
+    //     group: '',
+    //     token: '',
+    //     expires: '',
+    //   }
+    // } else {
+    //   return user
+    // } 
   } else {
     return {
       email: '',
@@ -79,7 +80,8 @@ export const loginUser = createAsyncThunk(
   async (_, thunkAPI) => {
     const {email, password} = thunkAPI.getState().user.form;
     try {
-      const res = await axios.post(`api/users/login`, { email,password});
+      const res = await axios.post(`api/users/login`, { email, password });
+      thunkAPI.dispatch(setLocalUser())
       return res.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)

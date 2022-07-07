@@ -8,7 +8,7 @@ const { getRestaurants,createRestaurant,deleteRestaurant,updateRestaurant,getRes
 const { registerUser, getPassword,getUser,editUser } = require('../models/user_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { createReview, getReviews, deleteReview, getReviewOwner, editReview } = require('../models/review_model');
+const { createReview, getReviews, deleteReview, getReviewOwner, editReview, updateRating } = require('../models/review_model');
 
 // Utils
 const { authenticateJWT } = require('./utils/auth_middleware.js');
@@ -299,6 +299,18 @@ app.delete('/api/reviews/:rev_id',authenticateJWT, async (req, res, next) => {
         } else {
             res.status(403).send('Unauthorised')
         }
+    } catch (error) {
+        next(error)
+    }
+})
+
+//Update rating
+app.post('/api/reviews/:r_id/update_rating', async (req, res, next) => {
+    try {
+        const id = req.params.r_id
+        const newRating = req.body.newRating
+        const data = await updateRating(id, newRating);
+        res.send(data)
     } catch (error) {
         next(error)
     }

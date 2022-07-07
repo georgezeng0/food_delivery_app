@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRestaurants, updateSort } from '../features/restaurantSlice'
+import { getRestaurants, refreshSort } from '../features/restaurantSlice'
 import { Loading, FilterSearch,Restaurant } from '../components'
 import { toast } from 'react-toastify';
 import styled from 'styled-components'
@@ -13,10 +13,14 @@ const Restaurants = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (all_restaurants.length===0) {
-      dispatch(getRestaurants());
+    dispatch(getRestaurants());
+  }, [])
+
+  useEffect(() => {
+    if (all_restaurants) {
+      dispatch(refreshSort());
     }
-  }, [dispatch])
+  },[all_restaurants])
   
   useEffect(() => {
     if (isError) {

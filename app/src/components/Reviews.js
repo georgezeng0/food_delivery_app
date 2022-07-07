@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import { getRestaurants } from '../features/restaurantSlice';
-import { clearForm, deleteReview, getReviews, resetSuccess,editMode } from '../features/reviewSlice';
+import { clearForm, deleteReview, getReviews, resetSuccess,editMode, updateRating } from '../features/reviewSlice';
 import Loading from './Loading';
 
 const Reviews = ({ r_id }) => {
@@ -16,6 +16,12 @@ const Reviews = ({ r_id }) => {
     useEffect(() => {
       dispatch(getReviews(r_id))
     }, [])
+
+    useEffect(() => {
+        if (reviews.length > 0 && reviews[0].restaurant === r_id) {
+            dispatch(updateRating(r_id))
+        }
+    }, [reviews])
 
     // Error actions
     useEffect(() => {
