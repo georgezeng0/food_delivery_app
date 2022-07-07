@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
 
@@ -8,19 +8,20 @@ import { TiUser } from 'react-icons/ti'
 import { MdOutlineShoppingBasket,MdRestaurantMenu  } from 'react-icons/md'
 import { useState } from 'react'
 import UserDropdown from './UserDropdown'
+import { useEffect } from 'react'
 
 const Navbar = () => {
-  const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
 
   const [showUser, setShowUser] = useState(false);
+  const { pathname } = useLocation()
   
   const toggleUserDropdown = () => {
     setShowUser(!showUser)
   }
 
     return (
-      <Wrapper>
+      <Wrapper pathname={pathname}>
         <div className='nav-container left-container'>
         <Link className='home-icon' to="/">
             <h1 id='logo'>Deliver<span >Eat</span></h1></Link>
@@ -28,12 +29,12 @@ const Navbar = () => {
         
         <div className='nav-container center-container'>
         <Link className='nav-link' to="/restaurants">
-        <div className='gradient'></div>
+        {/* <div className='gradient'></div> */}
           <span>Restaurants</span></Link>
           
 
         <Link className='nav-link' to="/basket">
-          <div className='gradient'></div>
+          {/* <div className='gradient'></div> */}
             <span>Basket&nbsp;<MdOutlineShoppingBasket/></span>
           </Link>
 
@@ -81,12 +82,17 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
     min-width: var(--min-width);
+    box-sizing: border-box;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: var(--nav-height);
     padding-left: 2%;
     padding-right: 2%;
+    transition: all 0.5s ease-in;
+    background-color: ${props=>props.pathname!=='/' && `var(--primary-3)`};
+    position: fixed;
     * {
       text-decoration: none;
     } 

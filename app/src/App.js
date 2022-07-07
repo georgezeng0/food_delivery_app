@@ -30,8 +30,6 @@ function App() {
     return Promise.reject(error)
     })
   
-  
-  
   // Basket saving to local storage
   const { basket } = useSelector(state => state.basket)
   

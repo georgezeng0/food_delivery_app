@@ -38,9 +38,9 @@ const Landing = () => {
 
 const Wrapper = styled.main`
   min-width: var(--min-width);
-  height: calc(100vh - var(--nav-height));
+  height: 100vh;
   min-height: 800px;
-  padding: 2% 2% 2%;
+  padding: calc(var(--nav-height)) 2% 2%;
   box-sizing: border-box;
   background-color: var(--white);
   display:flex;
@@ -129,8 +129,9 @@ const Wrapper = styled.main`
   }
 
   @media (max-width: ${ScreenSizes.breakpoint_md}) {
-    padding: 0;
-    padding-top: 1rem;
+    padding-right:0;
+    padding-left:0;
+    padding-bottom:0;
     .title-container {
     font-size: 1.5rem;
     }

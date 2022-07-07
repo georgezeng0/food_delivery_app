@@ -7,6 +7,7 @@ import BasketTotals from "./BasketTotals"
 import FilterSearch from "./FilterSearch"
 import DishFilter from "./DishFilter"
 import DishList from "./DishList"
+import Restaurant from "./Restaurant"
 
 export {
     Navbar,
@@ -17,5 +18,6 @@ export {
     BasketTotals,
     FilterSearch,
     DishFilter,
-    DishList
+    DishList,
+    Restaurant
 }
