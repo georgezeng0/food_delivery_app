@@ -58,6 +58,7 @@ body {
   --transition: 0.3s ease-in-out all;
   --min-width: 240px;
   --max-width: 1400px;
+  --max-width-main:1600px;
   --fixed-width: 500px;
   --fluid-width: 90vw;
   --breakpoint-sm: 425px;
