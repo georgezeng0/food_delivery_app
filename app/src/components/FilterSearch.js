@@ -5,7 +5,7 @@ import { getCuisines,updateSort } from '../features/restaurantSlice';
 import { FiSearch } from 'react-icons/fi'
 import ScreenSizes from '../utils/mediaVariables';
 
-const FilterSearch = ({horizontal}) => {
+const FilterSearch = ({horizontal,setPage}) => {
     const dispatch = useDispatch()
     const { restaurants, isLoading, form: { cuisineList },
     sort:{search,cuisine,sort,sortList}} = useSelector(state => state.restaurant);
@@ -19,7 +19,8 @@ const FilterSearch = ({horizontal}) => {
     const handleChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        dispatch(updateSort({name,value}))
+        dispatch(updateSort({ name, value }))
+        setPage(1);
     }
     
     

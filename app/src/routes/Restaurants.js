@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRestaurants, refreshSort } from '../features/restaurantSlice'
 import { Loading, FilterSearch,Restaurant } from '../components'
@@ -15,6 +14,11 @@ const Restaurants = () => {
   const dispatch = useDispatch();
   const [showFilter, setShowFilter] = useState(false)
   const [scrollY, setScrollY] = useState('')
+  const [page, setPage] = useState(1);
+  const [scrollLoading,setScrollLoading]=useState(false)
+  // Num per page
+  const num_per_page = 5
+  // const max_pages = Math.ceil(restaurants.length / num_per_page);
 
   const handleScroll = (e) => {
     setScrollY(window.scrollY);
@@ -26,14 +30,54 @@ const Restaurants = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-}, []);
+  }, []);
+  
+  // Interaction observer - infinte scroll function
+  const last_item = useRef(null);
+  // useCallback so that the function isn't reconstructed each time page changes
+  const handleObserver = useCallback((entries) => {
+    const target = entries[0];
+    if (target.isIntersecting) {
+      setScrollLoading(true)
+      setTimeout(() => {
+        setPage((prev) => {
+          //   if (prev < max_pages) {
+          //   return prev + 1
+          //   } else {
+          //     return prev
+          // }
+          return prev + 1
+        })
+        setScrollLoading(false)
+      }, 500)
+      
+      };
+    },[])
+;
 
   useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: `0px`,
+      threshold: 0.1
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (last_item.current) {
+      observer.observe(last_item.current);
+    }
+    return () => observer.disconnect();
+    // Need to discmount otherwise loops
+  }, [handleObserver, last_item.current]);
+  // Need these dependencies otherwise
+
+  useEffect(() => {
+    setPage(1);
     dispatch(getRestaurants());
   }, [])
 
   useEffect(() => {
     if (all_restaurants) {
+      setPage(1);
       dispatch(refreshSort());
     }
   },[all_restaurants])
@@ -54,11 +98,11 @@ const Restaurants = () => {
       <div className='horizontal-placeholder'/>
       <div className='location-container'>
         <AiOutlineMenu className='menu-icon' onClick={()=>setShowFilter(!showFilter) } />
-        <input type="text" placeholder='Enter your location...' />
+        <input type="text" placeholder={`Enter your location...`} />
         <AiFillCaretRight fontSize={`1.5rem`} />
       </div>
       <div className='filter-menu-container'>
-        <FilterSearch horizontal/>
+        <FilterSearch horizontal setPage={setPage}/>
       </div>
 
       
@@ -67,7 +111,7 @@ const Restaurants = () => {
         {/* Filter section */}
         <div className="block-placeholder" />
       <section className='filter-container'>
-        <FilterSearch />
+          <FilterSearch setPage={setPage} />
         </section>
 
       {/* Loading and All Restaurants */}
@@ -77,13 +121,18 @@ const Restaurants = () => {
           {/* Error Message */}
           {isError && <h4>Error getting restaurants.</h4>}
 
-          {restaurants.map(r => {
+          {restaurants.slice(0,page*num_per_page).map(r => {
             const { r_id} = r
             return <Restaurant key={r_id} restaurant={{ ...r}}>
             </Restaurant>
           })}
+              <div ref={last_item}></div>
+              
         </section>
-        }
+          }
+          <div className='scroll-loading-container'>
+            {scrollLoading && <Loading />}
+            </div>
         </section>
         </div>
       
@@ -97,6 +146,7 @@ min-width: 260px;
   display: flex;
     align-items: center;
     flex-direction: column;
+    padding-bottom: 20px;
   .map-container{
     height: 300px;
     width: 100%;
@@ -153,7 +203,6 @@ min-width: 260px;
     margin-top: -1px;
   }
   .restaurants-container{
-    width: 60%;
     margin-left: 20px;
     flex-grow: 1;
     transition: margin 0.5s linear;
@@ -165,6 +214,12 @@ min-width: 260px;
   }
   .menu-icon{
     display:none;
+  }
+  .scroll-loading-container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 40px 0px;
   }
   
   @media (max-width: ${ScreenSizes.breakpoint_xl}) {
