@@ -214,6 +214,9 @@ min-width: 260px;
   }
   .menu-icon{
     display:none;
+    :hover{
+      cursor:pointer;
+    }
   }
   .scroll-loading-container{
     display: flex;

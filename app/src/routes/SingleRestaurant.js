@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import Error from './Error';
 import { resetError } from '../features/basketSlice';
 import axios from 'axios';
+import styled from 'styled-components';
+import StarRatings from 'react-star-ratings';
+import { BsCurrencyPound } from 'react-icons/bs'
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -109,29 +112,66 @@ const SingleRestaurant = () => {
   }
   
   return (
-    <main>
+    <Wrapper>
+      <div className="content-container">
       {/* Consider cloudinary transformation API */}
-      <img src={image} width="500px"></img>
-      <h1>{r_name} </h1>
+      <div className='img-container'>
+          <img src={image}></img>
+          
+        </div>
+        
+        <div className="card-contents">
 
-      {isOwner && <span>You own this restaurant</span>}
+        
+        
+      <h1 id="name">{r_name} </h1>
       
-      <h3>{location}</h3>
-      <div>
-        <p>Rating: {rating}</p>
-        <p>Cuisines: {cuisine}</p>
-        <p>Pricepoint: {pricepoint}</p>
-        <p>Opening times: {open}-{close}</p>
-      </div>
+          <div className='restaurant-info'>
+            <h3>{location}</h3>
+            <div className="ratings-container">
+          <StarRatings
+                            className="rating"
+                            rating={rating}
+                            isAggregateRating
+                            starRatedColor="gold"
+                            numberOfStars={5}
+                            starDimension='15px'
+              />
+              <span>({reviews.length} review{`${reviews.length>1?'s':''}`})</span>
+              </div>
+          <p>{
+              cuisine && cuisine.map((c, i) => { 
+                if (i < (cuisine.length-1)) { return `${c}, ` }
+                    else return c
+              })
+            }
+            </p>
+            <p>{new Array({ pricepoint }).map(
+              (_, i) => {
+                return <BsCurrencyPound key={i} />
+              }
+            )  }</p>
+        <p>Open: {open}-{close}</p>
+          </div>
+          
+
+          <div className="owner-actions">
+            {isOwner && <span>You own this restaurant:</span>}
+
+            {isOwner&&
+            <div className='btn-container'>
+              <Link to={`./edit`}><button>Edit Restaurant</button></Link>
+              <Link to={`./new_dish`}><button>Add Dish</button></Link>
+               <button className="last-btn" onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete Restaurant</button>
+              </div>}
+            
+          </div>
+
+
       {/* Show edit/delete buttons only if owner */}
-      {isOwner&&
-        <div>
-        <Link to={`./edit`}><button>Edit</button></Link>
-        <Link to={`./new_dish`}><button>New Dish</button></Link>
-        <button onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete</button>
-        </div>}
       
-      <h2>Dishes</h2>
+      <div className='divider'/>
+      <h2 id="dishes_title">Dishes</h2>
 
       <DishFilter/>
 
@@ -141,9 +181,106 @@ const SingleRestaurant = () => {
 
       <Reviews r_id={id} />
       <ReviewForm r_id={id}/>
-
-    </main>
+        </div>
+        </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.main`
+  padding: calc(var(--nav-height) + 40px) 40px 40px;
+  display: flex;
+  justify-content: center;
+  .content-container{
+    border-radius: 30px;
+    overflow: hidden;
+    max-width: 1200px;
+    width: 100%;
+    box-shadow: 0px 0px 5px 5px var(--grey-2);
+  }
+
+.img-container{
+  width: 100%;
+  height: 400px;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+#name{
+ text-align:center ;
+ color: white;
+ background-color: var(--tertiary-1);
+ margin: 0px 20% 10px;
+ padding: 5px;
+ border-radius: 10px;
+ width: 80%;
+}
+.card-contents{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.restaurant-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p{
+    margin: 5px;
+  }
+}
+.ratings-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.owner-actions{
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  border-radius: 20px;
+  border: 3px solid var(--primary-3);
+  overflow: hidden;
+  span{
+    margin-bottom: 6px;
+  }
+}
+.btn-container{
+  width: 100%;
+  box-sizing: content-box;
+  button{
+    color: white;
+    background-color: var(--primary-2);
+    border: 3px solid var(--primary-3);
+    border-bottom: none;
+    border-left: none;
+    padding: 5px;
+    transition: 0.2s;
+    :hover{
+      cursor: pointer;
+      background-color: var(--primary-1);
+      
+    }
+  }
+  .last-btn{
+    border-right: none;
+  }
+}
+.divider{
+  height: 10px;
+  width: 100%;
+  background-color: var(--primary-3);
+  margin-top: 50px;
+}
+#dishes_title{
+  margin: 0;
+  padding: 10px;
+}
+`
 
 export default SingleRestaurant
