@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { createReview, updateForm,editReview,clearForm,getReviews,resetSuccess, populateForm } from '../features/reviewSlice'
 import { getRestaurants } from '../features/restaurantSlice';
 import Loading from './Loading';
+import styled from 'styled-components';
+import StarRatings from 'react-star-ratings';
 
 const ReviewForm = ({r_id}) => {
     const dispatch = useDispatch();
@@ -31,6 +33,10 @@ const ReviewForm = ({r_id}) => {
         const name = e.target.name;
         const value = e.target.value;
         dispatch(updateForm({name,value}))
+    }
+
+    const handleRating = (rating) => {
+        dispatch(updateForm({name:'rating',value: rating}))
     }
 
     // Success actions
@@ -62,33 +68,86 @@ const ReviewForm = ({r_id}) => {
     
 
   return (
-      <section>
+      <Wrapper>
           <h3>{isEdit? 'Editing review':'Leave a Review'}</h3>
-          <form onSubmit={handleSubmit}>
-                <div>
+          <form onSubmit={handleSubmit} className='form'>
+          <div className='input-container'>
+                  <label htmlFor="rating">Select Rating</label>
+                  <StarRatings
+                            className="rating"
+                      rating={rating}
+                      changeRating={handleRating}
+                            isAggregateRating
+                      starRatedColor="gold"
+                      starHoverColor="gold"
+                            numberOfStars={5}
+                      starDimension='15px'
+                      name='rating'
+                              />
+              </div>
+                <div className='input-container'>
                     <label htmlFor="title">Review Title</label>
                     <input type="text" id="title" name="title"
                           value={title}
                           onChange={handleChange} />
               </div>
-              <div>
-                    <label htmlFor="body">Review Body</label>
+              <div className='input-container'>
+                    <label htmlFor="body">Review Text</label>
                     <textarea type="text" id="body" name="body"
                         value={body}
-                        onChange={handleChange}>
+                      onChange={handleChange}
+                      rows="5"
+                  >
+                      
                     </textarea>
               </div>
-              <div>
-                    <label htmlFor="rating">Rating</label>
-                    <input type="range" id="rating" name="rating"
-                          value={rating} min="0" max="5"
-                          onChange={handleChange} />
-              </div>
+              
               {isLoading ? <Loading /> :
                   <button>Submit</button>}
           </form>
-    </section>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.section`
+border-radius: 15px;
+padding: 10px;
+margin-top: 25px;
+box-shadow: 0px 0px 5px 5px var(--grey-2);
+background-color: var(--tertiary-6);
+width: 90%;
+display: flex;
+flex-direction: column;
+align-items: center;
+.form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.input-container{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    align-items: center;
+    margin-top: 5px;
+    input, textarea{
+        width: 100%;
+    }
+    label{
+        margin-bottom: 5px;
+    }
+}
+button {
+    margin-top: 10px;
+    font-weight: 600;
+    border: none;
+    background-color:  var(--tertiary-6);
+    color: var(--tertiary-5);
+    :hover{
+        cursor: pointer;
+    }
+}
+`
 
 export default ReviewForm

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { updateFilter, resetFilter } from '../features/dishSlice'
 
 const DishFilter = () => {
-    const { isLoading } = useSelector(state => state.dish)
+    const { isLoading, filter } = useSelector(state => state.dish)
     const dispatch = useDispatch()
 
     const handleFilter = (category) => {
@@ -17,13 +17,35 @@ const DishFilter = () => {
 
   return (
       <Wrapper>
-          <button disabled={isLoading} onClick={()=>handleFilter("all")}>All</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("starred")}>Popular</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("starter")}>Starters</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("main")}>Main Courses</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("side")}>Sides</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("dessert")}>Desserts</button>
-          <button disabled={isLoading} onClick={()=>handleFilter("drink")}>Drinks</button>          
+          <button
+              disabled={isLoading} onClick={() => handleFilter("all")}
+              className={`${filter==='' && 'selected'}`}
+          >
+              All</button>
+          <button disabled={isLoading} onClick={() => handleFilter("starred")}
+          className={`${filter==='starred' && 'selected'}`}
+          >
+              Popular</button>
+          <button disabled={isLoading} onClick={() => handleFilter("starter")}
+          className={`${filter==='starter' && 'selected'}`}
+          >
+              Starters</button>
+          <button disabled={isLoading} onClick={() => handleFilter("main")}
+          className={`${filter==='main' && 'selected'}`}
+          >
+              Main Courses</button>
+          <button disabled={isLoading} onClick={() => handleFilter("side")}
+          className={`${filter==='side' && 'selected'}`}
+          >
+              Sides</button>
+          <button disabled={isLoading} onClick={() => handleFilter("dessert")}
+          className={`${filter==='dessert' && 'selected'}`}
+          >
+              Desserts</button>
+          <button disabled={isLoading} onClick={() => handleFilter("drink")}
+          className={`${filter==='drink' && 'selected'}`}
+          >
+              Drinks</button>          
     </Wrapper>
   )
 }
@@ -35,7 +57,7 @@ justify-content: center;
 align-items: center;
 background-color: var(--primary-3);
 button{
-    background-color: var(--primary-2);
+    background-color: var(--primary-3);
     color: white;
     border: 0;
     border-right: 3px solid var(--primary-5);
@@ -50,6 +72,9 @@ button{
 }
 button:first-child{
     border-left: 3px solid var(--primary-5);;
+}
+.selected{
+    background-color: var(--tertiary-1);
 }
 `
 

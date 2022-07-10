@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import StarRatings from 'react-star-ratings';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import { getRestaurants } from '../features/restaurantSlice';
 import { clearForm, deleteReview, getReviews, resetSuccess,editMode, updateRating } from '../features/reviewSlice';
 import Loading from './Loading';
+import { TiUser } from 'react-icons/ti'
 
 const Reviews = ({ r_id }) => {
     const dispatch = useDispatch();
@@ -11,7 +14,8 @@ const Reviews = ({ r_id }) => {
         isLoading, error: { isLoadError, LoadMessage, isError, message },
         success: { APIsuccess, successType },
         reviews
-    } = useSelector(state=>state.review)
+    } = useSelector(state => state.review)
+    const { user } = useSelector(state=>state.user)
 
     useEffect(() => {
       dispatch(getReviews(r_id))
@@ -47,26 +51,97 @@ const Reviews = ({ r_id }) => {
     },[APIsuccess])
     
   return (
-      <section>
-          <h2>Reviews</h2>
+      <Wrapper>
+          <h2 className='title'>Reviews</h2>
           {isLoading ? <Loading /> :
               (isLoadError?
                   <h3>Error Loading Reviews</h3>
                   :
                   reviews.map(review => {
                       const { rev_id, title, body, rating, restaurant, author } = review
-                      return <article key={rev_id}>
-                          <h3>{title} - By {author}</h3>
-                          <h5>Rating - {rating}</h5>
+                      return <article key={rev_id} className='review'>
+                          <div className="rating-container">
+                          <StarRatings
+                            className="rating"
+                            rating={rating}
+                            isAggregateRating
+                            starRatedColor="gold"
+                            numberOfStars={5}
+                            starDimension='15px'
+                              />
+                              </div>
+                          <h3>{title}</h3>
                           <p>{body}</p>
-                          <button onClick={() => dispatch(deleteReview(rev_id))}>Delete Review</button>
-                          <button onClick={()=>dispatch(editMode({rev_id,title,body,rating}))}>Edit Review</button>
+                          
+                              <div className='btn-container'>
+                              <span><TiUser /> {author}</span>
+                              {author === user.email &&
+                                  <div>
+                                      <button onClick={() => dispatch(deleteReview(rev_id))}>Delete Review</button>
+                                      <button onClick={() => dispatch(editMode({ rev_id, title, body, rating }))}>Edit Review</button>
+                                  </div>}
+                              </div>
+                          
+                          
                       </article>
                   })
                 )
           }
-    </section>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.section`
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+
+.title{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    margin-top: 50px;
+  padding: 10px;
+  border-top: 10px solid var(--tertiary-1);
+  border-bottom: 5px solid var(--tertiary-1);
+  box-sizing: border-box;
+}
+.review{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 5px solid var(--tertiary-1);
+    border-radius: 10px;
+    margin-top: 20px;
+    h3 {
+        margin: 2px 0px;
+    }
+    p {
+        margin: 5px;
+    }
+ .btn-container{
+    display: flex;
+    background-color: var(--tertiary-1);
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 2px 0px;
+    height: 2rem;
+    button{
+        background-color: var(--tertiary-1)
+    }
+    span{
+        padding-left: 10px;
+        color: white;
+        display: flex;
+        align-items: center;
+    }
+ }   
+}
+.rating-container{
+    padding-top: 6px;
+}
+`
 
 export default Reviews

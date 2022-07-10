@@ -114,7 +114,7 @@ const SingleRestaurant = () => {
   return (
     <Wrapper>
       <div className="content-container">
-      {/* Consider cloudinary transformation API */}
+
       <div className='img-container'>
           <img src={image}></img>
           
@@ -122,9 +122,7 @@ const SingleRestaurant = () => {
         
         <div className="card-contents">
 
-        
-        
-      <h1 id="name">{r_name} </h1>
+        <h1 id="name">{r_name} </h1>
       
           <div className='restaurant-info'>
             <h3>{location}</h3>
@@ -255,11 +253,11 @@ const Wrapper = styled.main`
   box-sizing: content-box;
   button{
     color: white;
-    background-color: var(--primary-2);
-    border: 3px solid var(--primary-3);
+    background-color: var(--primary-3);
+    border: none;
     border-bottom: none;
     border-left: none;
-    padding: 5px;
+    padding: 5px 10px 5px;
     transition: 0.2s;
     :hover{
       cursor: pointer;
