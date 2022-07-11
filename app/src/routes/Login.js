@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { updateForm, loginUser, emptyForm, setLocalUser } from '../features/userSlice'
 import { Loading } from '../components'
+import Wrapper from '../utils/wrappers/loginWrapper'
 
 const Login = () => {
   const { user, isLoading, error:{isError, message},
@@ -52,19 +53,21 @@ const Login = () => {
   },[isError])
   
 return (
-  <main>
-      <h1>Login</h1>
-      <div> 
-          <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="email">Email</label>
+  <Wrapper>
+    <img src="https://res.cloudinary.com/dvaeeygzx/image/upload/v1657557621/food_delivery_app/brooke-lark-wMzx2nBdeng-unsplash_yp4l3m.jpg" alt="" />
+    <div className="central-container">
+      <h1>Welcome Back</h1>
+      <div className='form-container'> 
+          <form onSubmit={handleSubmit} className='form'>
+              <div className='form-row'>
+                <label htmlFor="email">E-mail</label>
                 <input type="email" id="email"
                           name="email" value={email}
                           onChange={handleChange}
                       />
               </div>
 
-              <div>
+              <div className='form-row'>
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password"
                           name="password" value={password}
@@ -73,11 +76,17 @@ return (
               </div>
 
               {isLoading ? <Loading /> :
-                      <button>Submit</button>}
-          </form>
+                      <button className='global-button'>Login</button>}
+        </form>
+        <p>
+          Not a member? <Link to='/register'>Register Here</Link>
+        </p>
       </div>
-</main>
+      </div>
+</Wrapper>
 )
 }
+
+
 
 export default Login

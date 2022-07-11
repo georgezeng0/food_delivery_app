@@ -67,3 +67,16 @@ body {
   --breakpoint-xl:1440px;
   --nav-height: 3rem;
 }
+
+.global-button {
+  background-color: var(--primary-2);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+.global-button:hover {
+  cursor: pointer;
+  background-color: var(--primary-3);
+}
