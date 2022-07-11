@@ -3,10 +3,12 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { logout } from '../features/userSlice'
 import { MdClose } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const UserDropdown = ({ user, toggleUserDropdown, showUser }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     return (
         <Wrapper show={showUser ? true : false}>
@@ -33,6 +35,8 @@ const UserDropdown = ({ user, toggleUserDropdown, showUser }) => {
                         <button className='side-nav-link logout' onClick={() => {
                             toggleUserDropdown()
                             dispatch(logout())
+                            toast.success("Successfully logged out.")
+                            navigate('/restaurants')
                         }}>
                       <span>Logout</span>
                   </button>

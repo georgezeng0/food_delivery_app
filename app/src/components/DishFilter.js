@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { updateFilter, resetFilter } from '../features/dishSlice'
+import ScreenSizes from '../utils/mediaVariables'
 
 const DishFilter = () => {
     const { isLoading, filter } = useSelector(state => state.dish)
@@ -68,13 +69,28 @@ button{
         cursor: pointer;
         background-color: var(--primary-1);
     }
+    width: fit-content;
 
 }
 button:first-child{
-    border-left: 3px solid var(--primary-5);;
+    border-left: 3px solid var(--primary-5);
 }
 .selected{
     background-color: var(--tertiary-1);
+}
+@media (max-width: ${ScreenSizes.breakpoint_md}){
+button{
+    font-size: 0.7rem;
+}
+}
+@media (max-width: 560px){
+    flex-wrap: wrap;
+    button{
+        border: none;
+    }
+    button:first-child{
+    border-left: none;
+}
 }
 `
 

@@ -11,6 +11,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
 import { BsCurrencyPound } from 'react-icons/bs'
+import ScreenSizes from '../utils/mediaVariables';
 
 const SingleRestaurant = () => {
   const dispatch = useDispatch();
@@ -135,7 +136,7 @@ const SingleRestaurant = () => {
                             numberOfStars={5}
                             starDimension='15px'
               />
-              <span>({reviews.length} review{`${reviews.length>1?'s':''}`})</span>
+              <span>({reviews.length} review{`${reviews.length>1 || reviews.length===0?'s':''}`})</span>
               </div>
           <p>{
               cuisine && cuisine.map((c, i) => { 
@@ -152,18 +153,18 @@ const SingleRestaurant = () => {
         <p>Open: {open}-{close}</p>
           </div>
           
-
+        {isOwner&&
           <div className="owner-actions">
-            {isOwner && <span>You own this restaurant:</span>}
+            <span>You own this restaurant:</span>
 
-            {isOwner&&
-            <div className='btn-container'>
-              <Link to={`./edit`}><button>Edit Restaurant</button></Link>
-              <Link to={`./new_dish`}><button>Add Dish</button></Link>
-               <button className="last-btn" onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete Restaurant</button>
-              </div>}
             
-          </div>
+            <div className='btn-container'>
+              <Link to={`./edit`} className='link-btn'><button>Edit Restaurant</button></Link>
+              <Link to={`./new_dish`}  className='link-btn'><button>Add Dish</button></Link>
+               <button className="last-btn" onClick={()=>dispatch(deleteRestaurant(r_id))}>Delete Restaurant</button>
+              </div>
+            
+          </div>}
 
 
       {/* Show edit/delete buttons only if owner */}
@@ -189,6 +190,8 @@ const Wrapper = styled.main`
   padding: calc(var(--nav-height) + 40px) 40px 40px;
   display: flex;
   justify-content: center;
+  transition: padding 0.5s;
+  min-width: 300px;
   .content-container{
     border-radius: 30px;
     overflow: hidden;
@@ -216,6 +219,7 @@ const Wrapper = styled.main`
  width: 80%;
 }
 .card-contents{
+  transition: padding 0.2s;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -244,12 +248,14 @@ const Wrapper = styled.main`
   border-radius: 20px;
   border: 3px solid var(--primary-3);
   overflow: hidden;
+  box-sizing: border-box;
   span{
     margin-bottom: 6px;
   }
 }
 .btn-container{
   width: 100%;
+  display:flex;
   box-sizing: content-box;
   button{
     color: white;
@@ -278,6 +284,30 @@ const Wrapper = styled.main`
 #dishes_title{
   margin: 0;
   padding: 10px;
+}
+@media (max-width: ${ScreenSizes.breakpoint_lg}){
+  padding: var(--nav-height) 0px 0px;
+  .content-container{
+    border-radius: 0;
+  }
+}
+@media (max-width: ${ScreenSizes.breakpoint_md}){
+  .card-contents{
+    padding: 10px;
+  }
+  .btn-container{
+    flex-direction: column;
+    align-items:center;
+    button{
+      width: 100%;
+    }
+    .link-btn{
+      width: 100%;
+    }
+  }
+  .owner-actions{
+    width: 80%;
+  }
 }
 `
 

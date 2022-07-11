@@ -25,6 +25,9 @@ const Reviews = ({ r_id }) => {
         if (reviews.length > 0 && reviews[0].restaurant === r_id) {
             dispatch(updateRating(r_id))
         }
+        else if (reviews.length === 0) {
+            dispatch(updateRating(r_id))
+        }
     }, [reviews])
 
     // Error actions
@@ -54,37 +57,39 @@ const Reviews = ({ r_id }) => {
       <Wrapper>
           <h2 className='title'>Reviews</h2>
           {isLoading ? <Loading /> :
-              (isLoadError?
+              (isLoadError ?
                   <h3>Error Loading Reviews</h3>
                   :
-                  reviews.map(review => {
-                      const { rev_id, title, body, rating, restaurant, author } = review
-                      return <article key={rev_id} className='review'>
-                          <div className="rating-container">
-                          <StarRatings
-                            className="rating"
-                            rating={rating}
-                            isAggregateRating
-                            starRatedColor="gold"
-                            numberOfStars={5}
-                            starDimension='15px'
-                              />
-                              </div>
-                          <h3>{title}</h3>
-                          <p>{body}</p>
+                  reviews.length === 0 ?
+                          <h3>Nobody has reviewed this restaurant yet... Why don't you leave one below?</h3> :
+                          reviews.map(review => {
+                              const { rev_id, title, body, rating, restaurant, author } = review
+                              return <article key={rev_id} className='review'>
+                                  <div className="rating-container">
+                                      <StarRatings
+                                          className="rating"
+                                          rating={rating}
+                                          isAggregateRating
+                                          starRatedColor="gold"
+                                          numberOfStars={5}
+                                          starDimension='15px'
+                                      />
+                                  </div>
+                                  <h3>{title}</h3>
+                                  <p>{body}</p>
                           
-                              <div className='btn-container'>
-                              <span><TiUser /> {author}</span>
-                              {author === user.email &&
-                                  <div>
-                                      <button onClick={() => dispatch(deleteReview(rev_id))}>Delete Review</button>
-                                      <button onClick={() => dispatch(editMode({ rev_id, title, body, rating }))}>Edit Review</button>
-                                  </div>}
-                              </div>
+                                  <div className='btn-container'>
+                                      <span><TiUser /> {author}</span>
+                                      {author === user.email &&
+                                          <div>
+                                              <button onClick={() => dispatch(deleteReview(rev_id))}>Delete Review</button>
+                                              <button onClick={() => dispatch(editMode({ rev_id, title, body, rating }))}>Edit Review</button>
+                                          </div>}
+                                  </div>
                           
                           
-                      </article>
-                  })
+                              </article>
+                          })
                 )
           }
     </Wrapper>
@@ -96,7 +101,9 @@ width: 100%;
 display: flex;
 flex-direction: column;
 align-items: center;
-
+h3{
+    text-align: center;
+}
 .title{
     width: 100%;
     text-align: center;

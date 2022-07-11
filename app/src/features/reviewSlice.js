@@ -40,6 +40,9 @@ export const updateRating = createAsyncThunk(
         const res = await axios.post(`/api/reviews/${r_id}/update_rating`,{newRating});
         return res.data;
         
+      } else {
+        const res = await axios.post(`/api/reviews/${r_id}/update_rating`,{newRating:0});
+        return res.data;
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message||error.response.data)

@@ -5,11 +5,13 @@ import { addItem } from '../features/basketSlice';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiFillStar } from 'react-icons/ai'
+import ScreenSizes from '../utils/mediaVariables';
 
 const DishList = ({ isOwner, r_id }) => {
     const dispatch = useDispatch()
     const { dishes, filter } = useSelector(state => state.dish)
-    const categories = ["starred","starter","main","side","dessert","drink"]
+    const categories = ["starred", "starter", "main", "side", "dessert", "drink"]
+    const categories_diplay = ["Popular","Starters","Main Courses", "Sides", "Dessert", "Drinks"]
     return (
         <Wrapper>
             {
@@ -18,7 +20,7 @@ const DishList = ({ isOwner, r_id }) => {
                         if (!filter || filter === cat || filter === "starred" && cat==="starred") {
                             return <div key={i} className='category-container'>
                                 <h3 className='category-name'>
-                                    {cat === 'starred' ? `popular` : cat}
+                                    {categories_diplay[i]}
                                     {cat === 'starred' && <AiFillStar className='star' />}
                                 </h3>
                                 <div className='dishes-container'>
@@ -39,7 +41,7 @@ const DishList = ({ isOwner, r_id }) => {
                         
                                                     {/* Show edit/delete buttons only if owner */}
                                                     {isOwner && <>
-                                                        <Link to={`../../dishes/${d_id}/${restaurant}/edit`}><button>Edit Dish</button></Link>
+                                                        <Link className='link-btn' to={`../../dishes/${d_id}/${restaurant}/edit`}><button>Edit Dish</button></Link>
                                                         <button onClick={() => { dispatch(deleteDish({ d_id, r_id })) }}>Delete Dish</button>
                                                     </>}
                                                 </div>
@@ -105,7 +107,8 @@ justify-content: center;
 .btn-container{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    align-items: center;
+    width: 50% !important;
     button{
         width: 100%;
         border: none;
@@ -113,6 +116,15 @@ justify-content: center;
         margin-top: 5px;
         background-color: var(--primary-3);
         box-shadow: 0 0 2px 2px var(--grey-3)
+    }
+    .link-btn{
+        width: 100%;
+    }
+}
+@media (max-width: ${ScreenSizes.breakpoint_md}){
+    .dishes-container{
+        display: flex;
+        flex-direction: column;
     }
 }
 `
