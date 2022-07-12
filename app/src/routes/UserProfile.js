@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Loading } from '../components'
 import { updateForm, editUser,populateForm, setLocalUser, emptyForm } from '../features/userSlice'
+import Wrapper from '../utils/wrappers/loginWrapper'
 
 const UserProfile = () => {
     const { user,isLoading, error:{isError, message}, success,
@@ -43,19 +44,21 @@ const UserProfile = () => {
     },[isError])
 
     return (
-      <main>
+      <Wrapper>
+            <img src="https://res.cloudinary.com/dvaeeygzx/image/upload/v1657557621/food_delivery_app/brooke-lark-wMzx2nBdeng-unsplash_yp4l3m.jpg" alt="" />
+            <div className="central-container">
             <h1>Your Profile</h1>
-            <div> 
-              <form onSubmit={handleSubmit}>
-                  <div>
-                    <label htmlFor="email">Email</label>
+            <div className='form-container'> 
+              <form onSubmit={handleSubmit} className='form'>
+                  <div className='form-row'>
+                    <label htmlFor="email">E-mail</label>
                       <input type="email" id="email"
                           name="email" value={email}
                           onChange={handleChange}
                       />
                   </div>
 
-                  <div>
+                  <div className='form-row'>
                     <label htmlFor="name">Name</label>
                       <input type="text" id="name"
                           name="name" value={name}
@@ -63,7 +66,7 @@ const UserProfile = () => {
                       />
                   </div>
 
-                  <div>
+                  <div className='form-row'>
                     <label htmlFor="password">New Password</label>
                       <input type="password" id="password"
                           name="password" value={password}
@@ -71,7 +74,7 @@ const UserProfile = () => {
                       />
                   </div>
 
-                  <div>
+                  <div className='form-row'>
                     <label htmlFor="location">Postcode</label>
                       <input type="text" id="location"
                           name="location" value={location}
@@ -80,11 +83,12 @@ const UserProfile = () => {
                   </div>
 
                   {isLoading ? <Loading /> :
-                      <button>Edit Profile</button>}
+                      <button className='global-button'>Edit Profile</button>}
               </form>
-          </div>
+            </div>
+            </div>
 
-     </main>
+     </Wrapper>
   )
 }
 

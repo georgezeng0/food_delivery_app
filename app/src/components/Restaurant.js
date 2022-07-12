@@ -38,7 +38,7 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                 </p>              
                 <p>
                         {
-                            cuisine.map((c, i) => { 
+                            cuisine && cuisine.map((c, i) => { 
                                 if (i < (cuisine.length-1)) { return `${c}, ` }
                                 else return c
                         })
@@ -54,7 +54,7 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
 }
 
 const Wrapper = styled.article`
-
+    background-color: white;
     border: 2px solid var(--primary-5);
     margin: 5px 5px 0 5px;
     border-radius: 20px;

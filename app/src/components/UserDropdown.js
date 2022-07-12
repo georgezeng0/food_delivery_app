@@ -68,7 +68,7 @@ const Wrapper = styled.section`
     box-sizing: border-box;
     max-height: ${props=> props.show? "300px":"0px"};
     background-color: var(--white);
-    z-index: 1;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     transition: max-height 0.5s;
