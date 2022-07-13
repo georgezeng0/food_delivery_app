@@ -46,7 +46,7 @@ const Navbar = () => {
         <Link className='nav-link' to="/basket">
           {/* <div className='gradient'></div> */}
             <span>Basket&nbsp;<MdOutlineShoppingBasket />
-            <span id='basket-number-icon' className={isAddedToBasket && 'addToBasket_animation'}>{total_items}</span>
+            <span id='basket-number-icon' className={isAddedToBasket? 'addToBasket_animation':''}>{total_items}</span>
             </span>
           </Link>
 
@@ -77,7 +77,7 @@ const Navbar = () => {
           </Link>
           
         <Link className='nav-link nav-link-icon' to="/basket">
-            <span><MdOutlineShoppingBasket /><span id='basket-number-icon' className={isAddedToBasket && 'addToBasket_animation'}>{total_items}</span></span>
+            <span><MdOutlineShoppingBasket /><span id='basket-number-icon' className={isAddedToBasket? 'addToBasket_animation':''}>{total_items}</span></span>
           </Link>
 
           <TiUser className='user-icon' onClick={toggleUserDropdown} />
@@ -93,7 +93,7 @@ const Navbar = () => {
 }
 
 const Wrapper = styled.nav`
-    z-index: 1;
+    z-index: 10;
     min-width: var(--min-width);
     box-sizing: border-box;
     width: 100%;
