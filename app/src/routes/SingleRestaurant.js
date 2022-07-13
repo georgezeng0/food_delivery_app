@@ -18,7 +18,6 @@ const SingleRestaurant = () => {
   const navigate = useNavigate();
 
   const {
-    isLoading,
     error: {isError, message},
     success: { APIsuccess, successType },
     restaurants } = useSelector(state => state.restaurant);
@@ -28,7 +27,7 @@ const SingleRestaurant = () => {
   success: {APIsuccess:DishSuccess, successType: DishSuccessType}} = useSelector(state => state.dish);
   const { user:{email} } = useSelector(state => state.user);
   const {error: {isError:basketError, type:basketErrorType}} = useSelector(state=>state.basket)
-  const {reviews} = useSelector(state=>state.review)
+  const { reviews } = useSelector(state => state.review)
   
   const { r_id: id } = useParams();
   const [restaurant, setRestaurant] = useState({});
@@ -39,7 +38,7 @@ const SingleRestaurant = () => {
   } = restaurant;
 
   const getRestaurant = async (id) => {
-    try{
+    try {
       const res = await axios(`/api/restaurants/${id}`)
       setRestaurant(res.data)
     }
@@ -99,10 +98,6 @@ const SingleRestaurant = () => {
     }
 }, [isError,dishError])
   
-  if (isLoading) {
-    return <Loading/>
-  }
-
   if (isError) {
     if (message && message.match(/^403/gm)) {
       dispatch(resetRestaurantError())
@@ -111,9 +106,19 @@ const SingleRestaurant = () => {
     dispatch(resetRestaurantError())
     return <Error code='500'/>
   }
+
+  if (!restaurant.r_id) {
+    return <Wrapper>
+      <div className="content-container empty-container">
+        <Loading className='loading'></Loading>
+      </div>
+
+    </Wrapper>
+  }
   
   return (
     <Wrapper>
+      
       <div className="content-container">
 
       <div className='img-container'>
@@ -127,6 +132,7 @@ const SingleRestaurant = () => {
       
           <div className='restaurant-info'>
             <h3>{location}</h3>
+           
             <div className="ratings-container">
           <StarRatings
                             className="rating"
@@ -136,8 +142,13 @@ const SingleRestaurant = () => {
                             numberOfStars={5}
                             starDimension='15px'
               />
-              <span>({reviews.length} review{`${reviews.length>1 || reviews.length===0?'s':''}`})</span>
+              <span>
+                
+                ({reviews.length} review{`${reviews.length > 1 || reviews.length === 0 ? 's' : ''}`})
+                
+              </span>
               </div>
+              
           <p>{
               cuisine && cuisine.map((c, i) => { 
                 if (i < (cuisine.length-1)) { return `${c}, ` }
@@ -284,6 +295,12 @@ const Wrapper = styled.main`
 #dishes_title{
   margin: 0;
   padding: 10px;
+}
+.empty-container{
+min-height: 500px;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 @media (max-width: ${ScreenSizes.breakpoint_lg}){
   padding: var(--nav-height) 0px 0px;

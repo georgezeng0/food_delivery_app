@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
@@ -9,9 +9,12 @@ import { MdOutlineShoppingBasket,MdRestaurantMenu  } from 'react-icons/md'
 import { useState } from 'react'
 import UserDropdown from './UserDropdown'
 import { useEffect } from 'react'
+import { resetAddToBasket } from '../features/basketSlice'
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
+  const {total_items, isAddedToBasket} = useSelector(state=>state.basket)
 
   const [showUser, setShowUser] = useState(false);
   const { pathname } = useLocation()
@@ -19,6 +22,13 @@ const Navbar = () => {
   const toggleUserDropdown = () => {
     setShowUser(!showUser)
   }
+
+  useEffect(() => {
+    if (isAddedToBasket) {
+      setTimeout(()=>dispatch(resetAddToBasket())
+        , 100)
+    }
+  }, [isAddedToBasket])
 
     return (
       <Wrapper pathname={pathname}>
@@ -35,7 +45,9 @@ const Navbar = () => {
 
         <Link className='nav-link' to="/basket">
           {/* <div className='gradient'></div> */}
-            <span>Basket&nbsp;<MdOutlineShoppingBasket/></span>
+            <span>Basket&nbsp;<MdOutlineShoppingBasket />
+            <span id='basket-number-icon' className={isAddedToBasket && 'addToBasket_animation'}>{total_items}</span>
+            </span>
           </Link>
 
           
@@ -65,7 +77,7 @@ const Navbar = () => {
           </Link>
           
         <Link className='nav-link nav-link-icon' to="/basket">
-            <span><MdOutlineShoppingBasket /></span>
+            <span><MdOutlineShoppingBasket /><span id='basket-number-icon' className={isAddedToBasket && 'addToBasket_animation'}>{total_items}</span></span>
           </Link>
 
           <TiUser className='user-icon' onClick={toggleUserDropdown} />
@@ -173,7 +185,11 @@ const Wrapper = styled.nav`
       opacity: 0%;
     }
     .nav-link:hover {
-      
+      #basket-number-icon{
+        color: black;
+        transform: translateY(0px);
+        text-shadow: 0px 0px 0px var(--tertiary-7);
+      }
       span {
         color: var(--tertiary-1);
         transform: translateY(4px);
@@ -206,6 +222,22 @@ const Wrapper = styled.nav`
       cursor: pointer;
       color: var(--tertiary-1)
       }
+    }
+    #basket-number-icon{
+      background-color: var(--tertiary-1);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8rem;
+      position: relative;
+      top: -5px;
+      right: 3px;
+    }
+    .addToBasket_animation{
+      transform: translateY(-5px)
     }
     .nav-link-icon{
       display: none;

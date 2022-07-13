@@ -18,7 +18,8 @@ const initialState = {
   error: {
     isError: false,
     type: ''
-  }
+  },
+  isAddedToBasket: false
 };
 
 const basketSlice = createSlice({
@@ -27,6 +28,9 @@ const basketSlice = createSlice({
   reducers: {
     resetError: (state) => {
       state.error = { isError: false, type: '' }
+    },
+    resetAddToBasket: (state) => {
+      state.isAddedToBasket = false;
     },
     addItem: (state, { payload: dish }) => {
       if (state.basket.length < 1) {
@@ -47,6 +51,8 @@ const basketSlice = createSlice({
           amount: 1
         })
       }
+      // Toggle success actions (e.g. animate counter in navbar)
+      state.isAddedToBasket = true;
     },
     minusItemAmount: (state, { payload: d_id }) => {
       const index = state.basket.map(item=>item.d_id).indexOf(d_id)
@@ -86,5 +92,5 @@ const basketSlice = createSlice({
   extraReducers: {}
 });
 
-export const { resetError,addItem,updateTotals,deleteItem,addItemAmount,minusItemAmount,emptyBasket } = basketSlice.actions;
+export const { resetAddToBasket,resetError,addItem,updateTotals,deleteItem,addItemAmount,minusItemAmount,emptyBasket } = basketSlice.actions;
 export default basketSlice.reducer;
