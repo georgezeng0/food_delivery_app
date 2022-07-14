@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components';
 import { addItemAmount, deleteItem, minusItemAmount } from '../features/basketSlice'
 import { AiOutlinePlusCircle,AiOutlineMinusCircle,AiOutlineDelete } from 'react-icons/ai';
+import ScreenSizes from '../utils/mediaVariables';
 
 const BasketItems = () => {
     const dispatch = useDispatch();
@@ -18,18 +19,18 @@ const BasketItems = () => {
       <Wrapper>
           <div className="item-row headings">
               <span>Item</span>
-              <span>Price</span>
+              <span className='price'>Price</span>
               <span>Qty</span>
-              <span>Item Total</span>
+              <span className='total'>Item Total</span>
               <span></span>
           </div>
           {basket.map(item => {
               const { d_id, amount, price,name } = item;
               return <article key={d_id} className="item-row">
                   <span>{name}</span>
-                  <span>£{(price / 100).toFixed(2)}</span>
+                  <span className='price'>£{(price / 100).toFixed(2)}</span>
                   <span>{amount}</span>
-                  <span>£{((amount * price)/100).toFixed(2)}</span>
+                  <span className='total'>£{((amount * price)/100).toFixed(2)}</span>
                   <div className="item-button-container">
                   <button onClick={()=>dispatch(addItemAmount(d_id))}><AiOutlinePlusCircle/></button>
                   <button onClick={()=>dispatch(minusItemAmount(d_id))}><AiOutlineMinusCircle/></button>
@@ -77,6 +78,23 @@ width: 100%;
     border-bottom: 2px solid grey;
     padding-bottom: 5px;
     margin-bottom: 5px;
+}
+@media (max-width: ${ScreenSizes.breakpoint_md}){
+.item-row{
+    grid-template-columns: 35% 15% 10% 15% 20%;
+}
+}
+@media (max-width: 567px){
+.item-row{
+    grid-template-columns: 50% 10% 40%;
+    font-size: 0.8rem;
+}
+.price{
+    display: none;
+}
+.total{
+    display: none;
+}
 }
 `
 
