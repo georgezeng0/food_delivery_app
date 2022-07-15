@@ -6,6 +6,8 @@ import { createRestaurant, addImageUrl, editRestaurant, getRestaurants, emptyFor
 import { Loading } from '../components'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import styled from 'styled-components'
+import ScreenSizes from '../utils/mediaVariables'
 
 const NewRestaurant = () => {
     let {
@@ -122,85 +124,199 @@ const NewRestaurant = () => {
         }
     },[isError])
 
-  return (
-      <main>
-          <h1>{`${isEdit? "Edit":"New"} Restaurant`}</h1>
-          <div>
-              <form onSubmit={handleSubmit}>
-                  {/* Name text form */}
-                  <div>
-                      <label htmlFor="name">Restaurant Name</label>
-                      <input type="text" id="name" name="r_name"
-                          value={r_name}
-                          onChange={handleChange} />
-                  </div>
-                  {/* Cuisines checkbox */}
-                  <div>
-                      <legend>Cuisine</legend>
-                      <fieldset>
-                  {cuisineList.map((item,i)=> {
-                      return <div key={i}>
-                          <label htmlFor={item}>{item}</label>
-                          <input type="checkbox" name="cuisine"
-                              value={item} id={item}
-                              onChange={handleChange}
-                              checked={cuisine.includes(item)? true:false}
-                          />
-                          </div>
-                    })}
-                          </fieldset>
-                  </div>
-                  {/* Pricepoint range */}
-                  <div>
-                      <label htmlFor="pricepoint">Pricepoint</label>
-                      <input type="range" id="pricepoint" name="pricepoint"
-                          value={pricepoint} min="1" max="3"
-                          onChange={handleChange} />
-                  </div>
-                  {/* Location textform */}
-                  <div>
-                      <label htmlFor="location">Postcode</label>
-                      <input type="text" id="location" name="location"
+    return (
+        <Wrapper>
+            
+            <div className='form-container'>
+            <h1>{`${isEdit ? "Edit" : "New"} Restaurant`}</h1>
+                <form onSubmit={handleSubmit} className='form'>
+                    {/* Name text form */}
+                    <div className='form-row'>
+                        <label htmlFor="name">Restaurant Name</label>
+                        <input type="text" id="name" name="r_name"
+                            value={r_name}
+                            onChange={handleChange} />
+                    </div>
+                    {/* Cuisines checkbox */}
+                    <div className='form-row'>
+                        <legend>Cuisine(s)</legend>
+                        <fieldset>
+                            {cuisineList.map((item, i) => {
+                                return <div key={i} className='cuisine-input'>
+                                    <label htmlFor={item}>{item}</label>
+                                    <input type="checkbox" name="cuisine"
+                                        value={item} id={item}
+                                        onChange={handleChange}
+                                        checked={cuisine.includes(item) ? true : false}
+                                    />
+                                </div>
+                            })}
+                        </fieldset>
+                    </div>
+                    {/* Pricepoint range */}
+                    <div className='form-row'>
+                        <label htmlFor="pricepoint">Pricepoint</label>
+                        <span>{'£'.repeat(pricepoint)}</span>
+                        <input type="range" id="pricepoint" name="pricepoint"
+                            value={pricepoint} min="1" max="3"
+                            onChange={handleChange} />
+                    </div>
+                    {/* Location textform */}
+                    <div className='form-row'>
+                        <label htmlFor="location">Postcode</label>
+                        <input type="text" id="location" name="location"
                             value={location}
-                            onChange={handleChange}/>
-                  </div>
-                  {/* Open and close times */}
-                  <div>
-                      <label htmlFor="open">Open</label>
-                      <input type="time" id="open" name="open"
+                            onChange={handleChange} />
+                    </div>
+                    {/* Open and close times */}
+                    <div className='form-row'>
+                        <label htmlFor="open">Open</label>
+                        <input type="time" id="open" name="open"
                             value={open}
-                            onChange={handleChange}/>
-                      <label htmlFor="close">Close</label>
-                      <input type="time" id="close" name="close"
+                            onChange={handleChange} />
+                        <label htmlFor="close">Close</label>
+                        <input type="time" id="close" name="close"
                             value={close}
-                            onChange={handleChange}/>
-                  </div>
+                            onChange={handleChange} />
+                    </div>
 
-                  {/* Image */}
-                  <div>
-                      <label htmlFor="image">{!isEdit?`Select`:`Edit`} Image</label>
-                      <input type="file" accept="image/*" name="image" id="image"
-                            onChange={e=>setImage(e.target.files[0])}
-                      />
-                  </div>
+                    {/* Image */}
+                    <div className='form-row'>
+                        {image && <div className='preview-container'>
+                            <span id='preview-text'>PREVIEW</span>
+                            <img className="preview-img" src={URL.createObjectURL(image)} alt="" />
+                            </div>
+                        }
+                        <label htmlFor="image">{!isEdit ? `Select` : `Edit`} Image</label>
+                        
+                        <input type="file" accept="image/*" name="image" id="image"
+                            onChange={e => setImage(e.target.files[0])}
+                        />
+                        
+                    </div>
 
-                  {isEdit &&
-                      <div>
-                          Old Image: {!old_image && 'None'}
-                          <img src={old_image}/>
-                  </div>
-                  }
+                    {isEdit &&
+                        <div className='form-row old-image-container'>
+                            Old Image: {!old_image && 'None'}
+                            <img className='old-image' src={old_image} />
+                        </div>
+                    }
 
-                  {isLoading ?
-                    <Loading/>:
-                    <button>Submit</button>
+                    {isLoading ?
+                        <Loading /> :
+                        <button className='global-button'>Submit</button>
                     }
                   
 
-              </form>
-          </div>
-    </main>
+                </form>
+            </div>
+        </Wrapper>
   )
 }
+
+const Wrapper = styled.main`
+padding-top: calc(var(--nav-height) + 20px);
+display: flex;
+justify-content: center;
+.form-container{
+    width: 70%;
+    min-width: 300px;
+    max-width: var(--max-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px 5px var(--grey-3);
+}
+h1{
+    margin-top: 5px;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form-row{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    input{
+        text-align: center;
+        width: 80%;
+        margin-top: 5px;
+    }
+    margin-top: 10px;
+}
+fieldset{
+    display: flex;
+    flex-wrap: wrap;
+    width: 75%;
+    justify-content: space-around;
+}
+.cuisine-input{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#name{
+    width: 100%
+}
+#pricepoint{
+    width: 100%;
+}
+#location{
+    width: 200px;
+}
+#open, #close {
+    width: 180px;
+}
+#image{
+    width: 75%;
+    padding: 10px;
+    border: 2px solid var(--secondary-2);
+}
+.preview-container{
+    position: relative;
+}
+#preview-text{
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 0px 0px 5px black;
+}
+.preview-img{
+    width: 250px;
+    margin: 5px
+}
+button {
+    margin: 20px 20px 50px;
+}
+.old-image-container{
+    width: 90%;
+    height: 100%;
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin: 10px 0px;
+        border: 3px solid grey;
+        box-sizing: border-box;
+    }
+}
+@media (max-width: ${ScreenSizes.breakpoint_md}) {
+.form-container{
+    width: 100%;
+    box-shadow: none;
+    border-radius: none;
+    transition: 0.4s;
+}
+}
+`
 
 export default NewRestaurant

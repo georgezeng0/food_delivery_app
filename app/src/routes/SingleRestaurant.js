@@ -40,6 +40,9 @@ const SingleRestaurant = () => {
   const getRestaurant = async (id) => {
     try {
       const res = await axios(`/api/restaurants/${id}`)
+      if (!res.data) {
+        throw new Error("Restaurant not found")
+      }
       setRestaurant(res.data)
     }
     catch (error) {

@@ -64,11 +64,11 @@ export const editRestaurant = createAsyncThunk(
     'restaurant/editRestaurant',
     async (id, thunkAPI) => {
         const { r_name, cuisine, pricepoint,
-            location, open, close, image } = thunkAPI.getState().restaurant.form
+            location, open, close, image, old_image } = thunkAPI.getState().restaurant.form
         try {
             const res = await axios.patch(`/api/restaurants/${id}`,
             {r_id:id,r_name, cuisine, pricepoint,
-                location, open, close, image}
+                location, open, close, image: image || old_image}
             );
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before edited restaurant loaded
             thunkAPI.dispatch(emptyForm())

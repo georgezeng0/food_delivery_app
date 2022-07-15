@@ -5,7 +5,8 @@ import { Loading, FilterSearch,Restaurant } from '../components'
 import { toast } from 'react-toastify';
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
-import {AiOutlineMenu,AiFillCaretRight} from 'react-icons/ai'
+import { AiOutlineMenu, AiFillCaretRight } from 'react-icons/ai'
+import { Link } from 'react-router-dom';
 
 const Restaurants = () => {
   const { restaurants:all_restaurants,sorted_restaurants: restaurants, isLoading,
@@ -68,7 +69,6 @@ const Restaurants = () => {
     return () => observer.disconnect();
     // Need to discmount otherwise loops
   }, [handleObserver, last_item.current]);
-  // Need these dependencies otherwise
 
   useEffect(() => {
     setPage(1);
@@ -102,9 +102,8 @@ const Restaurants = () => {
         <AiFillCaretRight fontSize={`1.5rem`} />
       </div>
       <div className='filter-menu-container'>
-        <FilterSearch horizontal setPage={setPage}/>
+        <FilterSearch horizontal setPage={setPage} />
       </div>
-
       
 
       <div className='responsive-container'>
@@ -112,10 +111,18 @@ const Restaurants = () => {
         <div className="block-placeholder" />
       <section className='filter-container'>
           <FilterSearch setPage={setPage} />
+          <div className="create-restaurant">
+          <h5>Do you have a restaurant? You can join our expanding network of restaurants.</h5>
+          <Link to='/restaurants/create'>Create A Restaurant Page</Link>
+        </div>
         </section>
 
       {/* Loading and All Restaurants */}
-      <section className='restaurants-container'>
+        <section className='restaurants-container'>
+        <div className="create-restaurant column">
+          <h5>Do you have a restaurant? You can join our expanding network of restaurants.</h5>
+          <Link to='/restaurants/create'>Create A Restaurant Page</Link>
+        </div>
       {isLoading ? <Loading /> :
         <section className='restaurants-content'>
           {/* Error Message */}
@@ -190,6 +197,15 @@ min-width: 260px;
     height: 500px;
     transition: width 0.5s linear;
   }
+  .create-restaurant{
+    padding: 20px;
+    text-align: center;
+    margin-top: -100px;
+    transition: opacity 0.2s linear 1s;
+  }
+  .create-restaurant.column{
+    display:none;
+  }
   .filter-menu-container{
     width: 100%;
     height: 0;
@@ -250,6 +266,18 @@ min-width: 260px;
       transition: margin 0.4s linear 0.3s;
       margin-left:0;
       }
+    .create-restaurant{
+      opacity: 0;
+      transition: opacity 1ms;
+    }
+    .create-restaurant.column{
+      margin-top: 0px;
+      opacity: 100;
+      display: block;
+    }
+    .responsive-container{
+      margin-top: ${props=>props.scrollY>300 && '48px'}
+    }
   }
   @media (max-width: 600px){
     .filter-menu-container{

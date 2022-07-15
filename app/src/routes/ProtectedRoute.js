@@ -7,6 +7,7 @@ import Error from './Error'
 import { Loading } from '../components'
 import { logout } from '../features/userSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const ProtectedRoute = ({ children, user, redirectPath, authOwner }) => {
     const location = useLocation() // to be able to add state onto Navigate > access elsewhere to redirect
@@ -22,7 +23,8 @@ const ProtectedRoute = ({ children, user, redirectPath, authOwner }) => {
         return response
         },
         err => {
-        if (err.response.status === 401) {
+            if (err.response.status === 401) {
+            toast.error('Error status 401 - Please login again')
             dispatch(logout())
             navigate('/login') 
             }
