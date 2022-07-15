@@ -93,6 +93,7 @@ const Navbar = () => {
 }
 
 const Wrapper = styled.nav`
+margin: 0;
     z-index: 10;
     min-width: var(--min-width);
     box-sizing: border-box;
@@ -104,7 +105,7 @@ const Wrapper = styled.nav`
     padding-left: 2%;
     padding-right: 2%;
     transition: all 0.5s ease-in;
-    background-color: ${props=>props.pathname!=='/' && `var(--primary-3)`};
+    background-color: ${props=>props.pathname!=='/' ? `var(--primary-3)` : 'white'};
     position: fixed;
     * {
       text-decoration: none;

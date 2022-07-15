@@ -12,6 +12,10 @@ const Basket = () => {
   const [restaurant, setRestaurant] = useState({})
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const getRestaurantById = async (id) => {
     try {
       const res = await axios(`api/restaurants/${id}`)

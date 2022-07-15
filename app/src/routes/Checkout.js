@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { emptyBasket } from '../features/basketSlice';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 
@@ -26,7 +27,9 @@ const CheckoutForm = ({total_price}) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const fetchPaymentIntent = async () => {
     try {

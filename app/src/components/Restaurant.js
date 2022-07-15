@@ -64,6 +64,7 @@ const Wrapper = styled.article`
         text-decoration: none;
     }
     .img-container{
+        flex-shrink:0;
         width: 40%;
         height: 150px;
         img{

@@ -20,6 +20,10 @@ const NewDish = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!name || !price || !category) {

@@ -25,7 +25,11 @@ const NewRestaurant = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { r_id:id } = useParams();   
+    const { r_id: id } = useParams();   
+    
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     useEffect(() => {
         dispatch(resetSuccess())

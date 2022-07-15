@@ -11,6 +11,10 @@ const Register = () => {
         error: { isError, message },
         form: { email, name, password, location } } = useSelector(state => state.user)
 
+        useEffect(() => {
+            window.scrollTo(0, 0)
+          }, [])
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

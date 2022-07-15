@@ -113,7 +113,7 @@ const Restaurants = () => {
           <FilterSearch setPage={setPage} />
           <div className="create-restaurant">
           <h5>Do you have a restaurant? You can join our expanding network of restaurants.</h5>
-          <Link to='/restaurants/create'>Create A Restaurant Page</Link>
+          <Link to='/restaurants/create'>Add Your Restaurant</Link>
         </div>
         </section>
 
@@ -166,7 +166,7 @@ min-width: 260px;
   .horizontal-placeholder{
     width: 100%;
     height: ${props => {
-  return (props.scrollY > 300 ? (props.showFilter ? '94px' : '44px') : '0px');
+  return (props.scrollY > 300 ? '44px' : '0px');
     } };
   }
   .location-container{
@@ -187,8 +187,9 @@ min-width: 260px;
     max-width: var(--max-width-main);
   }
   .block-placeholder{
-    width:  ${props => props.scrollY > 300 && `250px`};
+    min-width:  ${props => props.scrollY > 300 && `250px`};
     transition: width 0.5s linear;
+    transition: min-width 0.5s linear;
   }
   .filter-container{
     position: ${props => props.scrollY > 300 && `fixed`};
@@ -219,11 +220,13 @@ min-width: 260px;
     margin-top: -1px;
   }
   .restaurants-container{
+    
     margin-left: 20px;
-    flex-grow: 1;
+    flex-grow:1;
     transition: margin 0.5s linear;
   }
   .restaurants-content{
+    padding-top: 16px;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
@@ -248,9 +251,13 @@ min-width: 260px;
   }
   }
   @media (max-width: ${ScreenSizes.breakpoint_md}){
-    .filter-container, .block-placeholder{
+    .filter-container{
       width: 0;
       transition: width 0.5s linear 0.25s;
+    }
+    .block-placeholder{
+      min-width:0;
+      transition: min-width 0.5s linear 0.25s;
     }
     .menu-icon{
       display: block;
@@ -276,8 +283,14 @@ min-width: 260px;
       display: block;
     }
     .responsive-container{
-      margin-top: ${props=>props.scrollY>300 && '48px'}
+      /* margin-top: ${props => props.scrollY > 300 && '48px'}; */
     }
+    .horizontal-placeholder{
+    width: 100%;
+    height: ${props => {
+  return (props.scrollY > 300 ? (props.showFilter ? '94px' : '44px') : '0px');
+    } };
+  }
   }
   @media (max-width: 600px){
     .filter-menu-container{

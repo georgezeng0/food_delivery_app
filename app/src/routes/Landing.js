@@ -39,8 +39,8 @@ const Landing = () => {
 const Wrapper = styled.main`
   min-width: var(--min-width);
   height: 100vh;
-  min-height: 800px;
-  padding: calc(var(--nav-height)) 2% 2%;
+  min-height: 570px;
+  padding: calc(var(--nav-height) + 12px) 2% 2%;
   box-sizing: border-box;
   background-color: var(--white);
   display:flex;

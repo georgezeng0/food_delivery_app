@@ -11,6 +11,10 @@ const UserProfile = () => {
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (email && name && location) {
