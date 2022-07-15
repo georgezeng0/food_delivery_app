@@ -115,6 +115,18 @@ const Checkout = () => {
           <BasketTotals/>
         </div>
 
+        <p>
+          <b>Test Card Payment via Stripe:</b>
+          <br></br>
+          Test Card Number:
+          <br></br>
+          Visa: 4242424242424242
+          <br></br>
+          Mastercard: 5555555555554444
+          <br></br>
+          Use valid expiry date, and any CVC and ZIP numberical combination.
+        </p>
+
           <FormWrapper className='form-container'>
           <Elements stripe={stripePromise}>
             <CheckoutForm total_price={total_price} />
