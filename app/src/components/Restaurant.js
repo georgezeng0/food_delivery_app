@@ -1,14 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,Link } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import StarRatings from 'react-star-ratings';
 
 const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating } }) => {
     const navigate = useNavigate();
-    const onClick = () => {
-      navigate(`/restaurants/${r_id}`)
-  }
   
     return (
       <Wrapper>
@@ -17,10 +14,11 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
           </div>
 
           <div className='info-container'>
-              <div className='name-container' onClick={onClick}>
+              <Link to={`/restaurants/${r_id}`}><div className='name-container'>
                   <h3>{r_name}</h3>
                   <FiArrowRight className='arrow'/>
                 </div>
+                </Link>
 
                 <div className="info">
                 <div className='rating-container'>

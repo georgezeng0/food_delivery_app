@@ -7,7 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 :root {
   /* colors */
   --primary-0: #ecd5f9;
@@ -79,4 +78,8 @@ body {
 .global-button:hover {
   cursor: pointer;
   background-color: var(--primary-3);
+}
+
+.toast-container{
+  margin-top: 50px;
 }

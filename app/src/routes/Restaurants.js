@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRestaurants, refreshSort } from '../features/restaurantSlice'
-import { Loading, FilterSearch,Restaurant } from '../components'
+import { Loading, FilterSearch,Restaurant, Map } from '../components'
 import { toast } from 'react-toastify';
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
@@ -92,7 +92,8 @@ const Restaurants = () => {
   return (
     <Wrapper showFilter={showFilter} scrollY={scrollY}>
       <section className='map-container'>
-        <img src="https://images.unsplash.com/photo-1651307445960-defaf8fbb170?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" />
+        <Map restaurants={restaurants} isLoading={isLoading}/>
+        {/* <img src="https://images.unsplash.com/photo-1651307445960-defaf8fbb170?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" /> */}
       </section>
 
       <div className='horizontal-placeholder'/>

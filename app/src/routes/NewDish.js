@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateForm,createDish,populateForm,editDish,getDishes, emptyForm, resetSuccess } from '../features/dishSlice'
 import { Loading } from '../components';
 import { toast } from 'react-toastify';
+import Wrapper from '../utils/wrappers/formWrapper'
 
 
 const NewDish = () => {
@@ -86,47 +87,48 @@ const NewDish = () => {
     }
 
   return (
-      <main>
+      <Wrapper>
+          
+          <div className='form-container form-container-dish'>
           <h1>{`${isEdit ? "Edit" : "New"} Dish`}</h1>
-          <div>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className='form'>
                 {/* Name text form */}
-                <div>
+                <div className='form-row'>
                       <label htmlFor="name">Name</label>
                       <input type="text" id="name" name="name"
                           value={name}
                           onChange={handleChange} />
                   </div>
-                  {/* Price form*/}
-                  <div>
-                      <label htmlFor="price">Price</label>
+                  {/* Price form*/} 
+                  <div className='form-row'>
+                      <label htmlFor="price">Price (£)</label>
                       <input type="number" id="price" name="price"
                           value={price/100} min="0.01" max="99.99" step="0.01"
                           onChange={handleChange} />
                   </div>
                   {/* Image form - consider changing to image upload w/ cloudinary*/}
-                  <div>
+                  {/* <div className='form-row'>
                       <label htmlFor="image">Image Url</label>
                       <input type="text" id="image" name="image"
                           value={image}
                           onChange={handleChange} />
-                  </div>
+                  </div> */}
                   {/* Available  */}
-                  <div>
+                  <div className='form-row'>
                       <label htmlFor="available">Available</label>
                       <input type="checkbox" id="available" name="available"
                           value={available} checked={available}
                           onChange={handleChange} />
                   </div>
                   {/* Starred Dish */}
-                  <div>
+                  <div className='form-row'>
                       <label htmlFor="starred">Starred dish</label>
                       <input type="checkbox" id="starred" name="starred"
                           value={starred} checked={starred}
                           onChange={handleChange} />
                   </div>
                   {/* Category form */}
-                  <div>
+                  <div className='form-row'>
                       <label htmlFor="category">Category</label>
                       <select id="category" name="category" value={category} onChange={handleChange} >
                           <option value="" >--Select One--</option>
@@ -139,12 +141,12 @@ const NewDish = () => {
                   </div>
 
                   {isLoading ? <Loading /> :
-                      <button>Submit</button>
+                      <button className='global-button'>Submit</button>
                   }
 
               </form>
           </div>
-    </main>
+    </Wrapper>
   )
 }
 

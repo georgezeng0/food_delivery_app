@@ -203,7 +203,7 @@ app.post("/api/users/new", async (req, res, next) => {
             },
             TOKEN_SECRET,
             {
-                expiresIn: 86400 // 24h 
+                expiresIn: "7d"
             } 
         )
         res.send({ ...newUser, token })

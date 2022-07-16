@@ -13,7 +13,7 @@ const authenticateJWT = (req, res, next) => {
                     // Send a 401 status so that axios interceptor logsout and redirects
                     res.status(401).send({message: "JWT expired"})
                 } else {
-                    res.sendStatus(403);
+                    res.status(403).send({message: err.message});
                 }
             }
             req.user = user;

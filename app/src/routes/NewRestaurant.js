@@ -6,8 +6,7 @@ import { createRestaurant, addImageUrl, editRestaurant, getRestaurants, emptyFor
 import { Loading } from '../components'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import styled from 'styled-components'
-import ScreenSizes from '../utils/mediaVariables'
+import Wrapper from '../utils/wrappers/formWrapper'
 
 const NewRestaurant = () => {
     let {
@@ -205,122 +204,17 @@ const NewRestaurant = () => {
                             <img className='old-image' src={old_image} />
                         </div>
                     }
-
+                    <h5>You can add and edit Dishes on your restaurant page.</h5>
                     {isLoading ?
                         <Loading /> :
                         <button className='global-button'>Submit</button>
                     }
                   
-
+                    
                 </form>
             </div>
         </Wrapper>
   )
 }
-
-const Wrapper = styled.main`
-padding-top: calc(var(--nav-height) + 20px);
-display: flex;
-justify-content: center;
-.form-container{
-    width: 70%;
-    min-width: 300px;
-    max-width: var(--max-width);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    border-radius: 40px;
-    overflow: hidden;
-    box-shadow: 0px 0px 5px 5px var(--grey-3);
-}
-h1{
-    margin-top: 5px;
-}
-.form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.form-row{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    input{
-        text-align: center;
-        width: 80%;
-        margin-top: 5px;
-    }
-    margin-top: 10px;
-}
-fieldset{
-    display: flex;
-    flex-wrap: wrap;
-    width: 75%;
-    justify-content: space-around;
-}
-.cuisine-input{
-    margin-top: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#name{
-    width: 100%
-}
-#pricepoint{
-    width: 100%;
-}
-#location{
-    width: 200px;
-}
-#open, #close {
-    width: 180px;
-}
-#image{
-    width: 75%;
-    padding: 10px;
-    border: 2px solid var(--secondary-2);
-}
-.preview-container{
-    position: relative;
-}
-#preview-text{
-    position: absolute;
-    top: 40%;
-    width: 100%;
-    text-align: center;
-    font-size: 1.2rem;
-    color: white;
-    text-shadow: 0px 0px 5px black;
-}
-.preview-img{
-    width: 250px;
-    margin: 5px
-}
-button {
-    margin: 20px 20px 50px;
-}
-.old-image-container{
-    width: 90%;
-    height: 100%;
-    img{
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        margin: 10px 0px;
-        border: 3px solid grey;
-        box-sizing: border-box;
-    }
-}
-@media (max-width: ${ScreenSizes.breakpoint_md}) {
-.form-container{
-    width: 100%;
-    box-shadow: none;
-    border-radius: none;
-    transition: 0.4s;
-}
-}
-`
 
 export default NewRestaurant

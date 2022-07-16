@@ -8,6 +8,7 @@ import FilterSearch from "./FilterSearch"
 import DishFilter from "./DishFilter"
 import DishList from "./DishList"
 import Restaurant from "./Restaurant"
+import Map from "./Map"
 
 export {
     Navbar,
@@ -19,5 +20,6 @@ export {
     FilterSearch,
     DishFilter,
     DishList,
-    Restaurant
+    Restaurant,
+    Map
 }

@@ -35,6 +35,16 @@ const initialState = {
     }    
 };
 
+//geocoding API to get longitude and latitude data for map
+const getCoords = async (location) => {
+    try {
+        const res = await axios(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?country=GB&access_token=${process.env.REACT_APP_MAPBOX_KEY}`)
+        return res.data.features[0]?.center
+    } catch (error) {
+        throw new Error(error.response.data || 'mapbox API error')
+    }
+}
+
 export const getRestaurants = createAsyncThunk(
     'restaurant/getRestaurants',
     async (_, thunkAPI) => {
@@ -66,9 +76,10 @@ export const editRestaurant = createAsyncThunk(
         const { r_name, cuisine, pricepoint,
             location, open, close, image, old_image } = thunkAPI.getState().restaurant.form
         try {
+            const coordinates = await getCoords(location)
             const res = await axios.patch(`/api/restaurants/${id}`,
             {r_id:id,r_name, cuisine, pricepoint,
-                location, open, close, image: image || old_image}
+                location, open, close, image: image || old_image, coordinates: coordinates || []}
             );
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before edited restaurant loaded
             thunkAPI.dispatch(emptyForm())
@@ -85,8 +96,9 @@ export const createRestaurant = createAsyncThunk(
         const input = thunkAPI.getState().restaurant.form
         const user = thunkAPI.getState().user.user
         try {
+            const coordinates = await getCoords(input.location)
             const res = await axios.post(`/api/restaurants/new`,
-            {r_id:uuid(),...input,owner:user.email }
+            {r_id:uuid(),...input,owner:user.email, coordinates: coordinates || []}
             ); 
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before new restaurant loaded
             thunkAPI.dispatch(emptyForm())
