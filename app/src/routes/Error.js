@@ -39,7 +39,6 @@ justify-content: center;
   font-size: 15rem;
   color: var(--red-dark);
   display: flex;
-  
 }
 h1{
   margin: 0px;

@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useNavigate,Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import StarRatings from 'react-star-ratings';
 
 const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating } }) => {
-    const navigate = useNavigate();
   
     return (
       <Wrapper>

@@ -203,7 +203,7 @@ const restaurantSlice = createSlice({
                     }
                 }
             )
-            state.sorted_restaurants=[...toSort]
+            state.sorted_restaurants = [...toSort]
         },
         refreshSort: (state) => {
             state.sorted_restaurants = state.restaurants.filter(
