@@ -3,6 +3,7 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import { createRoot } from 'react-dom/client';
 import styled from 'styled-components';
 import Marker from '../resources/marker-dark.png';
+import HomeMarker from '../resources/home.png'
 import {useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux';
 
@@ -28,7 +29,7 @@ const Popup = ({ restaurant, onClick }) => {
 }
 
 const Map = () => {
-    const { sorted_restaurants: restaurants} = useSelector(state => state.restaurant);
+    const { sorted_restaurants: restaurants, userLocation: { coordinates } } = useSelector(state => state.restaurant);
 
     // Defaults for initial lng/lat and zoom
     const mapContainer = useRef(null);
@@ -114,6 +115,26 @@ const Map = () => {
             markersTemp.forEach(marker=>marker.remove())
         }
     }, [restaurants]);
+
+    useEffect(() => {
+        const markerElement = document.createElement('img');
+                markerElement.className = 'marker';
+                markerElement.src = HomeMarker;
+        const marker = new mapboxgl.Marker(
+            {
+                color: "#e0aaff",
+                element: markerElement,
+                anchor: 'bottom',
+
+            })
+        if (coordinates.length > 0) {
+            
+
+            marker.setLngLat(coordinates)
+            marker.addTo(map.current)
+        }
+        return () => { marker.remove() }
+    },[coordinates])
 
   return (
       <Wrapper ref={mapContainer} className="map-container">

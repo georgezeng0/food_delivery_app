@@ -16,7 +16,7 @@ const initialState = {
     restaurants: [],
     sorted_restaurants: [],
     form: {
-        r_name:'',
+        r_name: '',
         cuisine: [],
         cuisineList: [],
         pricepoint: 1,
@@ -31,12 +31,16 @@ const initialState = {
         search: '',
         cuisine: 'all',
         sort: '',
-        sortList: ['A-Z','Z-A','Price Low-High','Price High-Low']
-    }    
+        sortList: ['A-Z', 'Z-A', 'Price Low-High', 'Price High-Low']
+    },
+    userLocation: {
+        string: '',
+        coordinates: []
+    }
 };
 
 //geocoding API to get longitude and latitude data for map
-const getCoords = async (location) => {
+export const getCoords = async (location) => {
     try {
         const res = await axios(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?country=GB&access_token=${process.env.REACT_APP_MAPBOX_KEY}`)
         return res.data.features[0]?.center
@@ -231,6 +235,12 @@ const restaurantSlice = createSlice({
                 }
             )
             state.sorted_restaurants=[...toSort]
+        },
+        updateUserLocation: (state, { payload }) => {
+            state.userLocation.string = payload
+        },
+        saveUserCoords: (state, { payload }) => {
+            state.userLocation.coordinates = payload
         }
     },
     extraReducers: {
@@ -297,5 +307,5 @@ const restaurantSlice = createSlice({
   }
 });
 
-export const {refreshSort,updateForm,updateSort,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
+export const {saveUserCoords,updateUserLocation,refreshSort,updateForm,updateSort,resetError,addImageUrl,getCuisines,populateForm,emptyForm,resetSuccess} = restaurantSlice.actions;
 export default restaurantSlice.reducer;

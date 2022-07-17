@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getRestaurants, refreshSort } from '../features/restaurantSlice'
+import { getCoords, getRestaurants, refreshSort, updateUserLocation,saveUserCoords } from '../features/restaurantSlice'
 import { Loading, FilterSearch,Restaurant, Map } from '../components'
 import { toast } from 'react-toastify';
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
 import { AiOutlineMenu, AiFillCaretRight } from 'react-icons/ai'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Restaurants = () => {
   const { restaurants:all_restaurants,sorted_restaurants: restaurants, isLoading,
-  error:{isError,message}
+    error: { isError, message },
+  userLocation:{string:user_location, coordinates}
   } = useSelector(state => state.restaurant);
   const dispatch = useDispatch();
   const [showFilter, setShowFilter] = useState(false)
@@ -89,6 +91,21 @@ const Restaurants = () => {
     
   }, [isError])
 
+  //Location form handler
+  const locationSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const coords = await getCoords(user_location)
+      dispatch(saveUserCoords(coords))
+      if (coords) {
+        toast.success(`Now delivering to ${user_location}`)
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Error setting your location')
+    }
+  }
+
   return (
     <Wrapper showFilter={showFilter} scrollY={scrollY}>
       <section className='map-container'>
@@ -97,11 +114,14 @@ const Restaurants = () => {
       </section>
 
       <div className='horizontal-placeholder'/>
-      <div className='location-container'>
+      <form className='location-container' onSubmit={locationSubmit}>
         <AiOutlineMenu className='menu-icon' onClick={()=>setShowFilter(!showFilter) } />
-        <input type="text" placeholder={`Enter your location...`} />
-        <AiFillCaretRight fontSize={`1.5rem`} />
-      </div>
+        <input type="text" placeholder={`Enter your location...`}
+          value={user_location}
+          onChange={e=>dispatch(updateUserLocation(e.target.value))}
+        />
+        <button><AiFillCaretRight fontSize={`1.5rem`} /></button>
+      </form>
       <div className='filter-menu-container'>
         <FilterSearch horizontal setPage={setPage} />
       </div>
@@ -181,6 +201,17 @@ min-width: 260px;
     position: ${props => props.scrollY > 300 && `fixed`};
     top: ${props => props.scrollY > 300 && `var(--nav-height)`};
     z-index: 1;
+    button{
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      color: white;
+      display: flex;
+      align-items: center;
+      :hover{
+        cursor: pointer;
+      }
+    }
   }
   .responsive-container{
     display: flex;

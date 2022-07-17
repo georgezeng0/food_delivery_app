@@ -3,9 +3,37 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import StarRatings from 'react-star-ratings';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating } }) => {
-  
+const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating, coordinates } }) => {
+    const {userLocation: {coordinates:userCoordinates}} = useSelector(state=>state.restaurant)
+    const [distance,setDistance] = useState('')
+    const [duration,setDuration] = useState('')
+
+    const getDistance = async () => {
+
+        try {
+            const res = await axios(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${coordinates[0]},${coordinates[1]};${userCoordinates[0]},${userCoordinates[1]}?access_token=${process.env.REACT_APP_MAPBOX_KEY}&annotations=distance,duration`)
+            if (res.data.durations) {
+                setDuration(res.data.durations[0][1] || res.data.durations[0][0])
+            }
+            if (res.data.distances) {
+                setDistance(res.data.distances[0][1] || res.data.distances[0][0])
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if (userCoordinates) {
+            getDistance()
+        }
+    },[userCoordinates])
+
     return (
       <Wrapper>
           <div className='img-container'>
@@ -31,7 +59,10 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                         />
                 </div>
                 <p>
-                    {location}
+                        {location} - {(distance / 1000).toFixed(2)}km away
+                        <br />
+                        {((duration+(10*60))/60).toFixed(0)}-{((duration+(25*60))/60).toFixed(0)} minutes
+
                 </p>              
                 <p>
                         {
