@@ -6,14 +6,15 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components'
 import ScreenSizes from '../utils/mediaVariables'
 import { AiOutlineMenu, AiFillCaretRight } from 'react-icons/ai'
+import { GoLocation } from 'react-icons/go'
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 const Restaurants = () => {
   const { restaurants:all_restaurants,sorted_restaurants: restaurants, isLoading,
     error: { isError, message },
-  userLocation:{string:user_location, coordinates}
+  userLocation:{string:user_location}
   } = useSelector(state => state.restaurant);
+  const { user } = useSelector(state=>state.user)
   const dispatch = useDispatch();
   const [showFilter, setShowFilter] = useState(false)
   const [scrollY, setScrollY] = useState('')
@@ -106,6 +107,28 @@ const Restaurants = () => {
     }
   }
 
+  const setUserLocation = async (location) => {
+    try {
+      const coords = await getCoords(location)
+      if (coords[0]) {
+        dispatch(saveUserCoords(coords))
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (user.location) {
+      setUserLocation(user.location)
+      dispatch(updateUserLocation(user.location))
+    } else {
+      // Reset location and map marker
+      dispatch(updateUserLocation(''))
+      dispatch(saveUserCoords([]))
+    }
+  },[user])
+
   return (
     <Wrapper showFilter={showFilter} scrollY={scrollY}>
       <section className='map-container'>
@@ -115,8 +138,9 @@ const Restaurants = () => {
 
       <div className='horizontal-placeholder'/>
       <form className='location-container' onSubmit={locationSubmit}>
-        <AiOutlineMenu className='menu-icon' onClick={()=>setShowFilter(!showFilter) } />
-        <input type="text" placeholder={`Enter your location...`}
+        <AiOutlineMenu className='menu-icon' onClick={() => setShowFilter(!showFilter)} />
+        <GoLocation fontSize={`1.5rem`}/>
+        <input type="text" placeholder={`Enter your postcode...`}
           value={user_location}
           onChange={e=>dispatch(updateUserLocation(e.target.value))}
         />

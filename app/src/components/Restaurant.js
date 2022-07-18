@@ -59,9 +59,9 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                         />
                 </div>
                 <p>
-                        {location} - {(distance / 1000).toFixed(2)}km away
+                        {distance? `${(distance / 1000).toFixed(2)}km away` : location}
                         <br />
-                        {((duration+(10*60))/60).toFixed(0)}-{((duration+(25*60))/60).toFixed(0)} minutes
+                        {duration && <><b>{((duration+(10*60))/60).toFixed(0)}-{((duration+(25*60))/60).toFixed(0)}</b> mins</> }
 
                 </p>              
                 <p>

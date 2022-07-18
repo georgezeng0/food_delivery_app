@@ -118,7 +118,7 @@ const Map = () => {
 
     useEffect(() => {
         const markerElement = document.createElement('img');
-                markerElement.className = 'marker';
+                markerElement.className = 'marker home';
                 markerElement.src = HomeMarker;
         const marker = new mapboxgl.Marker(
             {
@@ -179,6 +179,9 @@ height: 100%;
    p{
     margin: 0;
     margin-bottom: 10px;
+   }
+   .home{
+    z-index: 5;
    }
 }
 `
