@@ -9,8 +9,8 @@ const { registerUser, getPassword,getUser,editUser } = require('../models/user_m
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createReview, getReviews, deleteReview, getReviewOwner, editReview, updateRating } = require('../models/review_model');
-const bodyParser = require('body-parser');
 const postCharge = require('./utils/stripeHandler');
+const path = require('path')
 
 // Utils
 const { authenticateJWT } = require('./utils/auth_middleware.js');
@@ -26,6 +26,10 @@ const app = express();
 // Middleware
 app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: true }));
+
+// Pick up react index.html file
+app.use(express.static(
+    path.join(__dirname,'../app/build')));
 
 // Enable cors for all requests (used with stripe)
 app.use((_, res, next) => {
@@ -328,9 +332,14 @@ app.post('/api/reviews/:r_id/update_rating', async (req, res, next) => {
 })
 
 // Stripe payment
-app.post('/api/stripe/charge',postCharge)
+app.post('/api/stripe/charge', postCharge)
 
-// 404 handler
+// Any get requests not matching above > route to react
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,'../app/build/index.html'))
+})
+
+// 404 handler for non get requests
 app.all('*', (req, res, next) => {
     res.status(404).send({message: 'API route not found'})
 })
