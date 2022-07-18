@@ -3,6 +3,7 @@ if(process.env.NODE_ENV !== "production"){
 }
 
 const Pool = require('pg').Pool
+
 const pool = new Pool({
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
@@ -10,6 +11,11 @@ const pool = new Pool({
   password: process.env.PG_PW,
   port: process.env.PG_PORT,
   connectionTimeoutMillis: 10000
+  ,
+  ssl: {
+    // FOr heroku connection
+    rejectUnauthorized: false
+  }
 });
 
 module.exports = { pool };
