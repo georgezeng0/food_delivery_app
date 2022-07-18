@@ -25,7 +25,7 @@ const getRestaurantById = async (id) => {
 }
 
 const createRestaurant = async (body) => {
-    const { r_id, r_name, cuisine, pricepoint,location,open,close,image='NULL',owner='NULL', coordinates='NULL' } = body
+    const { r_id, r_name, cuisine, pricepoint,location,open,close,image='NULL',rating=0,owner='NULL', coordinates='NULL' } = body
     let cuisine_string = '{'
     cuisine.forEach(item => {
         cuisine_string=`${cuisine_string}${item},`
@@ -34,7 +34,7 @@ const createRestaurant = async (body) => {
     const query = format(
         'INSERT INTO restaurants VALUES (%L) RETURNING *;',
         // This needs to be in order of columns in postgres (positional)
-        [r_id, r_name, cuisine_string, pricepoint,location,open,close,owner,image, coordinates]
+        [r_id, r_name, cuisine_string, pricepoint,location,open,close,owner,image,rating, coordinates]
     )
     try {
         const res = await pool.query(query);
