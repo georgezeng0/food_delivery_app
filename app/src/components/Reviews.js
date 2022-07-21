@@ -134,7 +134,7 @@ h3{
     justify-content: space-between;
     align-items: center;
     padding: 4px 2px 0px;
-    height: 2rem;
+    height: auto;
     button{
         background-color: var(--tertiary-1)
     }
@@ -143,6 +143,7 @@ h3{
         color: white;
         display: flex;
         align-items: center;
+        margin-bottom: 2px;
     }
  }   
 }

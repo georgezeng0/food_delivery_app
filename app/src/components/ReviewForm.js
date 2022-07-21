@@ -6,9 +6,11 @@ import { getRestaurants } from '../features/restaurantSlice';
 import Loading from './Loading';
 import styled from 'styled-components';
 import StarRatings from 'react-star-ratings';
+import { useNavigate } from 'react-router-dom'
 
 const ReviewForm = ({r_id}) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {
         isLoading, error: { isError, message },
         success: { APIsuccess, successType },
@@ -19,9 +21,14 @@ const ReviewForm = ({r_id}) => {
             title,rating,body
         }
     } = useSelector(state => state.review)
+    const { user: { email } } = useSelector(state=>state.user)
     
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!email) {
+            navigate('/login')
+            return
+        }
         if (!isEdit) {
             dispatch(createReview(r_id))
         } else {
