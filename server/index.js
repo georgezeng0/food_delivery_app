@@ -26,6 +26,14 @@ const app = express();
 app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: true }));
 
+// Reroute to https
+app.use(function(request, response, next) {
+    if (process.env.NODE_ENV != 'development' && !request.secure) {
+       return response.redirect("https://" + request.headers.host + request.url);
+    }
+    next();
+})
+
 // Pick up react index.html file
 app.use(express.static(
     path.join(__dirname,'../app/build')));
