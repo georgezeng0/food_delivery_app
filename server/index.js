@@ -26,9 +26,9 @@ const app = express();
 app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: true }));
 
-// Reroute to https
+// Reroute to https - x-forwarded-proto as per heroku docs
 app.use((req, res, next) => {
-    if (!req.secure || req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
+    if ( req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
         return res.redirect(`https://${req.get('host')}${req.url}`);
     }
     next();
