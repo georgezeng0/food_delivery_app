@@ -27,12 +27,12 @@ app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: true }));
 
 // Reroute to https
-app.use(function(request, response, next) {
-    if (process.env.NODE_ENV != 'development' && !request.secure) {
-       return response.redirect("https://" + request.headers.host + request.url);
+app.use((req, res, next) => {
+    if (!req.secure || req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === "production") {
+        return res.redirect(`https://${req.get('host')}${req.url}`);
     }
     next();
-})
+  })
 
 // Pick up react index.html file
 app.use(express.static(
