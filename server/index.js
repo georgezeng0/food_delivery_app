@@ -4,11 +4,12 @@ if(process.env.NODE_ENV !== "production"){
 
 const express = require('express');
 const path = require('path')
+const helmet = require('helmet')
 
 // Utils //
+const postCharge = require('./utils/stripeHandler');
 // const { authenticateJWT } = require('./utils/auth_middleware.js');
 // const wrapAsync = require('./utils/wrapAsync');
-const postCharge = require('./utils/stripeHandler');
 
 // Import routes
 const restaurantRoutes = require('./routes/restaurantRoutes');
@@ -22,9 +23,40 @@ const PORT = process.env.PORT || 5000;
 // App
 const app = express();
 
-// Middleware
+// Middleware //
 app.use(express.json()); //Parse JSON in req.body
 app.use(express.urlencoded({ extended: true }));
+
+// Helmet
+if (process.env.NODE_ENV !== "production") {
+    app.use(helmet({
+        contentSecurityPolicy: {
+            directives: {
+                "default-src": ["'self'", "js.stripe.com","fonts.gstatic.com","blob:","mapbox.com"],
+                "font-src": ["'self'", "https:", "data:", "fonts.gstatic.com"],
+                "script-src": ["'self'", "js.stripe.com"],
+                "img-src": ["'self'", "images.unsplash.com", "data:"]
+            }
+        },
+        crossOriginEmbedderPolicy: false,
+        expectCt: false,
+    }))
+} else {
+    app.use(
+        helmet({
+            contentSecurityPolicy: {
+                directives: {
+                    "default-src": ["'self'", "js.stripe.com","fonts.gstatic.com","blob:","mapbox.com"],
+                    "font-src": ["'self'", "https:", "data:", "fonts.gstatic.com"],
+                    "script-src": ["'self'", "js.stripe.com"],
+                    "img-src": ["'self'", "images.unsplash.com", "data:"]
+                }
+            },
+            crossOriginResourcePolicy: true,
+            crossOriginEmbedderPolicy: false,
+        })
+    );
+}
 
 // Reroute to https - x-forwarded-proto as per heroku docs
 app.use((req, res, next) => {

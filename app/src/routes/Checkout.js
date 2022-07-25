@@ -63,10 +63,10 @@ const CheckoutForm = ({total_price}) => {
     setIsLoading(false);
     if (error) {
       toast.error('Payment Failed')
-      console.log('Payment confirmation error', error);
+      // console.log('Payment confirmation error', error);
     } else if (paymentIntent) {
       toast.success('Payment Success')
-      console.log('Success from promise', paymentIntent);
+      // console.log('Success from promise', paymentIntent);
       dispatch(emptyBasket())
       setTimeout(()=>navigate('/restaurants'), 2000)
       }

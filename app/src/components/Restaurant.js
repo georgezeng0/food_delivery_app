@@ -24,12 +24,13 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                 setDistance(res.data.distances[0][1] || res.data.distances[0][0])
             }
         } catch (error) {
-            console.log(error);
+            // May reach threshold of mapbox api to get distances and durations
+            // console.log(error);
         }
     }
 
     useEffect(() => {
-        if (userCoordinates) {
+        if (userCoordinates.length>0) {
             getDistance()
         }
     },[userCoordinates])
