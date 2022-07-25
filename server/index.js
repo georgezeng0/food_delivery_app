@@ -46,7 +46,7 @@ if (process.env.NODE_ENV !== "production") {
         helmet({
             contentSecurityPolicy: {
                 directives: {
-                    "default-src": ["'self'", "js.stripe.com","fonts.gstatic.com","blob:","api.mapbox.com"],
+                    "default-src": ["'self'", "*.stripe.com","fonts.gstatic.com","blob:","*.mapbox.com"],
                     "font-src": ["'self'", "https:", "data:", "fonts.gstatic.com"],
                     "script-src": ["'self'", "js.stripe.com","blob:",],
                     "img-src": ["'self'", "images.unsplash.com", "data:"]
