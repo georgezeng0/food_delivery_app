@@ -1,4 +1,4 @@
-# Deliver Eats - Mock Food Delivery App 
+# Deliver Eat - Mock Food Delivery App
 
 Link: https://deliver-eat.herokuapp.com/
 
@@ -19,12 +19,9 @@ This project features:
 - Responsive and efficient single page application using React.
 - Fully functional REST API and CRUD operations for restaurants, dishes, reviews.
 - File image upload and cloud image storage using Cloudinary.
-- Functional authorisation and authentication using JS web tokens. 
+- Functional authorisation and authentication using JS web tokens.
 - Location and map features using Mapbox API.
 - Mock checkout and payment functionality using Stripe API.
 - Security against cross site scripting, SQL injection.
 
 ### Learning and reflection
-
-
-

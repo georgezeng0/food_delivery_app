@@ -102,7 +102,7 @@ export const createRestaurant = createAsyncThunk(
         try {
             const coordinates = await getCoords(input.location)
             const res = await axios.post(`/api/restaurants/new`,
-            {r_id:uuid(),...input,owner:user.email, coordinates: coordinates || []}
+            {r_id:uuid(),...input,cuisineList: undefined,owner:user.email, coordinates: coordinates || []}
             ); 
             await thunkAPI.dispatch(getRestaurants()) //Await otherwise navigation occurs before new restaurant loaded
             thunkAPI.dispatch(emptyForm())

@@ -30,9 +30,17 @@ const ReviewForm = ({r_id}) => {
             return
         }
         if (!isEdit) {
-            dispatch(createReview(r_id))
+            if (title && rating) {
+                dispatch(createReview(r_id))
+            } else {
+                toast.error('Please provide a title and rating.')
+            }
         } else {
-            dispatch(editReview(edit_id))
+            if (title && rating) {
+                dispatch(editReview(edit_id))
+            } else {
+                toast.error('Please provide a title and rating.')
+            }
         }
     }
 

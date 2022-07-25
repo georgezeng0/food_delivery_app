@@ -24,7 +24,7 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                 setDistance(res.data.distances[0][1] || res.data.distances[0][0])
             }
         } catch (error) {
-            // May reach threshold of mapbox api to get distances and durations
+            // Likely will threshold of mapbox api to get distances and durations
             // console.log(error);
         }
     }
@@ -32,6 +32,9 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
     useEffect(() => {
         if (userCoordinates.length>0) {
             getDistance()
+        } else {
+            setDuration('')
+            setDistance('')
         }
     },[userCoordinates])
 
@@ -58,13 +61,15 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                             numberOfStars={5}
                             starDimension='15px'
                         />
-                </div>
-                <p>
-                        {distance? `${(distance / 1000).toFixed(2)}km away` : location}
-                        <br />
-                        {duration && <><b>{((duration+(10*60))/60).toFixed(0)}-{((duration+(25*60))/60).toFixed(0)}</b> mins</> }
+                    </div>
+                    
+                        <p>
+                            {distance ? `${(distance / 1000).toFixed(2)}km away` : location}
+                            <br />
+                            {duration && <><b>{((duration + (10 * 60)) / 60).toFixed(0)}-{((duration + (25 * 60)) / 60).toFixed(0)}</b> mins</>}
 
-                </p>              
+                        </p>
+                    
                 <p>
                         {
                             cuisine && cuisine.map((c, i) => { 
