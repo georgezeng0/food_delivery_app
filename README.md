@@ -1,6 +1,4 @@
-# Mock Food Delivery App 
-
-## Deliver Eats
+# Deliver Eats - Mock Food Delivery App 
 
 Link: https://deliver-eat.herokuapp.com/
 
@@ -13,7 +11,7 @@ Link: https://deliver-eat.herokuapp.com/
 
 ### Description
 
-This mock Food delivery application was built to improve my skills in building full stack applications.
+This mock food delivery application was built to improve my skills in building full stack applications.
 This project uses React as its front-end framework, with a node/Express back-end and a SQL database using Postgres.
 
 This project features:
