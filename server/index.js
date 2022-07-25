@@ -32,10 +32,10 @@ if (process.env.NODE_ENV !== "production") {
     app.use(helmet({
         contentSecurityPolicy: {
             directives: {
-                "default-src": ["'self'", "js.stripe.com","fonts.gstatic.com","blob:","mapbox.com"],
+                "default-src": ["'self'", "*.stripe.com","fonts.gstatic.com","blob:","*.mapbox.com"],
                 "font-src": ["'self'", "https:", "data:", "fonts.gstatic.com"],
-                "script-src": ["'self'", "js.stripe.com"],
-                "img-src": ["'self'", "images.unsplash.com", "data:"]
+                "script-src": ["'self'", "js.stripe.com","blob:",],
+                "img-src": ["'self'", "images.unsplash.com", "data:", "*.cloudinary.com"]
             }
         },
         crossOriginEmbedderPolicy: false,
@@ -46,10 +46,10 @@ if (process.env.NODE_ENV !== "production") {
         helmet({
             contentSecurityPolicy: {
                 directives: {
-                    "default-src": ["'self'", "*.stripe.com","fonts.gstatic.com","blob:","*.mapbox.com"],
+                    "default-src": ["'self'", "*.stripe.com","fonts.gstatic.com","blob:","*.mapbox.com","*.cloudinary.com"],
                     "font-src": ["'self'", "https:", "data:", "fonts.gstatic.com"],
                     "script-src": ["'self'", "js.stripe.com","blob:",],
-                    "img-src": ["'self'", "images.unsplash.com", "data:"]
+                    "img-src": ["'self'", "images.unsplash.com", "data:", "*.cloudinary.com", "blob:"]
                 }
             },
             crossOriginResourcePolicy: true,
