@@ -159,7 +159,7 @@ const SingleRestaurant = () => {
               })
             }
             </p>
-            <p>{new Array({ pricepoint }).map(
+            <p>{[...Array(pricepoint).keys()].map(
               (_, i) => {
                 return <BsCurrencyPound key={i} />
               }

@@ -7,8 +7,9 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { BsCurrencyPound } from 'react-icons/bs'
 
-const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rating, coordinates } }) => {
+const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, pricepoint, rating, coordinates } }) => {
     const {userLocation: {coordinates:userCoordinates}} = useSelector(state=>state.restaurant)
     const [distance,setDistance] = useState('')
     const [duration,setDuration] = useState('')
@@ -46,7 +47,12 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
 
           <div className='info-container'>
               <Link to={`/restaurants/${r_id}`}><div className='name-container'>
-                  <h3>{r_name}</h3>
+                    <h3>{r_name}
+                        <span>{[...Array(pricepoint).keys()].map(
+              (_, i) => {
+                return <BsCurrencyPound key={i} />
+              }
+            )  }</span></h3>
                   <FiArrowRight className='arrow'/>
                 </div>
                 </Link>
@@ -77,7 +83,7 @@ const Restaurant = ({ restaurant: { r_id, r_name, image, location, cuisine, rati
                                 else return c
                         })
                         }
-                </p>
+                    </p>
                 </div>
           </div>
           
@@ -130,6 +136,14 @@ const Wrapper = styled.article`
         :hover{
             cursor:pointer;
             background-color: var(--tertiary-1);
+        }
+        h3{
+            display: flex;
+            align-items: center;
+            span{
+                font-size: 0.8rem;
+                margin-left: 5px;
+            }
         }
     }
     .info{

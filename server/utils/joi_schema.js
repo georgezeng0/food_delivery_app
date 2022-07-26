@@ -50,7 +50,7 @@ module.exports.validateRestaurant = (req, res, next) => {
 }
 
 const dishSchema = Joi.object({
-    d_id: Joi.string().required().escapeHTML(),
+    d_id: Joi.string().escapeHTML(),
     name: Joi.string().required().escapeHTML(),
     price: Joi.number().min(1).max(10000).required(),
     restaurant: Joi.string().required(),

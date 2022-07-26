@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.cf1b5015.css",
-    "main.js": "/static/js/main.2d37216e.js",
+    "main.js": "/static/js/main.af2352d2.js",
     "static/media/landing_foods.bmp": "/static/media/landing_foods.d04c9f0a811e9ba906df.bmp",
     "static/media/marker-dark.png": "/static/media/marker-dark.eddeb4d37d8e2c12552c.png",
     "index.html": "/index.html",
     "main.cf1b5015.css.map": "/static/css/main.cf1b5015.css.map",
-    "main.2d37216e.js.map": "/static/js/main.2d37216e.js.map"
+    "main.af2352d2.js.map": "/static/js/main.af2352d2.js.map"
   },
   "entrypoints": [
     "static/css/main.cf1b5015.css",
-    "static/js/main.2d37216e.js"
+    "static/js/main.af2352d2.js"
   ]
 }

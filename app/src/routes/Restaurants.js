@@ -20,6 +20,7 @@ const Restaurants = () => {
   const [scrollY, setScrollY] = useState('')
   const [page, setPage] = useState(1);
   const [scrollLoading,setScrollLoading]=useState(false)
+
   // Num per page
   const num_per_page = 5
   // const max_pages = Math.ceil(restaurants.length / num_per_page);
@@ -47,7 +48,7 @@ const Restaurants = () => {
         setPage((prev) => {
           //   if (prev < max_pages) {
           //   return prev + 1
-          //   } else {
+          //   } else { 
           //     return prev
           // }
           return prev + 1
@@ -58,7 +59,7 @@ const Restaurants = () => {
       };
     },[])
 ;
-
+  // Add intersection observer for infinite scroll
   useEffect(() => {
     const option = {
       root: null,
@@ -71,26 +72,27 @@ const Restaurants = () => {
     }
     return () => observer.disconnect();
     // Need to discmount otherwise loops
-  }, [handleObserver, last_item.current]);
+  }, [handleObserver, restaurants]);
 
   useEffect(() => {
     setPage(1);
     dispatch(getRestaurants());
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (all_restaurants) {
       setPage(1);
       dispatch(refreshSort());
     }
-  },[all_restaurants])
+  }, [all_restaurants,dispatch])
+
   
   useEffect(() => {
     if (isError) {
       toast.error(`ERROR - ${message}`)
     }
     
-  }, [isError])
+  }, [isError,message])
 
   //Location form handler
   const locationSubmit = async (e) => {
@@ -127,7 +129,7 @@ const Restaurants = () => {
       dispatch(updateUserLocation(''))
       dispatch(saveUserCoords([]))
     }
-  },[user])
+  },[user,dispatch])
 
   return (
     <Wrapper showFilter={showFilter} scrollY={scrollY}>
@@ -168,7 +170,9 @@ const Restaurants = () => {
           <h5>Do you have a restaurant? You can join our expanding network of restaurants.</h5>
           <Link to='/restaurants/create'>Create A Restaurant Page</Link>
         </div>
-      {isLoading ? <Loading /> :
+      {isLoading ? <div className='scroll-loading-container'>
+            <Loading />
+            </div>:
         <section className='restaurants-content'>
           {/* Error Message */}
           {isError && <h4>Error getting restaurants.</h4>}
@@ -296,6 +300,7 @@ min-width: 260px;
   .scroll-loading-container{
     display: flex;
     width: 100%;
+    flex-grow: 1;
     justify-content: center;
     margin: 40px 0px;
   }
