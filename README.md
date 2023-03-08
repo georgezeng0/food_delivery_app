@@ -1,7 +1,5 @@
 # Deliver Eat - Mock Food Delivery App
 
-Link: https://deliver-eat.herokuapp.com/
-
 ### **Technology used:**
 
 - Node
